@@ -1,5 +1,6 @@
 package com.skhu.moodfriend.app.entity.user;
 
+import com.skhu.moodfriend.app.entity.attendance.Attendance;
 import com.skhu.moodfriend.app.entity.diary.Diary;
 import com.skhu.moodfriend.app.entity.diary_ai.DiaryAI;
 import com.skhu.moodfriend.app.entity.emotion_tracker.EmotionTracker;
@@ -49,6 +50,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "ROLE_TYPE", nullable = false)
     private RoleType roleType;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Attendance> attendances = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Diary> diaries = new ArrayList<>();
