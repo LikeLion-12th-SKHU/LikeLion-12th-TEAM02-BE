@@ -1,6 +1,6 @@
 package com.skhu.moodfriend.app.entity.object_store;
 
-import com.skhu.moodfriend.app.entity.user_object.UserObject;
+import com.skhu.moodfriend.app.entity.member_object.MemberObject;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -28,5 +28,5 @@ public class ObjectStore {
     private int price;
 
     @OneToMany(mappedBy = "objectStore", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserObject> objects = new ArrayList<>();
+    private List<MemberObject> objects = new ArrayList<>();
 }

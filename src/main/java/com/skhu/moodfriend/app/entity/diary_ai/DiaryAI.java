@@ -1,7 +1,7 @@
 package com.skhu.moodfriend.app.entity.diary_ai;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.skhu.moodfriend.app.entity.user.User;
+import com.skhu.moodfriend.app.entity.member.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -31,6 +31,6 @@ public class DiaryAI {
     private String summary;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
-    private User user;
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
 }
