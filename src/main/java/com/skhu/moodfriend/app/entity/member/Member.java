@@ -83,4 +83,8 @@ public class Member {
         this.loginType = loginType;
         this.roleType = roleType;
     }
+
+    public void updateInfo(String name) {
+        this.name = name;
+    }
 }

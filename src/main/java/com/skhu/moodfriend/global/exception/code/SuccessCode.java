@@ -11,6 +11,8 @@ public enum SuccessCode {
 
     // 200 OK
     LOGIN_MEMBER_SUCCESS(HttpStatus.OK, "로그인에 성공했습니다."),
+    GET_MEMBER_INFO_SUCCESS(HttpStatus.OK, "사용자 정보 조회에 성공했습니다."),
+    UPDATE_MEMBER_INFO_SUCCESS(HttpStatus.OK, "사용자 정보 수정에 성공했습니다."),
     GET_DIARY_SUCCESS(HttpStatus.OK, "일기 조회에 성공했습니다."),
     GET_ALL_DIARIES_SUCCESS(HttpStatus.OK, "모든 일기 조회에 성공했습니다."),
     UPDATE_DIARY_SUCCESS(HttpStatus.OK, "일기 수정에 성공했습니다."),
