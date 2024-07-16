@@ -14,7 +14,7 @@ public class ProfileController {
 
     private final Environment env;
 
-    @GetMapping("/profile")
+    @GetMapping("/api/v1/profile")
     public String profile() {
         List<String> profiles = Arrays.asList(env.getActiveProfiles());
         List<String> realProfiles = Arrays.asList("real1", "real2");
