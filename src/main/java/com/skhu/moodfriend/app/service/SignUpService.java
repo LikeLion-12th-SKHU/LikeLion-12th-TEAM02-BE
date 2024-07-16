@@ -10,6 +10,7 @@ import com.skhu.moodfriend.app.repository.MemberRefreshTokenRepository;
 import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.global.exception.CustomException;
 import com.skhu.moodfriend.global.exception.code.ErrorCode;
+import com.skhu.moodfriend.global.exception.code.SuccessCode;
 import com.skhu.moodfriend.global.jwt.TokenProvider;
 import com.skhu.moodfriend.global.template.ApiResponseTemplate;
 import lombok.AccessLevel;
@@ -73,11 +74,6 @@ public class SignUpService {
                 .refreshToken(refreshToken)
                 .build();
 
-        return ApiResponseTemplate.<AuthResDto>builder()
-                .status(201)
-                .success(true)
-                .message("회원가입 성공")
-                .data(resDto)
-                .build();
+        return ApiResponseTemplate.success(SuccessCode.CREATE_MEMBER_SUCCESS, resDto);
     }
 }
