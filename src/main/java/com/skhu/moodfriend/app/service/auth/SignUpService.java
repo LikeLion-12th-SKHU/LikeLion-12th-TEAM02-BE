@@ -1,7 +1,7 @@
-package com.skhu.moodfriend.app.service;
+package com.skhu.moodfriend.app.service.auth;
 
 import com.skhu.moodfriend.app.dto.auth.reqDto.SignUpReqDto;
-import com.skhu.moodfriend.app.dto.auth.resDto.AuthResDto;
+import com.skhu.moodfriend.app.dto.auth.resDto.SignUpResDto;
 import com.skhu.moodfriend.app.entity.member.LoginType;
 import com.skhu.moodfriend.app.entity.member.Member;
 import com.skhu.moodfriend.app.entity.member.MemberRefreshToken;
@@ -34,7 +34,7 @@ public class SignUpService {
     private static final String PASSWORD_REGEX = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{10,16}$";
 
     @Transactional
-    public ApiResponseTemplate<AuthResDto> signUp(SignUpReqDto signUpReqDto) {
+    public ApiResponseTemplate<SignUpResDto> signUp(SignUpReqDto signUpReqDto) {
 
         if (!Pattern.matches(EMAIL_REGEX, signUpReqDto.email())) {
             throw new CustomException(ErrorCode.INVALID_EMAIL_FORMAT_EXCEPTION, ErrorCode.INVALID_EMAIL_FORMAT_EXCEPTION.getMessage());
@@ -74,7 +74,7 @@ public class SignUpService {
 
         memberRefreshTokenRepository.save(memberRefreshToken);
 
-        AuthResDto resDto = AuthResDto.builder()
+        SignUpResDto resDto = SignUpResDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
