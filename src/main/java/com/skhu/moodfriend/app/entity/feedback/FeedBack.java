@@ -1,6 +1,6 @@
 package com.skhu.moodfriend.app.entity.feedback;
 
-import com.skhu.moodfriend.app.entity.user.User;
+import com.skhu.moodfriend.app.entity.member.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -25,6 +25,6 @@ public class FeedBack {
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
-    private User user;
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
 }

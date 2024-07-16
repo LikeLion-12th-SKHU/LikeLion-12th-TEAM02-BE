@@ -1,8 +1,8 @@
 package com.skhu.moodfriend.app.entity.emotion_tracker;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.skhu.moodfriend.app.entity.user.EmotionType;
-import com.skhu.moodfriend.app.entity.user.User;
+import com.skhu.moodfriend.app.entity.member.EmotionType;
+import com.skhu.moodfriend.app.entity.member.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -33,6 +33,6 @@ public class EmotionTracker {
     private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
-    private User user;
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
 }

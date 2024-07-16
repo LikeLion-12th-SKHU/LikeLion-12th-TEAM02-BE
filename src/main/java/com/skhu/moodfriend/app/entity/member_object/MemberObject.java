@@ -1,7 +1,7 @@
-package com.skhu.moodfriend.app.entity.user_object;
+package com.skhu.moodfriend.app.entity.member_object;
 
 import com.skhu.moodfriend.app.entity.object_store.ObjectStore;
-import com.skhu.moodfriend.app.entity.user.User;
+import com.skhu.moodfriend.app.entity.member.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
-public class UserObject {
+public class MemberObject {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,8 +23,8 @@ public class UserObject {
     private boolean status = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
-    private User user;
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "OBJECT_ID")

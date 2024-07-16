@@ -1,6 +1,6 @@
 package com.skhu.moodfriend.global.jwt;
 
-import com.skhu.moodfriend.app.entity.user.User;
+import com.skhu.moodfriend.app.entity.member.Member;
 import com.skhu.moodfriend.global.exception.code.ErrorCode;
 import com.skhu.moodfriend.global.exception.CustomException;
 import io.jsonwebtoken.Claims;
@@ -42,28 +42,28 @@ public class TokenProvider {
         this.refreshTokenValidityTime = refreshTokenValidityTime;
     }
 
-    public String createRefreshToken(User user) {
+    public String createRefreshToken(Member member) {
         long nowTime = (new Date().getTime());
 
         Date refreshTokenExpiredTime = new Date(nowTime + refreshTokenValidityTime);
 
         return Jwts.builder()
-                .setSubject(user.getUserId().toString())
+                .setSubject(member.getMemberId().toString())
                 .setIssuedAt(new Date())
-                .claim("Role", user.getRoleType().getCode())
+                .claim("Role", member.getRoleType().getCode())
                 .setExpiration(refreshTokenExpiredTime)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public String createAccessToken(User user) {
+    public String createAccessToken(Member member) {
         long nowTime = (new Date().getTime());
 
         Date accessTokenExpiredTime = new Date(nowTime + accessTokenValidityTime);
 
         return Jwts.builder()
-                .setSubject(user.getUserId().toString())
-                .claim("Role", user.getRoleType().getCode())
+                .setSubject(member.getMemberId().toString())
+                .claim("Role", member.getRoleType().getCode())
                 .setExpiration(accessTokenExpiredTime)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
