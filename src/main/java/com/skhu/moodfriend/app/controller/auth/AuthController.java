@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-@Tag(name = "회원가입/로그인", description = "회원가입/로그인을 담당하는 api 그룹")
+@Tag(name = "자체 회원가입/로그인", description = "자체 회원가입/로그인을 담당하는 api 그룹")
 @RequestMapping("/api/v1/auth")
 public class AuthController {
 
