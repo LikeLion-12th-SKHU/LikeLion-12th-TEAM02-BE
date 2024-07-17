@@ -11,7 +11,7 @@ public enum ErrorCode {
 
     // 400 Bad Request
     VALIDATION_EXCEPTION(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
-    PASSWORD_MISMATCH_EXCEPTION(HttpStatus.BAD_REQUEST,"잘못된 비밀번호가 입력되었습니다."),
+    PASSWORD_MISMATCH_EXCEPTION(HttpStatus.BAD_REQUEST,"비밀번호가 일치하지 않습니다."),
     VALIDATION_REQUEST_MISSING_EXCEPTION(HttpStatus.BAD_REQUEST, "필수적인 요청 값이 입력되지 않았습니다."),
     VALIDATION_REQUEST_HEADER_MISSING_EXCEPTION(HttpStatus.BAD_REQUEST, "요청 헤더값이 입력되지 않았습니다."),
     VALIDATION_REQUEST_PARAMETER_MISSING_EXCEPTION(HttpStatus.BAD_REQUEST, "요청 파라미터값이 입력되지 않았습니다."),
@@ -24,8 +24,8 @@ public enum ErrorCode {
     INVALID_DISPLAY_NAME_EXCEPTION(HttpStatus.BAD_REQUEST, "유효하지 않은 displayName이 있습니다 "),
     FAIL_ENCODING_IMAGE_FILE_NAME(HttpStatus.BAD_REQUEST, "파일명 인코딩에 실패했습니다."),
     INVALID_FILE_TYPE_EXCEPTION(HttpStatus.BAD_REQUEST, "잘못된 형식의 파일입니다."),
-    INVALID_EMAIL_FORMAT_EXCEPTION(HttpStatus.BAD_REQUEST, "이메일 형식이 유효하지 않습니다."),
-    INVALID_PASSWORD_FORMAT_EXCEPTION(HttpStatus.BAD_REQUEST, "비밀번호는 영문자, 숫자 조합의 10자 이상 16자 이하이어야 합니다."),
+    INVALID_EMAIL_FORMAT_EXCEPTION(HttpStatus.BAD_REQUEST, "이메일 형식에 알맞지 않습니다."),
+    INVALID_PASSWORD_FORMAT_EXCEPTION(HttpStatus.BAD_REQUEST, "영문, 숫자, 특수문자 조합의 10자 이상 16자 이하여야 합니다."),
 
     // 401 Unauthorized
     UNAUTHORIZED_EMAIL_EXCEPTION(HttpStatus.UNAUTHORIZED, "이메일 인증이 필요합니다."),
