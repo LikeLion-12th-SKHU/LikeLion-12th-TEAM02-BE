@@ -1,7 +1,5 @@
 package com.skhu.moodfriend.app.entity.member;
 
-import com.skhu.moodfriend.global.exception.CustomException;
-import com.skhu.moodfriend.global.exception.code.ErrorCode;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,14 +14,4 @@ public enum LoginType {
 
     private final String code;
     private final String displayName;
-
-    public static LoginType getLoginTypeOfString(String loginType) {
-        for (LoginType type : LoginType.values()) {
-            if (type.code.equals(loginType)) {
-                return type;
-            }
-        }
-
-        throw new CustomException(ErrorCode.INVALID_ROLE_TYPE_EXCEPTION, ErrorCode.INVALID_TOKEN_EXCEPTION.getMessage());
-    }
 }
