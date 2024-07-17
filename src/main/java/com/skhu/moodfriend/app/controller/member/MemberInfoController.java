@@ -31,10 +31,10 @@ public class MemberInfoController {
                     @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
                     @ApiResponse(responseCode = "404", description = "사용자 정보를 찾을 수 없음"),
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
-            })
+            }
+    )
     public ResponseEntity<ApiResponseTemplate<MemberInfoResDto>> getMemberInfo(Principal principal) {
         ApiResponseTemplate<MemberInfoResDto> data = memberInfoService.getMemberInfo(principal);
-
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
@@ -48,10 +48,10 @@ public class MemberInfoController {
                     @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
                     @ApiResponse(responseCode = "404", description = "사용자 정보를 찾을 수 없음"),
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
-            })
+            }
+    )
     public ResponseEntity<ApiResponseTemplate<MemberInfoResDto>> updateMemberInfo(Principal principal, @RequestBody MemberInfoUpdateReqDto reqDto) {
         ApiResponseTemplate<MemberInfoResDto> data = memberInfoService.updateMemberInfo(principal, reqDto);
-
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 }

@@ -32,7 +32,7 @@ public class MemberInfoService {
                 .email(member.getEmail())
                 .name(member.getName())
                 .mileage(member.getMileage())
-                .loginType(member.getLoginType())
+                .loginType(member.getLoginType().getDisplayName())
                 .build();
 
         return ApiResponseTemplate.success(SuccessCode.GET_MEMBER_INFO_SUCCESS, resDto);
@@ -51,7 +51,7 @@ public class MemberInfoService {
                 .email(member.getEmail())
                 .name(member.getName())
                 .mileage(member.getMileage())
-                .loginType(member.getLoginType())
+                .loginType(member.getLoginType().getDisplayName())
                 .build();
 
         return ApiResponseTemplate.success(SuccessCode.UPDATE_MEMBER_INFO_SUCCESS, resDto);
