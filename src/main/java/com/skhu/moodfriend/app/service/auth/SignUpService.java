@@ -54,7 +54,7 @@ public class SignUpService {
         Member member = memberRepository.save(Member.builder()
                 .email(signUpReqDto.email())
                 .password(encodePassword)
-                .name(signUpReqDto.name())
+                .name("호야집사")
                 .mileage(0)
                 .emotionType(EmotionType.SO_SO)
                 .loginType(LoginType.NATIVE_LOGIN)
