@@ -28,7 +28,7 @@ public class SignUpService {
     private final TokenProvider tokenProvider;
 
     private static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
-    private static final String PASSWORD_REGEX = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{10,16}$";
+    private static final String PASSWORD_REGEX = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{10,16}$";
 
     @Transactional
     public ApiResponseTemplate<SignUpResDto> signUp(SignUpReqDto signUpReqDto) {
