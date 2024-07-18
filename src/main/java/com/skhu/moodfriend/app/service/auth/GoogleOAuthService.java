@@ -34,7 +34,7 @@ public class GoogleOAuthService {
     private String GOOGLE_CLIENT_SECRET;
 
     private final String GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
-    private final String GOOGLE_REDIRECT_URI = "http://localhost:8080/api/v1/oauth2/callback/google";
+    private final String GOOGLE_REDIRECT_URI = "http://localhost:8080/api/v1/auth/callback/google";
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
 
