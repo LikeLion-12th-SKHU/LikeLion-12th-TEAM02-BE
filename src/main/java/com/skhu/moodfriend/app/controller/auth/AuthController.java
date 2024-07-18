@@ -29,7 +29,7 @@ public class AuthController {
 
     @PostMapping("/signUp")
     @Operation(
-            summary = "회원가입",
+            summary = "자체 회원가입",
             description = "사용자 정보를 받아 DB에 저장합니다. refreshToken, accessToken을 발급하여 회원가입을 진행하고 사용자 정보와 함께 반환합니다.",
             responses = {
                     @ApiResponse(responseCode = "201", description = "회원가입 성공"),
@@ -45,7 +45,7 @@ public class AuthController {
 
     @PostMapping("/login")
     @Operation(
-            summary = "로그인",
+            summary = "자체 로그인",
             description = "사용자의 이메일, 비밀번호를 받습니다. 암호화되어 저장된 비밀번호와 일치하는지 검사하고, 로그인을 통해서 갱신된 refreshToken, accessToken을 반환합니다.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "로그인 성공"),
