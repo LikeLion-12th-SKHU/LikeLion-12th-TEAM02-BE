@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
@@ -35,11 +34,13 @@ public class DiaryCreateService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
-        LocalDateTime now = LocalDateTime.now();
+        boolean exists = diaryRepository.existsByMemberAndCreatedAtDate(member);
+        if (exists) {
+            throw new CustomException(ErrorCode.ALREADY_EXIST_DIARY_EXCEPTION, ErrorCode.ALREADY_EXIST_DIARY_EXCEPTION.getMessage());
+        }
+
         Diary diary = Diary.builder()
                 .content(reqDto.content())
-                .createdAt(now)
-                .updatedAt(null)
                 .member(member)
                 .build();
 

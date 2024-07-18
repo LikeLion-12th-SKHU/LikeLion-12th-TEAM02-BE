@@ -27,12 +27,10 @@ public class Diary {
     @Column(name = "DIARY_CONTENT", length = 1024)
     private String content;
 
-    @JsonFormat(pattern = "yyyy-MM-dd - HH:mm", timezone = "Asia/Seoul")
     @CreatedDate
     @Column(name = "DIARY_CREATED_AT", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @JsonFormat(pattern = "yyyy-MM-dd - HH:mm", timezone = "Asia/Seoul")
     @LastModifiedDate
     @Column(name = "DIARY_UPDATED_AT")
     private LocalDateTime updatedAt;
@@ -42,10 +40,8 @@ public class Diary {
     private Member member;
 
     @Builder
-    private Diary(String content, LocalDateTime createdAt, LocalDateTime updatedAt, Member member) {
+    private Diary(String content, Member member) {
         this.content = content;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
         this.member = member;
     }
 }
