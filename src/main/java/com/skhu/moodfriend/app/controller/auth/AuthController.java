@@ -3,7 +3,9 @@ package com.skhu.moodfriend.app.controller.auth;
 import com.skhu.moodfriend.app.dto.auth.reqDto.LoginReqDto;
 import com.skhu.moodfriend.app.dto.auth.reqDto.SignUpReqDto;
 import com.skhu.moodfriend.app.dto.auth.resDto.LoginResDto;
+import com.skhu.moodfriend.app.dto.auth.resDto.OAuthResDto;
 import com.skhu.moodfriend.app.dto.auth.resDto.SignUpResDto;
+import com.skhu.moodfriend.app.service.auth.GoogleOAuthService;
 import com.skhu.moodfriend.app.service.auth.LoginService;
 import com.skhu.moodfriend.app.service.auth.SignUpService;
 import com.skhu.moodfriend.global.template.ApiResponseTemplate;
@@ -13,19 +15,17 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-@Tag(name = "자체 회원가입/로그인", description = "자체 회원가입/로그인을 담당하는 api 그룹")
+@Tag(name = "회원가입/로그인", description = "회원가입/로그인을 담당하는 api 그룹")
 @RequestMapping("/api/v1/auth")
 public class AuthController {
 
     private final SignUpService signUpService;
     private final LoginService loginService;
+    private final GoogleOAuthService googleOauthService;
 
     @PostMapping("/signUp")
     @Operation(
@@ -56,6 +56,21 @@ public class AuthController {
     )
     public ResponseEntity<ApiResponseTemplate<LoginResDto>> login(@RequestBody LoginReqDto loginReqDto) {
         ApiResponseTemplate<LoginResDto> data = loginService.login(loginReqDto);
+        return ResponseEntity.status(data.getStatus()).body(data);
+    }
+
+    @GetMapping("/callback/google")
+    @Operation(
+            summary = "구글 회원가입/로그인 콜백",
+            description = "구글 로그인 후 리다이렉션된 URI입니다. 인가 코드를 받아서 accessToken을 요청하고, 회원가입 또는 로그인을 처리합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "회원가입/로그인 성공"),
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청"),
+                    @ApiResponse(responseCode = "500", description = "관리자 문의")
+            }
+    )
+    public ResponseEntity<ApiResponseTemplate<OAuthResDto>> googleCallback(@RequestParam(name = "code") String code) {
+        ApiResponseTemplate<OAuthResDto> data = googleOauthService.signUpOrLogin(googleOauthService.getGoogleAccessToken(code).getData());
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 }
