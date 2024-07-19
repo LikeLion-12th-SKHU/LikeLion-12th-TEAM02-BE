@@ -43,7 +43,7 @@ public class DiaryModifyService {
             throw new CustomException(ErrorCode.CONTENT_LENGTH_EXCEEDED, ErrorCode.CONTENT_LENGTH_EXCEEDED.getMessage());
         }
 
-        diary.update(reqDto.emotionType(), reqDto.weatherType(), reqDto.content());
+        diary.update(reqDto.emotionType(), reqDto.weatherType(), reqDto.title(), reqDto.content());
         diaryRepository.save(diary);
 
         DiaryResDto resDto = DiaryResDto.builder()

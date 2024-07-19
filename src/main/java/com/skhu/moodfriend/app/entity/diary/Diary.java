@@ -58,9 +58,10 @@ public class Diary {
         this.tracker = tracker;
     }
 
-    public void update(EmotionType emotionType, WeatherType weatherType, String content) {
+    public void update(EmotionType emotionType, WeatherType weatherType, String title, String content) {
         this.emotionType = emotionType;
         this.weatherType = weatherType;
+        this.title = title;
         this.content = content;
     }
 }
