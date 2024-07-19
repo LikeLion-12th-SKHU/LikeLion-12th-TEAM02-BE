@@ -33,7 +33,7 @@ public enum ErrorCode {
     UNAUTHORIZED_EMAIL_EXCEPTION(HttpStatus.UNAUTHORIZED, "이메일 인증이 필요합니다."),
     UNAUTHORIZED_EXCEPTION(HttpStatus.UNAUTHORIZED, "인증되지 않은 사용자이거나 인증 과정에 오류가 있습니다."),
     INVALID_TOKEN_EXCEPTION(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
-    ONLY_OWN_DIARY_MODIFY_EXCEPTION(HttpStatus.UNAUTHORIZED, "본인이 작성한 일기만 삭제 가능합니다."),
+    ONLY_OWN_DIARY_ACCESS_EXCEPTION(HttpStatus.UNAUTHORIZED, "본인이 작성한 일기만 접근 가능합니다."),
 
     // 403 Forbidden
     FORBIDDEN_AUTH_EXCEPTION(HttpStatus.FORBIDDEN, "권한 정보가 없는 토큰입니다."),
