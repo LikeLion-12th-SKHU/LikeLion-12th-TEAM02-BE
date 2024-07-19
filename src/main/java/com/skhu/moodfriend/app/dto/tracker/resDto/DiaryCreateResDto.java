@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 
 @Builder
 public record DiaryCreateResDto(
+        String emotionType,
+        String weatherType,
         String content,
         @JsonFormat(pattern = "yyyy-MM-dd - HH:mm", timezone = "Asia/Seoul")
         LocalDateTime createdAt,
