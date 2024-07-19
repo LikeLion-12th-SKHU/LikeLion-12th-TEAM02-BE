@@ -26,12 +26,14 @@ public enum ErrorCode {
     INVALID_FILE_TYPE_EXCEPTION(HttpStatus.BAD_REQUEST, "잘못된 형식의 파일입니다."),
     INVALID_EMAIL_FORMAT_EXCEPTION(HttpStatus.BAD_REQUEST, "이메일 형식에 알맞지 않습니다."),
     INVALID_PASSWORD_FORMAT_EXCEPTION(HttpStatus.BAD_REQUEST, "영문, 숫자, 특수문자 조합의 10자 이상 16자 이하여야 합니다."),
+    INVALID_DATE_EXCEPTION(HttpStatus.BAD_REQUEST, "작성 일자는 현재 날짜보다 이전이어야 합니다."),
+    CONTENT_LENGTH_EXCEEDED(HttpStatus.BAD_REQUEST, "일기 내용의 길이가 허용된 최대 길이(1024자)를 초과했습니다."),
 
     // 401 Unauthorized
     UNAUTHORIZED_EMAIL_EXCEPTION(HttpStatus.UNAUTHORIZED, "이메일 인증이 필요합니다."),
     UNAUTHORIZED_EXCEPTION(HttpStatus.UNAUTHORIZED, "인증되지 않은 사용자이거나 인증 과정에 오류가 있습니다."),
     INVALID_TOKEN_EXCEPTION(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
-    ONLY_OWN_DIARY_MODIFY_EXCEPTION(HttpStatus.UNAUTHORIZED, "본인이 작성한 일기만 수정/삭제 가능합니다."),
+    ONLY_OWN_DIARY_ACCESS_EXCEPTION(HttpStatus.UNAUTHORIZED, "본인이 작성한 일기만 접근 가능합니다."),
 
     // 403 Forbidden
     FORBIDDEN_AUTH_EXCEPTION(HttpStatus.FORBIDDEN, "권한 정보가 없는 토큰입니다."),
@@ -42,11 +44,11 @@ public enum ErrorCode {
     // 404 NOT FOUND
     NOT_FOUND_ID_EXCEPTION(HttpStatus.NOT_FOUND, "해당 ID를 찾을 수 없습니다."),
     NOT_FOUND_EMAIL_EXCEPTION(HttpStatus.NOT_FOUND, "해당 이메일의 사용자를 찾을 수 없습니다."),
-    NOT_FOUND_USER_EXCEPTION(HttpStatus.NOT_FOUND, "해당 사용자를 찾을 수 없습니다."),
+    NOT_FOUND_MEMBER_EXCEPTION(HttpStatus.NOT_FOUND, "해당 사용자를 찾을 수 없습니다."),
     NOT_FOUND_DIARY_EXCEPTION(HttpStatus.NOT_FOUND, "해당 일기를 찾을 수 없습니다."),
 
     // 409 Conflict
-    ALREADY_EXIST_USER_EXCEPTION(HttpStatus.CONFLICT, "이미 회원가입이 완료된 사용자입니다."),
+    ALREADY_EXIST_MEMBER_EXCEPTION(HttpStatus.CONFLICT, "이미 회원가입이 완료된 사용자입니다."),
     ALREADY_EXIST_DIARY_EXCEPTION(HttpStatus.CONFLICT, "해당 날짜에 이미 작성된 일기가 존재합니다."),
 
     // 500 Internal Server Exception

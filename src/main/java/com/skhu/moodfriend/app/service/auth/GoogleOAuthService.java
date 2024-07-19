@@ -2,7 +2,6 @@ package com.skhu.moodfriend.app.service.auth;
 
 import com.google.gson.Gson;
 import com.skhu.moodfriend.app.dto.auth.resDto.OAuthResDto;
-import com.skhu.moodfriend.app.entity.member.EmotionType;
 import com.skhu.moodfriend.app.entity.member.LoginType;
 import com.skhu.moodfriend.app.entity.member.Member;
 import com.skhu.moodfriend.app.entity.member.RoleType;
@@ -69,7 +68,6 @@ public class GoogleOAuthService {
                         .name(memberInfo.name())
                         .password(null)
                         .mileage(0)
-                        .emotionType(EmotionType.SO_SO)
                         .loginType(LoginType.GOOGLE_LOGIN)
                         .roleType(RoleType.ROLE_USER)
                         .build())
@@ -100,6 +98,6 @@ public class GoogleOAuthService {
             return gson.fromJson(json, MemberInfo.class);
         }
 
-        throw new CustomException(ErrorCode.NOT_FOUND_USER_EXCEPTION, ErrorCode.NOT_FOUND_USER_EXCEPTION.getMessage());
+        throw new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage());
     }
 }

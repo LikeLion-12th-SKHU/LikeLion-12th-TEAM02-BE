@@ -46,7 +46,7 @@ public class SignUpService {
         }
 
         if (memberRepository.existsByEmail(signUpReqDto.email())) {
-            throw new CustomException(ErrorCode.ALREADY_EXIST_USER_EXCEPTION, ErrorCode.ALREADY_EXIST_USER_EXCEPTION.getMessage());
+            throw new CustomException(ErrorCode.ALREADY_EXIST_MEMBER_EXCEPTION, ErrorCode.ALREADY_EXIST_MEMBER_EXCEPTION.getMessage());
         }
 
         String encodePassword = passwordEncoder.encode(signUpReqDto.password());
@@ -56,7 +56,6 @@ public class SignUpService {
                 .password(encodePassword)
                 .name("호야집사")
                 .mileage(0)
-                .emotionType(EmotionType.SO_SO)
                 .loginType(LoginType.NATIVE_LOGIN)
                 .roleType(RoleType.ROLE_USER)
                 .build()

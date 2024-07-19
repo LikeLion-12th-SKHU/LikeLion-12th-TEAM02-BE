@@ -1,4 +1,4 @@
-package com.skhu.moodfriend.app.entity.member;
+package com.skhu.moodfriend.app.entity.diary;
 
 import com.skhu.moodfriend.global.exception.CustomException;
 import com.skhu.moodfriend.global.exception.code.ErrorCode;
