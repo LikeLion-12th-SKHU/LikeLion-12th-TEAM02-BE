@@ -43,7 +43,7 @@ public class MemberInfoService {
         Long memberId = Long.parseLong(principal.getName());
 
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ID_EXCEPTION, ErrorCode.NOT_FOUND_ID_EXCEPTION.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
         member.updateInfo(reqDto.name());
 
