@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
@@ -49,5 +51,29 @@ public class DiaryDisplayService {
                 .build();
 
         return ApiResponseTemplate.success(SuccessCode.GET_DIARY_SUCCESS, resDto);
+    }
+
+    @Transactional(readOnly = true)
+    public ApiResponseTemplate<List<DiaryResDto>> getAllDiariesByMember(Principal principal) {
+
+        Long memberId = Long.parseLong(principal.getName());
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
+
+        List<Diary> diaries = diaryRepository.findByTrackerMember(member);
+
+        List<DiaryResDto> resDtos = diaries.stream()
+                .map(diary -> DiaryResDto.builder()
+                        .emotionType(diary.getEmotionType().getDisplayName())
+                        .weatherType(diary.getWeatherType().getDisplayName())
+                        .title(diary.getTitle())
+                        .content(diary.getContent())
+                        .createdAt(diary.getCreatedAt())
+                        .updatedAt(diary.getUpdatedAt())
+                        .build())
+                .collect(Collectors.toList());
+
+        return ApiResponseTemplate.success(SuccessCode.GET_ALL_DIARIES_SUCCESS, resDtos);
     }
 }
