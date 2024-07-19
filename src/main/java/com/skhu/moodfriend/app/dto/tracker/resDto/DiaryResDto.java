@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Builder
-public record DiaryCreateResDto(
+public record DiaryResDto(
         String emotionType,
         String weatherType,
         String content,

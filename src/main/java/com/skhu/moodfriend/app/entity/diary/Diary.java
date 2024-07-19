@@ -6,7 +6,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -53,6 +52,12 @@ public class Diary {
         this.content = content;
         this.createdAt = createdAt;
         this.tracker = tracker;
+    }
+
+    public void update(EmotionType emotionType, WeatherType weatherType, String content) {
+        this.emotionType = emotionType;
+        this.weatherType = weatherType;
+        this.content = content;
     }
 }
 
