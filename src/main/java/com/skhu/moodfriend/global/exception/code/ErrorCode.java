@@ -27,6 +27,7 @@ public enum ErrorCode {
     INVALID_EMAIL_FORMAT_EXCEPTION(HttpStatus.BAD_REQUEST, "이메일 형식에 알맞지 않습니다."),
     INVALID_PASSWORD_FORMAT_EXCEPTION(HttpStatus.BAD_REQUEST, "영문, 숫자, 특수문자 조합의 10자 이상 16자 이하여야 합니다."),
     INVALID_DATE_EXCEPTION(HttpStatus.BAD_REQUEST, "작성 일자는 현재 날짜보다 이전이어야 합니다."),
+    CONTENT_LENGTH_EXCEEDED(HttpStatus.BAD_REQUEST, "일기 내용의 길이가 허용된 최대 길이(1024자)를 초과했습니다."),
 
     // 401 Unauthorized
     UNAUTHORIZED_EMAIL_EXCEPTION(HttpStatus.UNAUTHORIZED, "이메일 인증이 필요합니다."),
