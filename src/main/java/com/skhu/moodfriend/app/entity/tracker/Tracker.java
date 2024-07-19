@@ -5,6 +5,7 @@ import com.skhu.moodfriend.app.entity.diary_ai.DiaryAI;
 import com.skhu.moodfriend.app.entity.member.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -32,4 +33,9 @@ public class Tracker {
 
     @OneToMany(mappedBy = "tracker", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DiaryAI> diariesAI = new ArrayList<>();
+
+    @Builder
+    private Tracker(Member member) {
+        this.member = member;
+    }
 }
