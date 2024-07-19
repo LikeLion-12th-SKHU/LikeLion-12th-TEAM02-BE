@@ -1,7 +1,7 @@
-package com.skhu.moodfriend.app.service.diary;
+package com.skhu.moodfriend.app.service.tracker;
 
-import com.skhu.moodfriend.app.dto.diary.reqDto.DiaryCreateReqDto;
-import com.skhu.moodfriend.app.dto.diary.resDto.DiaryCreateResDto;
+import com.skhu.moodfriend.app.dto.tracker.reqDto.DiaryCreateReqDto;
+import com.skhu.moodfriend.app.dto.tracker.resDto.DiaryCreateResDto;
 import com.skhu.moodfriend.app.entity.diary.Diary;
 import com.skhu.moodfriend.app.entity.member.Member;
 import com.skhu.moodfriend.app.repository.DiaryRepository;
@@ -41,7 +41,6 @@ public class DiaryCreateService {
 
         Diary diary = Diary.builder()
                 .content(reqDto.content())
-                .member(member)
                 .build();
 
         diaryRepository.save(diary);

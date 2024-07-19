@@ -56,7 +56,6 @@ public class SignUpService {
                 .password(encodePassword)
                 .name("호야집사")
                 .mileage(0)
-                .emotionType(EmotionType.SO_SO)
                 .loginType(LoginType.NATIVE_LOGIN)
                 .roleType(RoleType.ROLE_USER)
                 .build()

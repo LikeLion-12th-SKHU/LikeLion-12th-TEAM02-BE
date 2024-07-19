@@ -1,8 +1,8 @@
-package com.skhu.moodfriend.app.controller.diary;
+package com.skhu.moodfriend.app.controller.tracker;
 
-import com.skhu.moodfriend.app.dto.diary.reqDto.DiaryCreateReqDto;
-import com.skhu.moodfriend.app.dto.diary.resDto.DiaryCreateResDto;
-import com.skhu.moodfriend.app.service.diary.DiaryCreateService;
+import com.skhu.moodfriend.app.dto.tracker.reqDto.DiaryCreateReqDto;
+import com.skhu.moodfriend.app.dto.tracker.resDto.DiaryCreateResDto;
+import com.skhu.moodfriend.app.service.tracker.DiaryCreateService;
 import com.skhu.moodfriend.global.template.ApiResponseTemplate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

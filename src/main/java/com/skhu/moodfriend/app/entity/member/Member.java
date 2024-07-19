@@ -1,9 +1,7 @@
 package com.skhu.moodfriend.app.entity.member;
 
 import com.skhu.moodfriend.app.entity.attendance.Attendance;
-import com.skhu.moodfriend.app.entity.diary.Diary;
-import com.skhu.moodfriend.app.entity.diary_ai.DiaryAI;
-import com.skhu.moodfriend.app.entity.emotion_tracker.EmotionTracker;
+import com.skhu.moodfriend.app.entity.tracker.Tracker;
 import com.skhu.moodfriend.app.entity.feedback.FeedBack;
 import com.skhu.moodfriend.app.entity.friend.Friend;
 import com.skhu.moodfriend.app.entity.member_object.MemberObject;
@@ -41,10 +39,6 @@ public class Member {
     private long mileage;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "EMOTION_TYPE")
-    private EmotionType emotionType;
-
-    @Enumerated(EnumType.STRING)
     @Column(name = "LOGIN_TYPE", nullable = false)
     private LoginType loginType;
 
@@ -56,13 +50,7 @@ public class Member {
     private List<Attendance> attendances = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Diary> diaries = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DiaryAI> diariesAI = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<EmotionTracker> emotionTrackers = new ArrayList<>();
+    private List<Tracker> trackers = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberObject> userObjects = new ArrayList<>();
@@ -74,12 +62,11 @@ public class Member {
     private List<FeedBack> feedBacks = new ArrayList<>();
 
     @Builder
-    private Member(String email, String password, String name, long mileage, EmotionType emotionType, LoginType loginType, RoleType roleType) {
+    private Member(String email, String password, String name, long mileage, LoginType loginType, RoleType roleType) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.mileage = mileage;
-        this.emotionType = emotionType;
         this.loginType = loginType;
         this.roleType = roleType;
     }

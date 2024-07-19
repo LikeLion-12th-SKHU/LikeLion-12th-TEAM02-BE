@@ -1,7 +1,6 @@
 package com.skhu.moodfriend.app.entity.diary;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.skhu.moodfriend.app.entity.member.Member;
+import com.skhu.moodfriend.app.entity.tracker.Tracker;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -24,6 +23,10 @@ public class Diary {
     @Column(name = "DIARY_ID")
     private Long diaryId;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "EMOTION_TYPE")
+    private EmotionType emotionType;
+
     @Column(name = "DIARY_CONTENT", length = 1024)
     private String content;
 
@@ -36,13 +39,13 @@ public class Diary {
     private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_ID")
-    private Member member;
+    @JoinColumn(name = "TRACKER_ID")
+    private Tracker tracker;
 
     @Builder
-    private Diary(String content, Member member) {
+    private Diary(String content, Tracker tracker) {
         this.content = content;
-        this.member = member;
+        this.tracker = tracker;
     }
 }
 

@@ -1,4 +1,4 @@
-package com.skhu.moodfriend.app.dto.diary.resDto;
+package com.skhu.moodfriend.app.dto.tracker.resDto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
