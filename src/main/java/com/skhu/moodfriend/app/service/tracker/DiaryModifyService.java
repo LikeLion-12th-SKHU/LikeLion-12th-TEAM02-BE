@@ -56,4 +56,26 @@ public class DiaryModifyService {
 
         return ApiResponseTemplate.success(SuccessCode.UPDATE_DIARY_SUCCESS, resDto);
     }
+
+    @Transactional
+    public ApiResponseTemplate<Void> deleteDiary(
+            Long diaryId,
+            Principal principal) {
+
+        Long memberId = Long.parseLong(principal.getName());
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
+
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DIARY_EXCEPTION, ErrorCode.NOT_FOUND_DIARY_EXCEPTION.getMessage()));
+
+        if (!diary.getTracker().getMember().equals(member)) {
+            throw new CustomException(ErrorCode.ONLY_OWN_DIARY_MODIFY_EXCEPTION, ErrorCode.ONLY_OWN_DIARY_MODIFY_EXCEPTION.getMessage());
+        }
+
+        diaryRepository.delete(diary);
+
+        return ApiResponseTemplate.success(SuccessCode.DELETE_DIARY_SUCCESS, null);
+    }
 }

@@ -61,4 +61,23 @@ public class DiaryController {
         ApiResponseTemplate<DiaryResDto> data = diaryModifyService.updateDiary(reqDto, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
+
+    @DeleteMapping("/delete/{diaryId}")
+    @Operation(
+            summary = "사용자 일기 삭제",
+            description = "사용자 일기를 삭제합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "사용자 일기 삭제 성공"),
+                    @ApiResponse(responseCode = "401", description = "권한 문제"),
+                    @ApiResponse(responseCode = "404", description = "해당 일기를 찾을 수 없음"),
+                    @ApiResponse(responseCode = "500", description = "토큰 문제 or 관리자 문의")
+            }
+    )
+    public ResponseEntity<ApiResponseTemplate<Void>> deleteDiary(
+            @PathVariable Long diaryId,
+            Principal principal) {
+
+        ApiResponseTemplate<Void> data = diaryModifyService.deleteDiary(diaryId, principal);
+        return ResponseEntity.status(data.getStatus()).body(data);
+    }
 }
