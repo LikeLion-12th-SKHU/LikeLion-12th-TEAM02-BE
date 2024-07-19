@@ -24,8 +24,12 @@ public class Diary {
     private Long diaryId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "EMOTION_TYPE")
+    @Column(name = "EMOTION_TYPE", nullable = false)
     private EmotionType emotionType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "WEATHER_TYPE", nullable = false)
+    private WeatherType weatherType;
 
     @Column(name = "DIARY_CONTENT", length = 1024)
     private String content;
@@ -43,7 +47,9 @@ public class Diary {
     private Tracker tracker;
 
     @Builder
-    private Diary(String content, Tracker tracker) {
+    private Diary(EmotionType emotionType, WeatherType weatherType, String content, Tracker tracker) {
+        this.emotionType = emotionType;
+        this.weatherType = weatherType;
         this.content = content;
         this.tracker = tracker;
     }
