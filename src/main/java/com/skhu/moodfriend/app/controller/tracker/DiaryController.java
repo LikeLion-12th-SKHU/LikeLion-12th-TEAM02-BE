@@ -18,7 +18,7 @@ import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-@Tag(name = "사용자 일기 작성/수정/삭제", description = "사용자 일기를 작성/수정/삭제하는 api 그룹")
+@Tag(name = "일기 작성/수정/삭제", description = "일기를 작성/수정/삭제하는 api 그룹")
 @RequestMapping("/api/v1/diary")
 public class DiaryController {
 

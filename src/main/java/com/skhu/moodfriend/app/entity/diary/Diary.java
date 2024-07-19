@@ -31,6 +31,9 @@ public class Diary {
     @Column(name = "WEATHER_TYPE", nullable = false)
     private WeatherType weatherType;
 
+    @Column(name = "DIARY_TITLE")
+    private String title;
+
     @Column(name = "DIARY_CONTENT", length = 1024)
     private String content;
 
@@ -46,9 +49,10 @@ public class Diary {
     private Tracker tracker;
 
     @Builder
-    private Diary(EmotionType emotionType, WeatherType weatherType, String content, LocalDate createdAt, Tracker tracker) {
+    private Diary(EmotionType emotionType, WeatherType weatherType, String title, String content, LocalDate createdAt, Tracker tracker) {
         this.emotionType = emotionType;
         this.weatherType = weatherType;
+        this.title = title;
         this.content = content;
         this.createdAt = createdAt;
         this.tracker = tracker;

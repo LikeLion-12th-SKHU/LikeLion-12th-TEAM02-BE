@@ -49,6 +49,7 @@ public class DiaryModifyService {
         DiaryResDto resDto = DiaryResDto.builder()
                 .emotionType(diary.getEmotionType().getDisplayName())
                 .weatherType(diary.getWeatherType().getDisplayName())
+                .title(diary.getTitle())
                 .content(diary.getContent())
                 .createdAt(diary.getCreatedAt())
                 .updatedAt(diary.getUpdatedAt())

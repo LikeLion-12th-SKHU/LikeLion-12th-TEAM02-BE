@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 public record DiaryResDto(
         String emotionType,
         String weatherType,
+        String title,
         String content,
         LocalDate createdAt,
         @JsonFormat(pattern = "yyyy-MM-dd - HH:mm", timezone = "Asia/Seoul")

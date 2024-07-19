@@ -8,6 +8,7 @@ import java.time.LocalDate;
 public record DiaryUpdateReqDto(
         EmotionType emotionType,
         WeatherType weatherType,
+        String title,
         String content,
         LocalDate createdAt
 ) {
