@@ -3,6 +3,7 @@ package com.skhu.moodfriend.app.dto.tracker.resDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Builder
@@ -10,8 +11,7 @@ public record DiaryCreateResDto(
         String emotionType,
         String weatherType,
         String content,
-        @JsonFormat(pattern = "yyyy-MM-dd - HH:mm", timezone = "Asia/Seoul")
-        LocalDateTime createdAt,
+        LocalDate createdAt,
         @JsonFormat(pattern = "yyyy-MM-dd - HH:mm", timezone = "Asia/Seoul")
         LocalDateTime updatedAt
 ) {

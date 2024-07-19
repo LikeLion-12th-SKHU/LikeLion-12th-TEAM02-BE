@@ -10,6 +10,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -34,9 +35,8 @@ public class Diary {
     @Column(name = "DIARY_CONTENT", length = 1024)
     private String content;
 
-    @CreatedDate
-    @Column(name = "DIARY_CREATED_AT", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    @Column(name = "DIARY_CREATED_AT", nullable = false)
+    private LocalDate createdAt;
 
     @LastModifiedDate
     @Column(name = "DIARY_UPDATED_AT")
@@ -47,10 +47,11 @@ public class Diary {
     private Tracker tracker;
 
     @Builder
-    private Diary(EmotionType emotionType, WeatherType weatherType, String content, Tracker tracker) {
+    private Diary(EmotionType emotionType, WeatherType weatherType, String content, LocalDate createdAt, Tracker tracker) {
         this.emotionType = emotionType;
         this.weatherType = weatherType;
         this.content = content;
+        this.createdAt = createdAt;
         this.tracker = tracker;
     }
 }

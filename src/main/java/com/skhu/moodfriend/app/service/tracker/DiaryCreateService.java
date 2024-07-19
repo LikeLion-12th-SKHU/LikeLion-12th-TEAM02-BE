@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
@@ -42,6 +43,12 @@ public class DiaryCreateService {
             throw new CustomException(ErrorCode.ALREADY_EXIST_DIARY_EXCEPTION, ErrorCode.ALREADY_EXIST_DIARY_EXCEPTION.getMessage());
         }
 
+        LocalDate createdAt = reqDto.createdAt();
+        LocalDate now = LocalDate.now();
+        if (createdAt.isAfter(now)) {
+            throw new CustomException(ErrorCode.INVALID_DATE_EXCEPTION, ErrorCode.INVALID_DATE_EXCEPTION.getMessage());
+        }
+
         Tracker tracker = trackerRepository.findByMember(member)
                 .orElseGet(() -> trackerRepository.save(Tracker.builder().member(member).build()));
 
@@ -49,6 +56,7 @@ public class DiaryCreateService {
                 .emotionType(reqDto.emotionType())
                 .weatherType(reqDto.weatherType())
                 .content(reqDto.content())
+                .createdAt(createdAt)
                 .tracker(tracker)
                 .build();
 
