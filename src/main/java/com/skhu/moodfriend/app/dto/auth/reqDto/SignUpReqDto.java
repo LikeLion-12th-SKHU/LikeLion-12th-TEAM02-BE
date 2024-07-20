@@ -1,7 +1,5 @@
 package com.skhu.moodfriend.app.dto.auth.reqDto;
 
-import com.skhu.moodfriend.global.exception.CustomException;
-import com.skhu.moodfriend.global.exception.code.ErrorCode;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
@@ -23,9 +21,4 @@ public record SignUpReqDto(
         @NotBlank(message = "비밀번호 재확인은 필수 입력 항목입니다.")
         String confirmPassword
 ) {
-    public SignUpReqDto {
-        if (!password.equals(confirmPassword)) {
-            throw new CustomException(ErrorCode.PASSWORD_MISMATCH_EXCEPTION, ErrorCode.PASSWORD_MISMATCH_EXCEPTION.getMessage());
-        }
-    }
 }

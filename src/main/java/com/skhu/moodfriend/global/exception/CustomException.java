@@ -1,10 +1,9 @@
 package com.skhu.moodfriend.global.exception;
 
 import com.skhu.moodfriend.global.exception.code.ErrorCode;
-import lombok.Getter;
 
-@Getter
 public class CustomException extends RuntimeException {
+
     private final ErrorCode errorCode;
 
     public CustomException(ErrorCode errorCode, String message) {
@@ -12,7 +11,7 @@ public class CustomException extends RuntimeException {
         this.errorCode = errorCode;
     }
 
-    public int getHttpStatus() {
-        return errorCode.getHttpStatusCode();
+    public ErrorCode getErrorCode() {
+        return errorCode;
     }
 }

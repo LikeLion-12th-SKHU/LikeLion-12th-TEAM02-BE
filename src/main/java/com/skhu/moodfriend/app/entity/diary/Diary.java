@@ -31,10 +31,10 @@ public class Diary {
     @Column(name = "WEATHER_TYPE", nullable = false)
     private WeatherType weatherType;
 
-    @Column(name = "DIARY_TITLE", length = 30)
+    @Column(name = "DIARY_TITLE", length = 30, nullable = false)
     private String title;
 
-    @Column(name = "DIARY_CONTENT", length = 1024)
+    @Column(name = "DIARY_CONTENT", length = 1024, nullable = false)
     private String content;
 
     @Column(name = "DIARY_CREATED_AT", nullable = false)

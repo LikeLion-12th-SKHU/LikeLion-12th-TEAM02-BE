@@ -28,6 +28,10 @@ public class SignUpService {
     @Transactional
     public ApiResponseTemplate<SignUpResDto> signUp(SignUpReqDto signUpReqDto) {
 
+        if (!signUpReqDto.password().equals(signUpReqDto.confirmPassword())) {
+            throw new CustomException(ErrorCode.PASSWORD_MISMATCH_EXCEPTION, ErrorCode.PASSWORD_MISMATCH_EXCEPTION.getMessage());
+        }
+
         if (memberRepository.existsByEmail(signUpReqDto.email())) {
             throw new CustomException(ErrorCode.ALREADY_EXIST_MEMBER_EXCEPTION, ErrorCode.ALREADY_EXIST_MEMBER_EXCEPTION.getMessage());
         }

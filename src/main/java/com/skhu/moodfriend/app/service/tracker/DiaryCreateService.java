@@ -60,8 +60,8 @@ public class DiaryCreateService {
         diaryRepository.save(diary);
 
         DiaryResDto resDto = DiaryResDto.builder()
-                .emotionType(diary.getEmotionType().getDisplayName())
-                .weatherType(diary.getWeatherType().getDisplayName())
+                .emotionType(diary.getEmotionType())
+                .weatherType(diary.getWeatherType())
                 .title(diary.getTitle())
                 .content(diary.getContent())
                 .createdAt(diary.getCreatedAt())
