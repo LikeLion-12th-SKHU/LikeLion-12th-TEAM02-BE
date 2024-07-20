@@ -16,8 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.regex.Pattern;
-
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class SignUpService {
@@ -27,23 +25,8 @@ public class SignUpService {
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
 
-    private static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
-    private static final String PASSWORD_REGEX = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{10,16}$";
-
     @Transactional
     public ApiResponseTemplate<SignUpResDto> signUp(SignUpReqDto signUpReqDto) {
-
-        if (!Pattern.matches(EMAIL_REGEX, signUpReqDto.email())) {
-            throw new CustomException(ErrorCode.INVALID_EMAIL_FORMAT_EXCEPTION, ErrorCode.INVALID_EMAIL_FORMAT_EXCEPTION.getMessage());
-        }
-
-        if (!Pattern.matches(PASSWORD_REGEX, signUpReqDto.password())) {
-            throw new CustomException(ErrorCode.INVALID_PASSWORD_FORMAT_EXCEPTION, ErrorCode.INVALID_PASSWORD_FORMAT_EXCEPTION.getMessage());
-        }
-
-        if (!signUpReqDto.password().equals(signUpReqDto.confirmPassword())) {
-            throw new CustomException(ErrorCode.PASSWORD_MISMATCH_EXCEPTION, ErrorCode.PASSWORD_MISMATCH_EXCEPTION.getMessage());
-        }
 
         if (memberRepository.existsByEmail(signUpReqDto.email())) {
             throw new CustomException(ErrorCode.ALREADY_EXIST_MEMBER_EXCEPTION, ErrorCode.ALREADY_EXIST_MEMBER_EXCEPTION.getMessage());

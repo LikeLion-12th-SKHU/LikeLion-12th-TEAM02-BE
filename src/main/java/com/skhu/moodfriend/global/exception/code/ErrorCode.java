@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
     // 400 Bad Request
-    VALIDATION_EXCEPTION(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
     PASSWORD_MISMATCH_EXCEPTION(HttpStatus.BAD_REQUEST,"비밀번호가 일치하지 않습니다."),
     VALIDATION_REQUEST_MISSING_EXCEPTION(HttpStatus.BAD_REQUEST, "필수적인 요청 값이 입력되지 않았습니다."),
     VALIDATION_REQUEST_HEADER_MISSING_EXCEPTION(HttpStatus.BAD_REQUEST, "요청 헤더값이 입력되지 않았습니다."),
@@ -28,6 +27,7 @@ public enum ErrorCode {
     INVALID_PASSWORD_FORMAT_EXCEPTION(HttpStatus.BAD_REQUEST, "영문, 숫자, 특수문자 조합의 10자 이상 16자 이하여야 합니다."),
     INVALID_DATE_EXCEPTION(HttpStatus.BAD_REQUEST, "작성 일자는 현재 날짜보다 이전이어야 합니다."),
     CONTENT_LENGTH_EXCEEDED(HttpStatus.BAD_REQUEST, "일기 내용의 길이가 허용된 최대 길이(1024자)를 초과했습니다."),
+    VALIDATION_EXCEPTION(HttpStatus.BAD_REQUEST, "유효성 검사에 맞지않습니다."),
 
     // 401 Unauthorized
     UNAUTHORIZED_EMAIL_EXCEPTION(HttpStatus.UNAUTHORIZED, "이메일 인증이 필요합니다."),

@@ -9,6 +9,7 @@ import com.skhu.moodfriend.global.template.ApiResponseTemplate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,7 @@ public class DiaryController {
             }
     )
     public ResponseEntity<ApiResponseTemplate<DiaryResDto>> createDiary(
-            @RequestBody DiaryCreateReqDto reqDto,
+            @Valid @RequestBody DiaryCreateReqDto reqDto,
             Principal principal) {
 
         ApiResponseTemplate<DiaryResDto> data = diaryCreateService.createDiary(reqDto, principal);
@@ -55,7 +56,7 @@ public class DiaryController {
             }
     )
     public ResponseEntity<ApiResponseTemplate<DiaryResDto>> updateDiary(
-            @RequestBody DiaryUpdateReqDto reqDto,
+            @Valid @RequestBody DiaryUpdateReqDto reqDto,
             Principal principal) {
 
         ApiResponseTemplate<DiaryResDto> data = diaryModifyService.updateDiary(reqDto, principal);

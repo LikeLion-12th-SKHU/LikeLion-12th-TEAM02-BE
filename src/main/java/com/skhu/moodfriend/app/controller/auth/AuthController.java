@@ -12,6 +12,7 @@ import com.skhu.moodfriend.global.template.ApiResponseTemplate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,7 @@ public class AuthController {
                     @ApiResponse(responseCode = "500", description = "관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<SignUpResDto>> signUp(@RequestBody SignUpReqDto signUpReqDto) {
+    public ResponseEntity<ApiResponseTemplate<SignUpResDto>> signUp(@Valid @RequestBody SignUpReqDto signUpReqDto) {
         ApiResponseTemplate<SignUpResDto> data = signUpService.signUp(signUpReqDto);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
@@ -54,7 +55,7 @@ public class AuthController {
                     @ApiResponse(responseCode = "500", description = "관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<LoginResDto>> login(@RequestBody LoginReqDto loginReqDto) {
+    public ResponseEntity<ApiResponseTemplate<LoginResDto>> login(@Valid @RequestBody LoginReqDto loginReqDto) {
         ApiResponseTemplate<LoginResDto> data = loginService.login(loginReqDto);
         return ResponseEntity.status(data.getStatus()).body(data);
     }

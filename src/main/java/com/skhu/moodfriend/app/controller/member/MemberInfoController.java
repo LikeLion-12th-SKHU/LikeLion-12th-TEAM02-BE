@@ -7,6 +7,7 @@ import com.skhu.moodfriend.global.template.ApiResponseTemplate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -50,8 +51,8 @@ public class MemberInfoController {
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<MemberInfoResDto>> updateMemberInfo(Principal principal, @RequestBody MemberInfoUpdateReqDto reqDto) {
-        ApiResponseTemplate<MemberInfoResDto> data = memberInfoService.updateMemberInfo(principal, reqDto);
+    public ResponseEntity<ApiResponseTemplate<MemberInfoResDto>> updateMemberInfo(@Valid @RequestBody MemberInfoUpdateReqDto reqDto, Principal principal) {
+        ApiResponseTemplate<MemberInfoResDto> data = memberInfoService.updateMemberInfo(reqDto, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 }

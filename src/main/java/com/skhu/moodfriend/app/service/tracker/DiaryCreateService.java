@@ -39,19 +39,10 @@ public class DiaryCreateService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
         LocalDate createdAt = reqDto.createdAt();
-        LocalDate now = LocalDate.now();
-
-        if (createdAt.isAfter(now)) {
-            throw new CustomException(ErrorCode.INVALID_DATE_EXCEPTION, ErrorCode.INVALID_DATE_EXCEPTION.getMessage());
-        }
 
         boolean exists = diaryRepository.existsByMemberAndCreatedAtDate(member, createdAt);
         if (exists) {
             throw new CustomException(ErrorCode.ALREADY_EXIST_DIARY_EXCEPTION, ErrorCode.ALREADY_EXIST_DIARY_EXCEPTION.getMessage());
-        }
-
-        if (reqDto.content().length() > 1024) {
-            throw new CustomException(ErrorCode.CONTENT_LENGTH_EXCEEDED, ErrorCode.CONTENT_LENGTH_EXCEEDED.getMessage());
         }
 
         Tracker tracker = trackerRepository.findByMember(member)
