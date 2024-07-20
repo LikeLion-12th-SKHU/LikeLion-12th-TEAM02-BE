@@ -42,8 +42,8 @@ public class DiaryDisplayService {
         }
 
         DiaryResDto resDto = DiaryResDto.builder()
-                .emotionType(diary.getEmotionType().getDisplayName())
-                .weatherType(diary.getWeatherType().getDisplayName())
+                .emotionType(diary.getEmotionType())
+                .weatherType(diary.getWeatherType())
                 .title(diary.getTitle())
                 .content(diary.getContent())
                 .createdAt(diary.getCreatedAt())
@@ -65,8 +65,8 @@ public class DiaryDisplayService {
 
         List<DiaryResDto> resDtos = diaries.stream()
                 .map(diary -> DiaryResDto.builder()
-                        .emotionType(diary.getEmotionType().getDisplayName())
-                        .weatherType(diary.getWeatherType().getDisplayName())
+                        .emotionType(diary.getEmotionType())
+                        .weatherType(diary.getWeatherType())
                         .title(diary.getTitle())
                         .content(diary.getContent())
                         .createdAt(diary.getCreatedAt())

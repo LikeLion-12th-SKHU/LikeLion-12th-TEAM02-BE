@@ -23,6 +23,7 @@ public class MemberInfoService {
 
     @Transactional(readOnly = true)
     public ApiResponseTemplate<MemberInfoResDto> getMemberInfo(Principal principal) {
+
         Long memberId = Long.parseLong(principal.getName());
 
         Member member = memberRepository.findById(memberId)
@@ -39,7 +40,9 @@ public class MemberInfoService {
     }
 
     @Transactional
-    public ApiResponseTemplate<MemberInfoResDto> updateMemberInfo(Principal principal, MemberInfoUpdateReqDto reqDto) {
+    public ApiResponseTemplate<MemberInfoResDto> updateMemberInfo(
+            MemberInfoUpdateReqDto reqDto, Principal principal) {
+
         Long memberId = Long.parseLong(principal.getName());
 
         Member member = memberRepository.findById(memberId)

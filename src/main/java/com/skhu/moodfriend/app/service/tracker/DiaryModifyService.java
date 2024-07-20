@@ -39,16 +39,12 @@ public class DiaryModifyService {
         Diary diary = diaryRepository.findByCreatedAtAndTrackerMember(createdAt, member)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DIARY_EXCEPTION, ErrorCode.NOT_FOUND_DIARY_EXCEPTION.getMessage()));
 
-        if (reqDto.content().length() > 1024) {
-            throw new CustomException(ErrorCode.CONTENT_LENGTH_EXCEEDED, ErrorCode.CONTENT_LENGTH_EXCEEDED.getMessage());
-        }
-
         diary.update(reqDto.emotionType(), reqDto.weatherType(), reqDto.title(), reqDto.content());
         diaryRepository.save(diary);
 
         DiaryResDto resDto = DiaryResDto.builder()
-                .emotionType(diary.getEmotionType().getDisplayName())
-                .weatherType(diary.getWeatherType().getDisplayName())
+                .emotionType(diary.getEmotionType())
+                .weatherType(diary.getWeatherType())
                 .title(diary.getTitle())
                 .content(diary.getContent())
                 .createdAt(diary.getCreatedAt())

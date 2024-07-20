@@ -18,8 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.regex.Pattern;
-
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class LoginService {
@@ -31,14 +29,8 @@ public class LoginService {
     private final TokenRenewService tokenRenewService;
     private final PasswordEncoder passwordEncoder;
 
-    private static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
-
     @Transactional
     public ApiResponseTemplate<LoginResDto> login(LoginReqDto loginReqDto) {
-
-        if (!Pattern.matches(EMAIL_REGEX, loginReqDto.email())) {
-            throw new CustomException(ErrorCode.INVALID_EMAIL_FORMAT_EXCEPTION, ErrorCode.INVALID_EMAIL_FORMAT_EXCEPTION.getMessage());
-        }
 
         Member member = memberRepository.findByEmail(loginReqDto.email())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_EMAIL_EXCEPTION,
