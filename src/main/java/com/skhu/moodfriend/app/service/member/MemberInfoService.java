@@ -16,12 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.security.Principal;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberInfoService {
 
     private final MemberRepository memberRepository;
 
-    @Transactional(readOnly = true)
     public ApiResponseTemplate<MemberInfoResDto> getMemberInfo(Principal principal) {
 
         Long memberId = Long.parseLong(principal.getName());

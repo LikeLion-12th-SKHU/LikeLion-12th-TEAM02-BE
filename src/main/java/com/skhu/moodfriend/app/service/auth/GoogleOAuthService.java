@@ -17,12 +17,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.util.Map;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class GoogleOAuthService {
 
@@ -59,6 +61,7 @@ public class GoogleOAuthService {
         throw new CustomException(ErrorCode.FAILED_GET_TOKEN_EXCEPTION, ErrorCode.FAILED_GET_TOKEN_EXCEPTION.getMessage());
     }
 
+    @Transactional
     public ApiResponseTemplate<OAuthResDto> signUpOrLogin(String googleAccessToken) {
         MemberInfo memberInfo = getMemberInfo(googleAccessToken);
 
