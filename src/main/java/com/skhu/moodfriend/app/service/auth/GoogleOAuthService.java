@@ -75,6 +75,7 @@ public class GoogleOAuthService {
 
         OAuthResDto resDto = OAuthResDto.builder()
                 .accessToken(tokenProvider.createAccessToken(member))
+                .refreshToken(tokenProvider.createRefreshToken(member))
                 .build();
 
         return ApiResponseTemplate.success(SuccessCode.LOGIN_MEMBER_SUCCESS, resDto);

@@ -4,6 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record OAuthResDto(
-        String accessToken
+        String accessToken,
+        String refreshToken
 ) {
 }
