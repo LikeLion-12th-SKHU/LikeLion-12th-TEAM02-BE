@@ -6,6 +6,7 @@ import com.skhu.moodfriend.app.dto.auth.resDto.LoginResDto;
 import com.skhu.moodfriend.app.dto.auth.resDto.OAuthResDto;
 import com.skhu.moodfriend.app.dto.auth.resDto.SignUpResDto;
 import com.skhu.moodfriend.app.service.auth.GoogleOAuthService;
+import com.skhu.moodfriend.app.service.auth.KakaoOAuthService;
 import com.skhu.moodfriend.app.service.auth.LoginService;
 import com.skhu.moodfriend.app.service.auth.SignUpService;
 import com.skhu.moodfriend.global.template.ApiResponseTemplate;
@@ -27,6 +28,7 @@ public class AuthController {
     private final SignUpService signUpService;
     private final LoginService loginService;
     private final GoogleOAuthService googleOauthService;
+    private final KakaoOAuthService kakaoOAuthService;
 
     @PostMapping("/signUp")
     @Operation(
@@ -72,6 +74,21 @@ public class AuthController {
     )
     public ResponseEntity<ApiResponseTemplate<OAuthResDto>> googleCallback(@RequestParam(name = "code") String code) {
         ApiResponseTemplate<OAuthResDto> data = googleOauthService.signUpOrLogin(googleOauthService.getGoogleAccessToken(code).getData());
+        return ResponseEntity.status(data.getStatus()).body(data);
+    }
+
+    @GetMapping("/callback/kakao")
+    @Operation(
+            summary = "카카오 회원가입/로그인 콜백",
+            description = "카카오 로그인 후 리다이렉션된 URI입니다. 인가 코드를 받아서 accessToken을 요청하고, 회원가입 또는 로그인을 처리합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "회원가입/로그인 성공"),
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청"),
+                    @ApiResponse(responseCode = "500", description = "관리자 문의")
+            }
+    )
+    public ResponseEntity<ApiResponseTemplate<OAuthResDto>> kakaoCallback(@RequestParam(name = "code") String code) {
+        ApiResponseTemplate<OAuthResDto> data = kakaoOAuthService.signUpOrLogin(kakaoOAuthService.getKakaoAccessToken(code).getData());
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 }
