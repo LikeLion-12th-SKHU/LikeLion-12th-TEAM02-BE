@@ -45,7 +45,7 @@ public class ControllerExceptionAdvice {
                 String enumValues = getEnumValues(ife.getTargetType());
                 String message = String.format("허용되는 값: [%s]", enumValues);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(ApiResponseTemplate.error(ErrorCode.INVALID_DISPLAY_NAME_EXCEPTION, message));
+                        .body(ApiResponseTemplate.error(ErrorCode.INVALID_ENUM_VALUE, message));
             }
         }
 
@@ -55,7 +55,7 @@ public class ControllerExceptionAdvice {
 
     private static String getEnumValues(Class<?> enumClass) {
         if (!enumClass.isEnum()) {
-            throw new CustomException(ErrorCode.INVALID_DISPLAY_NAME_EXCEPTION, ErrorCode.INVALID_DISPLAY_NAME_EXCEPTION.getMessage());
+            throw new CustomException(ErrorCode.INVALID_ENUM_VALUE, ErrorCode.INVALID_ENUM_VALUE.getMessage());
         }
 
         return Stream.of(enumClass.getEnumConstants())

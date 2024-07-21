@@ -12,11 +12,11 @@ import java.time.LocalDate;
 
 public record DiaryUpdateReqDto(
         @NotNull(message = "감정은 필수 입력 항목입니다.")
-        @EnumValid(enumClass = EmotionType.class, message = "올바르지 않은 감정 타입 값입니다.")
+        @EnumValid(enumClass = EmotionType.class)
         EmotionType emotionType,
 
         @NotNull(message = "날씨는 필수 입력 항목입니다.")
-        @EnumValid(enumClass = WeatherType.class, message = "올바르지 않은 날씨 타입 값입니다.")
+        @EnumValid(enumClass = WeatherType.class)
         WeatherType weatherType,
 
         @NotBlank(message = "제목은 필수 입력 항목입니다.")

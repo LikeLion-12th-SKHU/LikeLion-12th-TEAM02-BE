@@ -19,13 +19,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class DiaryDisplayService {
 
     private final DiaryRepository diaryRepository;
     private final MemberRepository memberRepository;
 
-    @Transactional(readOnly = true)
     public ApiResponseTemplate<DiaryResDto> getDiaryById(
             Long diaryId, Principal principal) {
 
@@ -53,7 +53,6 @@ public class DiaryDisplayService {
         return ApiResponseTemplate.success(SuccessCode.GET_DIARY_SUCCESS, resDto);
     }
 
-    @Transactional(readOnly = true)
     public ApiResponseTemplate<List<DiaryResDto>> getAllDiariesByMember(Principal principal) {
 
         Long memberId = Long.parseLong(principal.getName());
