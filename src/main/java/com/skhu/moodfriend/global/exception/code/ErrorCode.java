@@ -33,6 +33,7 @@ public enum ErrorCode {
     // 409 Conflict
     ALREADY_EXIST_MEMBER_EXCEPTION(HttpStatus.CONFLICT, "이미 회원가입이 완료된 사용자입니다."),
     ALREADY_EXIST_DIARY_EXCEPTION(HttpStatus.CONFLICT, "해당 날짜에 이미 작성된 일기가 존재합니다."),
+    ALREADY_EXIST_ATTENDED_EXCEPTION(HttpStatus.CONFLICT, "이미 오늘 출석했습니다."),
 
     // 500 Internal Server Exception
     INTERNAL_SERVER_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "서버에서 오류가 발생했습니다."),

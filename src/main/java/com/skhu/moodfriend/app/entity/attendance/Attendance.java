@@ -1,9 +1,9 @@
 package com.skhu.moodfriend.app.entity.attendance;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.skhu.moodfriend.app.entity.member.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -22,12 +22,16 @@ public class Attendance {
     @Column(name = "ATTENDANCE_ID")
     private Long attendanceId;
 
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     @CreatedDate
-    @Column(name = "ATTENDANCE_DATE", nullable = false, updatable = false)
+    @Column(name = "ATTENDANCE_DATE", updatable = false)
     private LocalDate attendanceDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
+
+    @Builder
+    private Attendance(Member member) {
+        this.member = member;
+    }
 }

@@ -33,7 +33,7 @@ public class KakaoOAuthService {
     private String KAKAO_CLIENT_ID;
 
     private final String KAKAO_TOKEN_URL = "https://kauth.kakao.com/oauth/token";
-    private final String KAKAO_REDIRECT_URI = "http://localhost:8080/api/v1/auth/callback/kakao";
+    private final String KAKAO_REDIRECT_URI = "https://moodfriend.site/api/v1/auth/callback/kakao";
 
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
