@@ -30,3 +30,6 @@ oauth:
     client-secret: ${GOOGLE_CLIENT_SECRET}
   kakao:
     client-id: ${KAKAO_CLIENT_ID}
+
+kakao-map:
+  client-id: ${KAKAO_CLIENT_ID}
