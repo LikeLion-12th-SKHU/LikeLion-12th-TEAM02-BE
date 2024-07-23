@@ -74,4 +74,8 @@ public class Member {
     public void updateInfo(String name) {
         this.name = name;
     }
+
+    public void updateMileage(long mileageIncrement) {
+        this.mileage += mileageIncrement;
+    }
 }
