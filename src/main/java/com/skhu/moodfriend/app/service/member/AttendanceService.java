@@ -1,5 +1,6 @@
 package com.skhu.moodfriend.app.service.member;
 
+import com.skhu.moodfriend.app.dto.member.resDto.MemberInfoResDto;
 import com.skhu.moodfriend.app.entity.attendance.Attendance;
 import com.skhu.moodfriend.app.entity.member.Member;
 import com.skhu.moodfriend.app.repository.AttendanceRepository;
@@ -28,7 +29,7 @@ public class AttendanceService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public ApiResponseTemplate<String> recordAttendance(Principal principal) {
+    public ApiResponseTemplate<MemberInfoResDto> recordAttendance(Principal principal) {
         Long memberId = Long.parseLong(principal.getName());
 
         Member member = memberRepository.findById(memberId)
@@ -49,6 +50,13 @@ public class AttendanceService {
         member.updateMileage(MILEAGE_INCREMENT);
         memberRepository.save(member);
 
-        return ApiResponseTemplate.success(SuccessCode.ATTENDANCE_SUCCESS, SuccessCode.ATTENDANCE_SUCCESS.getMessage());
+        MemberInfoResDto resDto = MemberInfoResDto.builder()
+                .email(member.getEmail())
+                .name(member.getName())
+                .mileage(member.getMileage())
+                .loginType(member.getLoginType().getDisplayName())
+                .build();
+
+        return ApiResponseTemplate.success(SuccessCode.ATTENDANCE_SUCCESS, resDto);
     }
 }

@@ -1,5 +1,6 @@
 package com.skhu.moodfriend.app.controller.member;
 
+import com.skhu.moodfriend.app.dto.member.resDto.MemberInfoResDto;
 import com.skhu.moodfriend.app.service.member.AttendanceService;
 import com.skhu.moodfriend.global.template.ApiResponseTemplate;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,8 +35,8 @@ public class AttendanceController {
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<String>> recordAttendance(Principal principal) {
-        ApiResponseTemplate<String> data = attendanceService.recordAttendance(principal);
+    public ResponseEntity<ApiResponseTemplate<MemberInfoResDto>> recordAttendance(Principal principal) {
+        ApiResponseTemplate<MemberInfoResDto> data = attendanceService.recordAttendance(principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 }
