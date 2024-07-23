@@ -38,10 +38,7 @@ public class DiaryCreateService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
-        LocalDate createdAt = reqDto.createdAt();
-
-        boolean exists = diaryRepository.existsByMemberAndCreatedAtDate(member, createdAt);
-        if (exists) {
+        if (diaryRepository.existsByMemberAndCreatedAtDate(member, reqDto.createdAt())) {
             throw new CustomException(ErrorCode.ALREADY_EXIST_DIARY_EXCEPTION, ErrorCode.ALREADY_EXIST_DIARY_EXCEPTION.getMessage());
         }
 
@@ -53,7 +50,7 @@ public class DiaryCreateService {
                 .weatherType(reqDto.weatherType())
                 .title(reqDto.title())
                 .content(reqDto.content())
-                .createdAt(createdAt)
+                .createdAt(reqDto.createdAt())
                 .tracker(tracker)
                 .build();
 
