@@ -35,8 +35,7 @@ public class DiaryModifyService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
-        LocalDate createdAt = reqDto.createdAt();
-        Diary diary = diaryRepository.findByCreatedAtAndTrackerMember(createdAt, member)
+        Diary diary = diaryRepository.findByCreatedAtAndTrackerMember(reqDto.createdAt(), member)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DIARY_EXCEPTION, ErrorCode.NOT_FOUND_DIARY_EXCEPTION.getMessage()));
 
         diary.update(reqDto.emotionType(), reqDto.weatherType(), reqDto.title(), reqDto.content());

@@ -26,4 +26,15 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
     Optional<Diary> findByCreatedAtAndTrackerMember(@Param("date") LocalDate date, @Param("member") Member member);
 
     List<Diary> findByTrackerMember(Member member);
+
+    @Query(value = "SELECT d FROM Diary d " +
+            "WHERE d.tracker.member = :member " +
+            "AND FUNCTION('YEAR', d.createdAt) = :year " +
+            "AND FUNCTION('MONTH', d.createdAt) = :month " +
+            "ORDER BY d.createdAt ASC")
+    List<Diary> findMonthlyDailyEmotions(
+            @Param("member") Member member,
+            @Param("year") int year,
+            @Param("month") int month
+    );
 }
