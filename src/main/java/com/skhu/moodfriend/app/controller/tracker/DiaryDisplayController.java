@@ -31,9 +31,9 @@ public class DiaryDisplayController {
             description = "사용자의 특정 일기를 조회합니다.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "일기 조회 성공"),
-                    @ApiResponse(responseCode = "401", description = "권한 문제"),
+                    @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
                     @ApiResponse(responseCode = "404", description = "해당 일기를 찾을 수 없음"),
-                    @ApiResponse(responseCode = "500", description = "서버 오류 or 관리자 문의")
+                    @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
     public ResponseEntity<ApiResponseTemplate<DiaryResDto>> getDiaryById(
@@ -50,8 +50,8 @@ public class DiaryDisplayController {
             description = "사용자의 모든 일기를 조회합니다.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "일기 목록 조회 성공"),
-                    @ApiResponse(responseCode = "401", description = "권한 문제"),
-                    @ApiResponse(responseCode = "500", description = "서버 오류 or 관리자 문의")
+                    @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
+                    @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
     public ResponseEntity<ApiResponseTemplate<List<DiaryResDto>>> getAllDiariesByUser(Principal principal) {

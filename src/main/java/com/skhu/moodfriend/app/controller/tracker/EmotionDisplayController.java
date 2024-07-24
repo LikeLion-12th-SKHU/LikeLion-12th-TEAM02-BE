@@ -29,9 +29,9 @@ public class EmotionDisplayController {
             description = "특정 년, 월에 해당하는 사용자의 감정 리스트를 조회합니다.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "월별 감정 리스트 조회 성공"),
-                    @ApiResponse(responseCode = "401", description = "권한 문제"),
+                    @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
                     @ApiResponse(responseCode = "404", description = "해당 감정 리스트를 찾을 수 없음"),
-                    @ApiResponse(responseCode = "500", description = "서버 오류 or 관리자 문의")
+                    @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
     public ResponseEntity<ApiResponseTemplate<MonthlyEmotionResDto>> getMonthlyEmotionStats(

@@ -1,32 +1,45 @@
 package com.skhu.moodfriend.app.controller.chat;
 
-import com.skhu.moodfriend.app.dto.chat.reqDto.ChatGPTReqDto;
-import com.skhu.moodfriend.app.dto.chat.resDto.ChatGPTResDto;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import com.skhu.moodfriend.app.dto.chat.resDto.HoyaResDto;
+import com.skhu.moodfriend.app.service.chat.HoyaService;
+import com.skhu.moodfriend.global.template.ApiResponseTemplate;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
+
+import java.security.Principal;
 
 @RestController
-@RequestMapping("/api/v1/bot")
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+@Tag(name = "호야 챗봇", description = "호야 챗봇 api 그룹")
+@RequestMapping("/api/v1/hoya/chat")
 public class HoyaController {
 
-    @Value("${openai.model}")
-    private String model;
+    private final HoyaService hoyaService;
 
-    @Value("${openai.api.url}")
-    private String apiURL;
+    @GetMapping
+    @Operation(
+            summary = "챗봇 응답 조회",
+            description = "사용자의 프롬프트에 대한 챗봇 응답을 조회합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "챗봇 응답 조회 성공"),
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청 or 입력값 오류"),
+                    @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
+                    @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
+            }
+    )
+    public ResponseEntity<ApiResponseTemplate<HoyaResDto>> chat(
+            @RequestParam(name = "prompt") String prompt,
+            Principal principal) {
 
-    @Autowired
-    private RestTemplate template;
-
-    @GetMapping("/chat")
-    public String chat(@RequestParam(name = "prompt") String prompt) {
-        ChatGPTReqDto reqDto = new ChatGPTReqDto(model, prompt);
-        ChatGPTResDto resDto = template.postForObject(apiURL, reqDto, ChatGPTResDto.class);
-        return resDto.choices().get(0).message().content();
+        ApiResponseTemplate<HoyaResDto> data = hoyaService.getResponse(prompt, principal);
+        return ResponseEntity.status(data.getStatus()).body(data);
     }
 }

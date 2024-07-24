@@ -5,11 +5,11 @@ import com.skhu.moodfriend.app.dto.chat.Message;
 import java.util.ArrayList;
 import java.util.List;
 
-public record ChatGPTReqDto(
+public record HoyaReqDto(
         String model,
         List<Message> messages
 ) {
-    public ChatGPTReqDto(String model, String prompt) {
+    public HoyaReqDto(String model, String prompt) {
         this(model, new ArrayList<>(List.of(new Message("user", prompt))));
     }
 }

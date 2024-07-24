@@ -4,7 +4,7 @@ import com.skhu.moodfriend.app.dto.chat.Message;
 
 import java.util.List;
 
-public record ChatGPTResDto(
+public record HoyaResDto(
         List<Choice> choices
 ) {
     public record Choice(
