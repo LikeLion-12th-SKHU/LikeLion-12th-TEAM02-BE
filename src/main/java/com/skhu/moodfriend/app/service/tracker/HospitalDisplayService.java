@@ -43,7 +43,7 @@ public class HospitalDisplayService {
         List<HospitalResDto> resDtos = new ArrayList<>(results);
         resDtos.sort(Comparator.comparing(HospitalResDto::distance));
 
-        return ApiResponseTemplate.success(SuccessCode.ATTENDANCE_SUCCESS, resDtos);
+        return ApiResponseTemplate.success(SuccessCode.GET_HOSPITALS_SUCCESS, resDtos);
     }
 
     private String parseCategoryName(String categoryName) {

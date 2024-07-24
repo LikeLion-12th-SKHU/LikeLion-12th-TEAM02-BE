@@ -46,7 +46,7 @@ public class KakaoMapService {
                 ))
                 .collect(Collectors.toList());
 
-        return ApiResponseTemplate.success(SuccessCode.ATTENDANCE_SUCCESS, resDtos);
+        return ApiResponseTemplate.success(SuccessCode.GET_HOSPITALS_SUCCESS, resDtos);
     }
 
     private Integer parseInteger(Object value) {
