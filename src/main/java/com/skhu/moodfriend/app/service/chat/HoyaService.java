@@ -41,10 +41,6 @@ public class HoyaService {
         HoyaReqDto reqDto = new HoyaReqDto(model, prompt);
         HoyaResDto resDto = restTemplate.postForObject(apiURL, reqDto, HoyaResDto.class);
 
-        if (resDto == null || resDto.choices().isEmpty()) {
-            throw new CustomException(ErrorCode.INVALID_INPUT_EXCEPTION, ErrorCode.INVALID_INPUT_EXCEPTION.getMessage());
-        }
-
         return ApiResponseTemplate.success(SuccessCode.GET_HOYA_SUCCESS, resDto);
     }
 }

@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 
 @Builder
 public record DiaryResDto(
+        Long diaryId,
         EmotionType emotionType,
         WeatherType weatherType,
         String title,
