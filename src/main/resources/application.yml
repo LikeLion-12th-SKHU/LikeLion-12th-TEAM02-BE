@@ -33,3 +33,9 @@ oauth:
 
 kakao-map:
   client-id: ${KAKAO_CLIENT_ID}
+
+openai:
+  model: ${OPEN_AI_MODEL}
+  api:
+    key: ${OPEN_AI_API_KEY}
+    url: ${OPEN_AI_API_URL}
