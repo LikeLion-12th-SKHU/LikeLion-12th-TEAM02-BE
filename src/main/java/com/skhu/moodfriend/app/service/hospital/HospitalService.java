@@ -1,47 +1,47 @@
 package com.skhu.moodfriend.app.service.hospital;
 
-import com.skhu.moodfriend.app.dto.hospital.HospitalResDto;
-import com.skhu.moodfriend.app.dto.hospital.kakaoMap.KakaoMapKeywordRequest;
-import com.skhu.moodfriend.app.dto.hospital.kakaoMap.KakaoMapKeywordResDto;
-import com.skhu.moodfriend.app.service.hospital.kakaoMap.KakaoMapService;
+import com.skhu.moodfriend.app.dto.hospital.reqDto.KakaoMapKeywordReqDto;
+import com.skhu.moodfriend.app.dto.hospital.resDto.KakaoMapKeywordResDto;
+import com.skhu.moodfriend.global.exception.code.SuccessCode;
+import com.skhu.moodfriend.global.template.ApiResponseTemplate;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
+
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class HospitalService {
     private static final List<String> DEFAULT_KEYWORDS = List.of("심리과", "심리병원", "정신과", "정신병원");
     private final KakaoMapService kakaoMapService;
 
-    @Transactional(readOnly = true)
-    public List<HospitalResDto> retrieve(
+    public ApiResponseTemplate<List<KakaoMapKeywordResDto>> retrieve(
             String x,
             String y,
             String radius
     ) {
-        Set<HospitalResDto> results = new HashSet<>();
+        Set<KakaoMapKeywordResDto> results = new HashSet<>();
 
         for (String keyword : DEFAULT_KEYWORDS) {
-            KakaoMapKeywordRequest request = new KakaoMapKeywordRequest(keyword, x, y, radius, null);
-            List<KakaoMapKeywordResDto> response = kakaoMapService.retrieveByKeyword(request);
-            results.addAll(response.stream()
-                    .map(it -> new HospitalResDto(
+            KakaoMapKeywordReqDto reqDto = new KakaoMapKeywordReqDto(keyword, x, y, radius, null);
+            List<KakaoMapKeywordResDto> resDtos = kakaoMapService.retrieveByKeyword(reqDto);
+            results.addAll(resDtos.stream()
+                    .map(it -> new KakaoMapKeywordResDto(
                             parseCategoryName(it.categoryName()),
                             it.placeName(),
                             it.distance(),
                             it.placeUrl()
                     )).collect(Collectors.toList()));
         }
+        List<KakaoMapKeywordResDto> sortedResults = new ArrayList<>(results);
+        sortedResults.sort(Comparator.comparing(KakaoMapKeywordResDto::distance));
 
-        return new ArrayList<>(results);
+        return ApiResponseTemplate.success(SuccessCode.ATTENDANCE_SUCCESS, sortedResults);
     }
 
     private String parseCategoryName(String categoryName) {

@@ -1,4 +1,4 @@
-package com.skhu.moodfriend.app.dto.hospital.kakaoMap;
+package com.skhu.moodfriend.app.dto.hospital.resDto;
 
 public record KakaoMapKeywordResDto(
         String categoryName,

@@ -1,6 +1,6 @@
 package com.skhu.moodfriend.app.repository;
 
-import com.skhu.moodfriend.app.dto.hospital.kakaoMap.KakaoMapKeyword;
+import com.skhu.moodfriend.app.dto.hospital.KakaoMapKeyword;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;

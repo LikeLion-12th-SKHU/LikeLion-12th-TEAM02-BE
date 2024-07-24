@@ -1,10 +1,12 @@
-package com.skhu.moodfriend.app.service.hospital.kakaoMap;
+package com.skhu.moodfriend.app.service.hospital;
 
-import com.skhu.moodfriend.app.dto.hospital.kakaoMap.KakaoMapDocument;
-import com.skhu.moodfriend.app.dto.hospital.kakaoMap.KakaoMapKeyword;
-import com.skhu.moodfriend.app.dto.hospital.kakaoMap.KakaoMapKeywordRequest;
-import com.skhu.moodfriend.app.dto.hospital.kakaoMap.KakaoMapKeywordResDto;
+import com.skhu.moodfriend.app.dto.hospital.KakaoMapDocument;
+import com.skhu.moodfriend.app.dto.hospital.KakaoMapKeyword;
+import com.skhu.moodfriend.app.dto.hospital.reqDto.KakaoMapKeywordReqDto;
+import com.skhu.moodfriend.app.dto.hospital.resDto.KakaoMapKeywordResDto;
 import com.skhu.moodfriend.app.repository.KakaoMapRepository;
+import com.skhu.moodfriend.global.exception.code.SuccessCode;
+import com.skhu.moodfriend.global.template.ApiResponseTemplate;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +26,7 @@ public class KakaoMapService {
 
     private final KakaoMapRepository kakaoMapRepository;
 
-    public List<KakaoMapKeywordResDto> retrieveByKeyword(KakaoMapKeywordRequest request) {
+    public ApiResponseTemplate<List<KakaoMapKeywordResDto>> retrieveByKeyword(KakaoMapKeywordReqDto request) {
         KakaoMapKeyword response = kakaoMapRepository.searchByKeyword(
                 KAKAO_AUTH_PREFIX + KAKAO_CLIENT_ID,
                 request.query(),
@@ -33,10 +35,8 @@ public class KakaoMapService {
                 request.radius()
         );
 
-        return response
-                .documents()
+        List<KakaoMapKeywordResDto> results = response.documents()
                 .stream()
-                .sorted(Comparator.comparing(KakaoMapDocument::distance))
                 .map(it -> new KakaoMapKeywordResDto(
                         it.categoryName(),
                         it.placeName(),
@@ -44,5 +44,7 @@ public class KakaoMapService {
                         it.placeUrl()
                 ))
                 .collect(Collectors.toList());
+
+        return ApiResponseTemplate.success(SuccessCode.ATTENDANCE_SUCCESS, results);
     }
 }

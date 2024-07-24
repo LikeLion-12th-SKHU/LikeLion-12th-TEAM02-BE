@@ -1,7 +1,8 @@
 package com.skhu.moodfriend.app.controller.hospital;
 
-import com.skhu.moodfriend.app.dto.hospital.HospitalResDto;
+import com.skhu.moodfriend.app.dto.hospital.resDto.KakaoMapKeywordResDto;
 import com.skhu.moodfriend.app.service.hospital.HospitalService;
+import com.skhu.moodfriend.global.template.ApiResponseTemplate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -33,11 +34,12 @@ public class HospitalController {
                     @ApiResponse(responseCode = "500", description = "관리자 문의")
             }
     )
-    public ResponseEntity<List<HospitalResDto>> retrieveHospitals(
+    public ResponseEntity<ApiResponseTemplate<List<KakaoMapKeywordResDto>>> retrieveHospitals(
             @Parameter(name = "x", description = "경도 (longitude)") @RequestParam String x,
             @Parameter(name = "y", description = "위도 (latitude)") @RequestParam String y,
             @Parameter(name = "radius", description = "반경 (단위: 미터, 최소: 0, 최대: 20000)") @RequestParam String radius
     ) {
-        return ResponseEntity.ok(hospitalService.retrieve(x, y, radius));
+        ApiResponseTemplate<List<KakaoMapKeywordResDto>> data = hospitalService.retrieve(x, y, radius);
+        return ResponseEntity.status(data.getStatus()).body(data);
     }
 }

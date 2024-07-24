@@ -1,4 +1,4 @@
-package com.skhu.moodfriend.app.dto.hospital.kakaoMap;
+package com.skhu.moodfriend.app.dto.hospital;
 
 import lombok.Builder;
 
