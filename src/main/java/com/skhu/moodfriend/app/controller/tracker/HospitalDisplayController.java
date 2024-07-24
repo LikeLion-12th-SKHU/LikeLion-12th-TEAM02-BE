@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @Tag(name = "의료기관 조회", description = "의료기관 조회를 담당하는 api 그룹")
-@RequestMapping("/api/v1/hospitals")
+@RequestMapping("/api/v1/hospital/display")
 public class HospitalDisplayController {
     private final HospitalDisplayService hospitalDisplayService;
 
@@ -30,8 +30,8 @@ public class HospitalDisplayController {
             description = "사용자 위치정보를 받아 카카오 지도 API를 호출합니다. 정신과, 심리 관련 의료기관을 모두 나열합니다.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "의료기관 조회 성공"),
-                    @ApiResponse(responseCode = "403", description = "URL 문제 or 관리자 문의"),
-                    @ApiResponse(responseCode = "500", description = "관리자 문의")
+                    @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
+                    @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
     public ResponseEntity<ApiResponseTemplate<List<HospitalResDto>>> retrieveHospitals(

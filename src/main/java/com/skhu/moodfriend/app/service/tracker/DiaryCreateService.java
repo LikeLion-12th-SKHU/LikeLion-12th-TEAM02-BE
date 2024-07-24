@@ -17,9 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.Principal;
-import java.time.LocalDate;
-
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class DiaryCreateService {
@@ -31,9 +28,7 @@ public class DiaryCreateService {
     @Transactional
     public ApiResponseTemplate<DiaryResDto> createDiary(
             DiaryCreateReqDto reqDto,
-            Principal principal) {
-
-        Long memberId = Long.parseLong(principal.getName());
+            Long memberId) {
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
