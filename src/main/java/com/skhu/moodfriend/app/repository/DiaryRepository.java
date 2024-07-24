@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface DiaryRepository extends JpaRepository<Diary, Long> {
@@ -19,11 +18,6 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
             "WHERE d.tracker.member = :member " +
             "AND d.createdAt = :date")
     boolean existsByMemberAndCreatedAtDate(@Param("member") Member member, @Param("date") LocalDate date);
-
-    @Query("SELECT d FROM Diary d " +
-            "WHERE d.tracker.member = :member " +
-            "AND d.createdAt = :date")
-    Optional<Diary> findByCreatedAtAndTrackerMember(@Param("date") LocalDate date, @Param("member") Member member);
 
     List<Diary> findByTrackerMember(Member member);
 
