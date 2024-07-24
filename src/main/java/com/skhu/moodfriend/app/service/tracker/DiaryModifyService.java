@@ -24,14 +24,19 @@ public class DiaryModifyService {
 
     @Transactional
     public ApiResponseTemplate<DiaryResDto> updateDiary(
-            DiaryUpdateReqDto reqDto,
-            Long memberId) {
+            Long diaryId,
+            Long memberId,
+            DiaryUpdateReqDto reqDto) {
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
-        Diary diary = diaryRepository.findByCreatedAtAndTrackerMember(reqDto.createdAt(), member)
+        Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DIARY_EXCEPTION, ErrorCode.NOT_FOUND_DIARY_EXCEPTION.getMessage()));
+
+        if (!diary.getTracker().getMember().equals(member)) {
+            throw new CustomException(ErrorCode.ONLY_OWN_DIARY_ACCESS_EXCEPTION, ErrorCode.ONLY_OWN_DIARY_ACCESS_EXCEPTION.getMessage());
+        }
 
         diary.update(reqDto.emotionType(), reqDto.weatherType(), reqDto.title(), reqDto.content());
         diaryRepository.save(diary);

@@ -42,7 +42,7 @@ public class DiaryController {
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
-    @PatchMapping("/update")
+    @PatchMapping("/update/{diaryId}")
     @Operation(
             summary = "사용자 일기 수정",
             description = "사용자 일기를 수정합니다.",
@@ -54,10 +54,11 @@ public class DiaryController {
             }
     )
     public ResponseEntity<ApiResponseTemplate<DiaryResDto>> updateDiary(
-            @Valid @RequestBody DiaryUpdateReqDto reqDto,
-            @RequestParam Long memberId) {
+            @PathVariable Long diaryId,
+            @RequestParam Long memberId,
+            @Valid @RequestBody DiaryUpdateReqDto reqDto) {
 
-        ApiResponseTemplate<DiaryResDto> data = diaryModifyService.updateDiary(reqDto, memberId);
+        ApiResponseTemplate<DiaryResDto> data = diaryModifyService.updateDiary(diaryId, memberId, reqDto);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
