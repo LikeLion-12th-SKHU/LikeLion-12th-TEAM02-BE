@@ -1,7 +1,7 @@
-package com.skhu.moodfriend.app.controller.hospital;
+package com.skhu.moodfriend.app.controller.tracker;
 
-import com.skhu.moodfriend.app.dto.hospital.resDto.KakaoMapKeywordResDto;
-import com.skhu.moodfriend.app.service.hospital.HospitalService;
+import com.skhu.moodfriend.app.dto.tracker.resDto.HospitalResDto;
+import com.skhu.moodfriend.app.service.tracker.HospitalDisplayService;
 import com.skhu.moodfriend.global.template.ApiResponseTemplate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -21,8 +21,8 @@ import java.util.List;
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @Tag(name = "의료기관 조회", description = "의료기관 조회를 담당하는 api 그룹")
 @RequestMapping("/api/v1/hospitals")
-public class HospitalController {
-    private final HospitalService hospitalService;
+public class HospitalDisplayController {
+    private final HospitalDisplayService hospitalDisplayService;
 
     @GetMapping
     @Operation(
@@ -34,12 +34,12 @@ public class HospitalController {
                     @ApiResponse(responseCode = "500", description = "관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<List<KakaoMapKeywordResDto>>> retrieveHospitals(
+    public ResponseEntity<ApiResponseTemplate<List<HospitalResDto>>> retrieveHospitals(
             @Parameter(name = "x", description = "경도 (longitude)") @RequestParam String x,
             @Parameter(name = "y", description = "위도 (latitude)") @RequestParam String y,
             @Parameter(name = "radius", description = "반경 (단위: 미터, 최소: 0, 최대: 20000)") @RequestParam String radius
     ) {
-        ApiResponseTemplate<List<KakaoMapKeywordResDto>> data = hospitalService.retrieve(x, y, radius);
+        ApiResponseTemplate<List<HospitalResDto>> data = hospitalDisplayService.retrieve(x, y, radius);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 }

@@ -20,6 +20,7 @@ public enum SuccessCode {
     GET_FRIENDS_SUCCESS(HttpStatus.OK, "친구 목록 조회에 성공했습니다."),
     ATTENDANCE_SUCCESS(HttpStatus.OK, "출석 및 마일리지 적립에 성공했습니다."),
     GET_MONTHLY_EMOTION_TYPES_SUCCESS(HttpStatus.OK, "월별 감정 리스트 조회에 성공했습니다."),
+    GET_HOSPITALS_SUCCESS(HttpStatus.OK, "의료기관 조회에 성공했습니다."),
 
     // 201 Created
     CREATE_MEMBER_SUCCESS(HttpStatus.CREATED, "회원가입에 성공했습니다."),
