@@ -1,10 +1,11 @@
 package com.skhu.moodfriend.app.repository;
 
-import com.skhu.moodfriend.app.dto.hospital.KakaoMapKeyword;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Map;
 
 @FeignClient(
         name = "kakaomap-client",
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 )
 public interface KakaoMapRepository {
     @GetMapping(value = "/v2/local/search/keyword.json")
-    KakaoMapKeyword searchByKeyword(
+    Map<String, Object> searchByKeyword(
             @RequestHeader("Authorization") String auth,
             @RequestParam("query") String query,
             @RequestParam("x") String x,
