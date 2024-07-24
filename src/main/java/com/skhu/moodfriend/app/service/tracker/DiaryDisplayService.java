@@ -39,6 +39,7 @@ public class DiaryDisplayService {
         }
 
         DiaryResDto resDto = DiaryResDto.builder()
+                .diaryId(diary.getDiaryId())
                 .emotionType(diary.getEmotionType())
                 .weatherType(diary.getWeatherType())
                 .title(diary.getTitle())
@@ -59,6 +60,7 @@ public class DiaryDisplayService {
 
         List<DiaryResDto> resDtos = diaries.stream()
                 .map(diary -> DiaryResDto.builder()
+                        .diaryId(diary.getDiaryId())
                         .emotionType(diary.getEmotionType())
                         .weatherType(diary.getWeatherType())
                         .title(diary.getTitle())
