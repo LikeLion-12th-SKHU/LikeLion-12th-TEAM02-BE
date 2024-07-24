@@ -15,8 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
-
 @RestController
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @Tag(name = "일기 작성/수정/삭제", description = "일기를 작성/수정/삭제하는 api 그룹")
@@ -24,7 +22,7 @@ import java.security.Principal;
 public class DiaryController {
 
     private final DiaryCreateService diaryCreateService;
-    private  final DiaryModifyService diaryModifyService;
+    private final DiaryModifyService diaryModifyService;
 
     @PostMapping("/create")
     @Operation(
@@ -38,9 +36,9 @@ public class DiaryController {
     )
     public ResponseEntity<ApiResponseTemplate<DiaryResDto>> createDiary(
             @Valid @RequestBody DiaryCreateReqDto reqDto,
-            Principal principal) {
+            @RequestParam Long memberId) {
 
-        ApiResponseTemplate<DiaryResDto> data = diaryCreateService.createDiary(reqDto, principal);
+        ApiResponseTemplate<DiaryResDto> data = diaryCreateService.createDiary(reqDto, memberId);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
@@ -57,9 +55,9 @@ public class DiaryController {
     )
     public ResponseEntity<ApiResponseTemplate<DiaryResDto>> updateDiary(
             @Valid @RequestBody DiaryUpdateReqDto reqDto,
-            Principal principal) {
+            @RequestParam Long memberId) {
 
-        ApiResponseTemplate<DiaryResDto> data = diaryModifyService.updateDiary(reqDto, principal);
+        ApiResponseTemplate<DiaryResDto> data = diaryModifyService.updateDiary(reqDto, memberId);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
@@ -76,9 +74,9 @@ public class DiaryController {
     )
     public ResponseEntity<ApiResponseTemplate<Void>> deleteDiary(
             @PathVariable Long diaryId,
-            Principal principal) {
+            @RequestParam Long memberId) {
 
-        ApiResponseTemplate<Void> data = diaryModifyService.deleteDiary(diaryId, principal);
+        ApiResponseTemplate<Void> data = diaryModifyService.deleteDiary(diaryId, memberId);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 }

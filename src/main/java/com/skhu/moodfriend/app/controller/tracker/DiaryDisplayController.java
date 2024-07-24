@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -38,9 +37,9 @@ public class DiaryDisplayController {
     )
     public ResponseEntity<ApiResponseTemplate<DiaryResDto>> getDiaryById(
             @PathVariable Long diaryId,
-            Principal principal) {
+            Long memberId) {
 
-        ApiResponseTemplate<DiaryResDto> data = diaryDisplayService.getDiaryById(diaryId, principal);
+        ApiResponseTemplate<DiaryResDto> data = diaryDisplayService.getDiaryById(diaryId, memberId);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
@@ -54,9 +53,9 @@ public class DiaryDisplayController {
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<List<DiaryResDto>>> getAllDiariesByUser(Principal principal) {
+    public ResponseEntity<ApiResponseTemplate<List<DiaryResDto>>> getAllDiariesByUser(Long memberId) {
 
-        ApiResponseTemplate<List<DiaryResDto>> data = diaryDisplayService.getAllDiariesByMember(principal);
+        ApiResponseTemplate<List<DiaryResDto>> data = diaryDisplayService.getAllDiariesByMember(memberId);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 }
