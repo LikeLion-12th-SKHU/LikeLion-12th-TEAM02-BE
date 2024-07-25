@@ -39,3 +39,8 @@ openai:
   api:
     key: ${OPEN_AI_API_KEY}
     url: ${OPEN_AI_API_URL}
+
+deepl:
+  api:
+    key: ${DEEPL_API_KEY}
+    url: ${DEEPL_API_URL}
