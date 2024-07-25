@@ -2,6 +2,7 @@ package com.skhu.moodfriend.app.service.chat;
 
 import java.util.List;
 
+// TODO : 감정 처리
 public record EmotionKeywords(List<String> keywords) {
 
     public static final EmotionKeywords EMOTION_KEYWORDS = new EmotionKeywords(List.of(

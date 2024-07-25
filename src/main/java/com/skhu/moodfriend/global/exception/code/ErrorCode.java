@@ -14,7 +14,8 @@ public enum ErrorCode {
     INVALID_SIGNATURE_EXCEPTION(HttpStatus.BAD_REQUEST, "JWT 토큰의 서명이 올바르지 않습니다."),
     INVALID_ENUM_VALUE(HttpStatus.BAD_REQUEST, "유효하지 않은 Enum 타입 값이 있습니다."),
     INVALID_PROMPT_EXCEPTION(HttpStatus.BAD_REQUEST, "프롬프트는 감정에 관한 내용이어야 합니다."),
-    VALIDATION_JSON_SYNTAX_FAIL(HttpStatus.BAD_REQUEST, "JSON 파싱 오류 발생"),
+    JSON_SYNTAX_ERROR(HttpStatus.BAD_REQUEST, "JSON 파싱 오류 발생"),
+    JSON_SERIALIZATION_ERROR(HttpStatus.BAD_REQUEST, "JSON 직렬화 오류 발생"),
     VALIDATION_EXCEPTION(HttpStatus.BAD_REQUEST, "유효성 검사에 맞지않습니다."),
 
     // 401 Unauthorized
@@ -42,7 +43,8 @@ public enum ErrorCode {
 
     // 503 Service Unavailable
     FAILED_GET_TOKEN_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "토큰을 가져오는 중 오류가 발생했습니다."),
-    FAILED_TRANSLATION_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "번역하는 중 오류가 발생했습니다.");
+    FAILED_TRANSLATION_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "번역하는 중 오류가 발생했습니다."),
+    FAILED_GET_GPT_RESPONSE_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "챗봇 응답 중 오류가 발생했습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

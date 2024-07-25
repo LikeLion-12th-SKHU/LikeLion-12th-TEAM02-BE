@@ -43,7 +43,6 @@ public class HoyaService {
         memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
-        // Translate the prompt from Korean to English
         String translatedPromptToEn = translationService.translate(prompt, "EN");
 
         List<Message> messages = new ArrayList<>(conversationService.getConversation(memberId));
@@ -53,24 +52,20 @@ public class HoyaService {
         HoyaResDto resDto = restTemplate.postForObject(apiURL, reqDto, HoyaResDto.class);
 
         if (resDto == null || resDto.choices().isEmpty()) {
-            throw new CustomException(ErrorCode.INTERNAL_SERVER_EXCEPTION, "GPT 응답이 없습니다.");
+            throw new CustomException(ErrorCode.FAILED_GET_GPT_RESPONSE_EXCEPTION, ErrorCode.FAILED_GET_GPT_RESPONSE_EXCEPTION.getMessage());
         }
 
-        // Extract the assistant's message and usage details
         HoyaResDto.Choice choice = resDto.choices().get(0);
         Message assistantMessage = choice.message();
 
-        // Translate the assistant's response from English to Korean
         String translatedResToKO = translationService.translate(assistantMessage.content(), "KO");
         Message translatedMessage = new Message(assistantMessage.role(), translatedResToKO);
 
-        // Add translated message to conversation
         conversationService.addMessage(memberId, translatedMessage);
 
-        // Build the HoyaResDto response with actual usage details
         HoyaResDto responseDto = new HoyaResDto(
                 Collections.singletonList(new HoyaResDto.Choice(0, translatedMessage)),
-                resDto.usage() // Pass the actual usage details from the response
+                resDto.usage()
         );
 
         return ApiResponseTemplate.success(SuccessCode.GET_HOYA_SUCCESS, responseDto);

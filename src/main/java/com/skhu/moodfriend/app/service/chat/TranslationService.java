@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -43,25 +42,16 @@ public class TranslationService {
         try {
             requestBody = objectMapper.writeValueAsString(reqDto);
         } catch (Exception e) {
-            throw new CustomException(ErrorCode.FAILED_TRANSLATION_EXCEPTION, "Failed to serialize request body: " + e.getMessage());
+            throw new CustomException(ErrorCode.JSON_SERIALIZATION_ERROR, ErrorCode.JSON_SERIALIZATION_ERROR.getMessage());
         }
 
         HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
 
-        ResponseEntity<TranslationResDto> response;
-        try {
-            response = restTemplate.exchange(deeplApiUrl + "?auth_key=" + authKey, HttpMethod.POST, entity, TranslationResDto.class);
-        } catch (Exception e) {
-            throw new CustomException(ErrorCode.FAILED_TRANSLATION_EXCEPTION, "Failed to translate: " + e.getMessage());
-        }
-
-        if (response.getStatusCode() != HttpStatus.OK) {
-            throw new CustomException(ErrorCode.FAILED_TRANSLATION_EXCEPTION, "Failed to translate. Status code: " + response.getStatusCode());
-        }
+        ResponseEntity<TranslationResDto> response = restTemplate.exchange(deeplApiUrl + "?auth_key=" + authKey, HttpMethod.POST, entity, TranslationResDto.class);
 
         TranslationResDto resDto = response.getBody();
         if (resDto == null || resDto.translations().isEmpty()) {
-            throw new CustomException(ErrorCode.FAILED_TRANSLATION_EXCEPTION, "No translation results");
+            throw new CustomException(ErrorCode.FAILED_TRANSLATION_EXCEPTION, ErrorCode.FAILED_TRANSLATION_EXCEPTION.getMessage());
         }
 
         return resDto.translations().get(0).text();
