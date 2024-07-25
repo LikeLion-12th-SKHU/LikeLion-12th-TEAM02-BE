@@ -38,7 +38,7 @@ public class DiaryModifyService {
             throw new CustomException(ErrorCode.ONLY_OWN_DIARY_ACCESS_EXCEPTION, ErrorCode.ONLY_OWN_DIARY_ACCESS_EXCEPTION.getMessage());
         }
 
-        diary.update(reqDto.emotionType(), reqDto.weatherType(), reqDto.title(), reqDto.content());
+        diary.update(reqDto.emotionType(), reqDto.weatherType(), reqDto.title(), reqDto.content(), reqDto.createdAt());
         diaryRepository.save(diary);
 
         DiaryResDto resDto = DiaryResDto.builder()
