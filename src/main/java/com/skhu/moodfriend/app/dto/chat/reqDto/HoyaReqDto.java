@@ -8,7 +8,4 @@ public record HoyaReqDto(
         String model,
         List<Message> messages
 ) {
-    public HoyaReqDto(String model, String prompt) {
-        this(model, List.of(new Message("user", prompt)));
-    }
 }
