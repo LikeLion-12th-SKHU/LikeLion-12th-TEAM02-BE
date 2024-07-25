@@ -42,6 +42,10 @@ public class HoyaService {
         memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
+        if (!isEmotionRelated(prompt)) {
+            throw new CustomException(ErrorCode.INVALID_PROMPT_EXCEPTION, ErrorCode.INVALID_PROMPT_EXCEPTION.getMessage());
+        }
+
         List<Message> messages = new ArrayList<>(conversationService.getConversation(memberId));
 
         messages.add(new Message("user", prompt));
@@ -55,5 +59,10 @@ public class HoyaService {
         }
 
         return ApiResponseTemplate.success(SuccessCode.GET_HOYA_SUCCESS, resDto);
+    }
+
+    private boolean isEmotionRelated(String prompt) {
+        return EmotionKeywords.EMOTION_KEYWORDS.keywords().stream()
+                .anyMatch(prompt.toLowerCase()::contains);
     }
 }
