@@ -1,6 +1,6 @@
 package com.skhu.moodfriend.app.entity.diary;
 
-import com.skhu.moodfriend.app.entity.tracker.Tracker;
+import com.skhu.moodfriend.app.entity.member.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -45,17 +45,17 @@ public class Diary {
     private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TRACKER_ID")
-    private Tracker tracker;
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
 
     @Builder
-    private Diary(EmotionType emotionType, WeatherType weatherType, String title, String content, LocalDate createdAt, Tracker tracker) {
+    private Diary(EmotionType emotionType, WeatherType weatherType, String title, String content, LocalDate createdAt, Member member) {
         this.emotionType = emotionType;
         this.weatherType = weatherType;
         this.title = title;
         this.content = content;
         this.createdAt = createdAt;
-        this.tracker = tracker;
+        this.member = member;
     }
 
     public void update(EmotionType emotionType, WeatherType weatherType, String title, String content, LocalDate createdAt) {

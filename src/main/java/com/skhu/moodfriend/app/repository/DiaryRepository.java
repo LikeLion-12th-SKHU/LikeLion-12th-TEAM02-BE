@@ -15,14 +15,14 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
 
     @Query("SELECT CASE WHEN COUNT(d) > 0 THEN true ELSE false END " +
             "FROM Diary d " +
-            "WHERE d.tracker.member = :member " +
+            "WHERE d.member = :member " +
             "AND d.createdAt = :date")
     boolean existsByMemberAndCreatedAtDate(@Param("member") Member member, @Param("date") LocalDate date);
 
-    List<Diary> findByTrackerMember(Member member);
+    List<Diary> findByMember(Member member);
 
     @Query(value = "SELECT d FROM Diary d " +
-            "WHERE d.tracker.member = :member " +
+            "WHERE d.member = :member " +
             "AND FUNCTION('YEAR', d.createdAt) = :year " +
             "AND FUNCTION('MONTH', d.createdAt) = :month " +
             "ORDER BY d.createdAt ASC")
