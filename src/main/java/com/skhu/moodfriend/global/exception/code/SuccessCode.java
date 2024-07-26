@@ -22,6 +22,8 @@ public enum SuccessCode {
     GET_MONTHLY_EMOTION_TYPES_SUCCESS(HttpStatus.OK, "월별 감정 리스트 조회에 성공했습니다."),
     GET_HOSPITALS_SUCCESS(HttpStatus.OK, "의료기관 조회에 성공했습니다."),
     GET_HOYA_SUCCESS(HttpStatus.OK, "챗봇 응답을 성공적으로 가져왔습니다."),
+    GET_DIARY_SUMMARY_SUCCESS(HttpStatus.OK, "일기 AI 조회에 성공했습니다."),
+    GET_ALL_DIARY_SUMMARIES_SUCCESS(HttpStatus.OK, "모든 일기 AI 조회에 성공했습니다."),
 
     // 201 Created
     CREATE_MEMBER_SUCCESS(HttpStatus.CREATED, "회원가입에 성공했습니다."),

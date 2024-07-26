@@ -1,8 +1,8 @@
 package com.skhu.moodfriend.app.dto.tracker.resDto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.skhu.moodfriend.app.entity.diary.EmotionType;
-import com.skhu.moodfriend.app.entity.diary.WeatherType;
+import com.skhu.moodfriend.app.entity.tracker.diary.EmotionType;
+import com.skhu.moodfriend.app.entity.tracker.diary.WeatherType;
 import lombok.Builder;
 
 import java.time.LocalDate;

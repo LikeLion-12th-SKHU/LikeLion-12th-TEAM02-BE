@@ -1,7 +1,7 @@
 package com.skhu.moodfriend.app.service.member;
 
 import com.skhu.moodfriend.app.dto.member.resDto.MemberInfoResDto;
-import com.skhu.moodfriend.app.entity.attendance.Attendance;
+import com.skhu.moodfriend.app.entity.member.attendance.Attendance;
 import com.skhu.moodfriend.app.entity.member.Member;
 import com.skhu.moodfriend.app.repository.AttendanceRepository;
 import com.skhu.moodfriend.app.repository.MemberRepository;

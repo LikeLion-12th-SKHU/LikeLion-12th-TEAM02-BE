@@ -1,7 +1,7 @@
 package com.skhu.moodfriend.app.service.tracker;
 
 import com.skhu.moodfriend.app.dto.tracker.resDto.DiaryResDto;
-import com.skhu.moodfriend.app.entity.diary.Diary;
+import com.skhu.moodfriend.app.entity.tracker.diary.Diary;
 import com.skhu.moodfriend.app.entity.member.Member;
 import com.skhu.moodfriend.app.repository.DiaryRepository;
 import com.skhu.moodfriend.app.repository.MemberRepository;
@@ -34,7 +34,7 @@ public class DiaryDisplayService {
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DIARY_EXCEPTION, ErrorCode.NOT_FOUND_DIARY_EXCEPTION.getMessage()));
 
-        if (!diary.getTracker().getMember().equals(member)) {
+        if (!diary.getMember().equals(member)) {
             throw new CustomException(ErrorCode.ONLY_OWN_DIARY_ACCESS_EXCEPTION, ErrorCode.ONLY_OWN_DIARY_ACCESS_EXCEPTION.getMessage());
         }
 
@@ -56,7 +56,7 @@ public class DiaryDisplayService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
-        List<Diary> diaries = diaryRepository.findByTrackerMember(member);
+        List<Diary> diaries = diaryRepository.findByMemberOrderByCreatedAtAsc(member);
 
         List<DiaryResDto> resDtos = diaries.stream()
                 .map(diary -> DiaryResDto.builder()

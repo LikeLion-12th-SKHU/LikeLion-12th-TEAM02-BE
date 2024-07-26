@@ -2,7 +2,7 @@ package com.skhu.moodfriend.app.service.tracker;
 
 import com.skhu.moodfriend.app.dto.tracker.reqDto.DiaryUpdateReqDto;
 import com.skhu.moodfriend.app.dto.tracker.resDto.DiaryResDto;
-import com.skhu.moodfriend.app.entity.diary.Diary;
+import com.skhu.moodfriend.app.entity.tracker.diary.Diary;
 import com.skhu.moodfriend.app.entity.member.Member;
 import com.skhu.moodfriend.app.repository.DiaryRepository;
 import com.skhu.moodfriend.app.repository.MemberRepository;
@@ -34,11 +34,15 @@ public class DiaryModifyService {
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DIARY_EXCEPTION, ErrorCode.NOT_FOUND_DIARY_EXCEPTION.getMessage()));
 
-        if (!diary.getTracker().getMember().equals(member)) {
+        if (!diary.getMember().equals(member)) {
             throw new CustomException(ErrorCode.ONLY_OWN_DIARY_ACCESS_EXCEPTION, ErrorCode.ONLY_OWN_DIARY_ACCESS_EXCEPTION.getMessage());
         }
 
-        diary.update(reqDto.emotionType(), reqDto.weatherType(), reqDto.title(), reqDto.content());
+        if (diaryRepository.existsByMemberAndCreatedAtDateExcludingDiary(member, reqDto.createdAt(), diaryId)) {
+            throw new CustomException(ErrorCode.ALREADY_EXIST_DIARY_EXCEPTION, ErrorCode.ALREADY_EXIST_DIARY_EXCEPTION.getMessage());
+        }
+
+        diary.update(reqDto.emotionType(), reqDto.weatherType(), reqDto.title(), reqDto.content(), reqDto.createdAt());
         diaryRepository.save(diary);
 
         DiaryResDto resDto = DiaryResDto.builder()
@@ -65,7 +69,7 @@ public class DiaryModifyService {
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DIARY_EXCEPTION, ErrorCode.NOT_FOUND_DIARY_EXCEPTION.getMessage()));
 
-        if (!diary.getTracker().getMember().equals(member)) {
+        if (!diary.getMember().equals(member)) {
             throw new CustomException(ErrorCode.ONLY_OWN_DIARY_ACCESS_EXCEPTION, ErrorCode.ONLY_OWN_DIARY_ACCESS_EXCEPTION.getMessage());
         }
 

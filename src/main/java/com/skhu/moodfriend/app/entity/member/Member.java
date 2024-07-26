@@ -1,10 +1,9 @@
 package com.skhu.moodfriend.app.entity.member;
 
-import com.skhu.moodfriend.app.entity.attendance.Attendance;
-import com.skhu.moodfriend.app.entity.tracker.Tracker;
-import com.skhu.moodfriend.app.entity.feedback.FeedBack;
+import com.skhu.moodfriend.app.entity.member.attendance.Attendance;
+import com.skhu.moodfriend.app.entity.member.feedback.FeedBack;
 import com.skhu.moodfriend.app.entity.friend.Friend;
-import com.skhu.moodfriend.app.entity.member_object.MemberObject;
+import com.skhu.moodfriend.app.entity.member.member_object.MemberObject;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -48,9 +47,6 @@ public class Member {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Attendance> attendances = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Tracker> trackers = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberObject> userObjects = new ArrayList<>();

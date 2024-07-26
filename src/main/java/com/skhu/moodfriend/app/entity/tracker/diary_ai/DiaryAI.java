@@ -1,15 +1,15 @@
-package com.skhu.moodfriend.app.entity.diary_ai;
+package com.skhu.moodfriend.app.entity.tracker.diary_ai;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.skhu.moodfriend.app.entity.tracker.Tracker;
+import com.skhu.moodfriend.app.entity.member.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -22,15 +22,20 @@ public class DiaryAI {
     @Column(name = "DIARY_AI_ID")
     private Long diaryAIId;
 
-    @JsonFormat(pattern = "yyyy-MM-dd - HH:mm", timezone = "Asia/Seoul")
     @CreatedDate
-    @Column(name = "DIARY_AI_CREATED_AT", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    @Column(name = "DIARY_AI_CREATED_AT", updatable = false)
+    private LocalDate createdAt;
 
     @Column(name = "DIARY_AI_SUMMARY", length = 1024)
     private String summary;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TRACKER_ID")
-    private Tracker tracker;
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
+
+    @Builder
+    private DiaryAI(String summary, Member member) {
+        this.summary = summary;
+        this.member = member;
+    }
 }
