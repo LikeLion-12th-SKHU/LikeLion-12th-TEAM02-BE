@@ -19,7 +19,7 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
             "AND d.createdAt = :date")
     boolean existsByMemberAndCreatedAtDate(@Param("member") Member member, @Param("date") LocalDate date);
 
-    List<Diary> findByMember(Member member);
+    List<Diary> findByMemberOrderByCreatedAtAsc(Member member);
 
     @Query(value = "SELECT d FROM Diary d " +
             "WHERE d.member = :member " +

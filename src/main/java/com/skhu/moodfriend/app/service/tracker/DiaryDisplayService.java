@@ -56,7 +56,7 @@ public class DiaryDisplayService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
-        List<Diary> diaries = diaryRepository.findByMember(member);
+        List<Diary> diaries = diaryRepository.findByMemberOrderByCreatedAtAsc(member);
 
         List<DiaryResDto> resDtos = diaries.stream()
                 .map(diary -> DiaryResDto.builder()
