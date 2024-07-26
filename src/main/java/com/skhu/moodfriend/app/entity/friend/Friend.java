@@ -28,4 +28,11 @@ public class Friend {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
+
+    // 필드 초기화를 위한 생성자
+    public Friend(Member member, String receiverEmail, Status status) {
+        this.member = member;
+        this.receiverEmail = receiverEmail;
+        this.status = status;
+    }
 }

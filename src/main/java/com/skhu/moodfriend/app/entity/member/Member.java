@@ -61,6 +61,7 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FeedBack> feedBacks = new ArrayList<>();
 
+
     @Builder
     private Member(String email, String password, String name, long mileage, LoginType loginType, RoleType roleType) {
         this.email = email;
