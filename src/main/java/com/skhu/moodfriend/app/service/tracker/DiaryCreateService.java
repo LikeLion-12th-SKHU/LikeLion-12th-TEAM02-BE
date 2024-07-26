@@ -2,12 +2,10 @@ package com.skhu.moodfriend.app.service.tracker;
 
 import com.skhu.moodfriend.app.dto.tracker.reqDto.DiaryCreateReqDto;
 import com.skhu.moodfriend.app.dto.tracker.resDto.DiaryResDto;
-import com.skhu.moodfriend.app.entity.diary.Diary;
+import com.skhu.moodfriend.app.entity.tracker.diary.Diary;
 import com.skhu.moodfriend.app.entity.member.Member;
-import com.skhu.moodfriend.app.entity.tracker.Tracker;
 import com.skhu.moodfriend.app.repository.DiaryRepository;
 import com.skhu.moodfriend.app.repository.MemberRepository;
-import com.skhu.moodfriend.app.repository.TrackerRepository;
 import com.skhu.moodfriend.global.exception.CustomException;
 import com.skhu.moodfriend.global.exception.code.ErrorCode;
 import com.skhu.moodfriend.global.exception.code.SuccessCode;
@@ -21,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class DiaryCreateService {
 
-    private final TrackerRepository trackerRepository;
     private final DiaryRepository diaryRepository;
     private final MemberRepository memberRepository;
 
@@ -37,16 +34,13 @@ public class DiaryCreateService {
             throw new CustomException(ErrorCode.ALREADY_EXIST_DIARY_EXCEPTION, ErrorCode.ALREADY_EXIST_DIARY_EXCEPTION.getMessage());
         }
 
-        Tracker tracker = trackerRepository.findByMember(member)
-                .orElseGet(() -> trackerRepository.save(Tracker.builder().member(member).build()));
-
         Diary diary = Diary.builder()
                 .emotionType(reqDto.emotionType())
                 .weatherType(reqDto.weatherType())
                 .title(reqDto.title())
                 .content(reqDto.content())
                 .createdAt(reqDto.createdAt())
-                .tracker(tracker)
+                .member(member)
                 .build();
 
         diaryRepository.save(diary);

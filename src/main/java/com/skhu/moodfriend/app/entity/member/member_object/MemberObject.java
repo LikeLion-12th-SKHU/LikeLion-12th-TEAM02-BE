@@ -1,4 +1,4 @@
-package com.skhu.moodfriend.app.entity.member_object;
+package com.skhu.moodfriend.app.entity.member.member_object;
 
 import com.skhu.moodfriend.app.entity.object_store.ObjectStore;
 import com.skhu.moodfriend.app.entity.member.Member;

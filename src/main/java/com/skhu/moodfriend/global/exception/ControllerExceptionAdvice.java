@@ -50,7 +50,7 @@ public class ControllerExceptionAdvice {
         }
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponseTemplate.error(ErrorCode.VALIDATION_JSON_SYNTAX_FAIL, ErrorCode.VALIDATION_JSON_SYNTAX_FAIL.getMessage()));
+                .body(ApiResponseTemplate.error(ErrorCode.JSON_SYNTAX_ERROR, ErrorCode.JSON_SYNTAX_ERROR.getMessage()));
     }
 
     private static String getEnumValues(Class<?> enumClass) {

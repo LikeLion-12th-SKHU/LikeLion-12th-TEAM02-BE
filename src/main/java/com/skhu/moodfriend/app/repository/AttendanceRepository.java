@@ -1,6 +1,6 @@
 package com.skhu.moodfriend.app.repository;
 
-import com.skhu.moodfriend.app.entity.attendance.Attendance;
+import com.skhu.moodfriend.app.entity.member.attendance.Attendance;
 import com.skhu.moodfriend.app.entity.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
