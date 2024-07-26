@@ -19,6 +19,13 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
             "AND d.createdAt = :date")
     boolean existsByMemberAndCreatedAtDate(@Param("member") Member member, @Param("date") LocalDate date);
 
+    @Query("SELECT CASE WHEN COUNT(d) > 0 THEN true ELSE false END " +
+            "FROM Diary d " +
+            "WHERE d.member = :member " +
+            "AND d.createdAt = :date " +
+            "AND d.diaryId <> :diaryId")
+    boolean existsByMemberAndCreatedAtDateExcludingDiary(@Param("member") Member member, @Param("date") LocalDate date, @Param("diaryId") Long diaryId);
+
     List<Diary> findByMemberOrderByCreatedAtAsc(Member member);
 
     @Query(value = "SELECT d FROM Diary d " +
