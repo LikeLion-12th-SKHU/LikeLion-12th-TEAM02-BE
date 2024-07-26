@@ -25,6 +25,26 @@ public class DiaryAIDisplayService {
     private final DiaryAIRepository diaryAIRepository;
     private final MemberRepository memberRepository;
 
+    public ApiResponseTemplate<DiaryAIResDto> getDiarySummaryById(Long diaryAIId, Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
+
+        DiaryAI diaryAI = diaryAIRepository.findById(diaryAIId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DIARY_EXCEPTION, ErrorCode.NOT_FOUND_DIARY_EXCEPTION.getMessage()));
+
+        if (!diaryAI.getMember().equals(member)) {
+            throw new CustomException(ErrorCode.ONLY_OWN_DIARY_ACCESS_EXCEPTION, ErrorCode.ONLY_OWN_DIARY_ACCESS_EXCEPTION.getMessage());
+        }
+
+        DiaryAIResDto resDto = DiaryAIResDto.builder()
+                .diaryAIId(diaryAI.getDiaryAIId())
+                .createdAt(diaryAI.getCreatedAt())
+                .summary(diaryAI.getSummary())
+                .build();
+
+        return ApiResponseTemplate.success(SuccessCode.GET_DIARY_SUMMARY_SUCCESS, resDto);
+    }
+
     public ApiResponseTemplate<List<DiaryAIResDto>> getAllDiarySummariesByMember(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));

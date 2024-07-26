@@ -9,10 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,6 +20,25 @@ import java.util.List;
 public class DiaryAIDisplayController {
 
     private final DiaryAIDisplayService diaryAIDisplayService;
+
+    @GetMapping("/{diaryAIId}")
+    @Operation(
+            summary = "사용자의 특정 AI 일기 조회",
+            description = "사용자의 특정 AI 일기를 조회합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "AI 일기 조회 성공"),
+                    @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
+                    @ApiResponse(responseCode = "404", description = "해당 AI 일기를 찾을 수 없음"),
+                    @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
+            }
+    )
+    public ResponseEntity<ApiResponseTemplate<DiaryAIResDto>> getDiarySummaryById(
+            @PathVariable Long diaryAIId,
+            @RequestParam Long memberId) {
+
+        ApiResponseTemplate<DiaryAIResDto> data = diaryAIDisplayService.getDiarySummaryById(diaryAIId, memberId);
+        return ResponseEntity.status(data.getStatus()).body(data);
+    }
 
     @GetMapping
     @Operation(
