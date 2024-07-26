@@ -56,12 +56,14 @@ public class HoyaService {
         }
 
         HoyaResDto.Choice choice = resDto.choices().get(0);
-        Message assistantMessage = choice.message();
+        String responseInEN = choice.message().content();
 
-        String translatedResToKO = translationService.translate(assistantMessage.content(), "KO");
-        Message translatedMessage = new Message(assistantMessage.role(), translatedResToKO);
+        Message responseMessage = new Message("assistant", responseInEN);
+        conversationService.addMessage(memberId, responseMessage);
 
-        conversationService.addMessage(memberId, translatedMessage);
+        String translatedResponseToKO = translationService.translate(responseInEN, "KO");
+
+        Message translatedMessage = new Message("assistant", translatedResponseToKO);
 
         HoyaResDto responseDto = new HoyaResDto(
                 Collections.singletonList(new HoyaResDto.Choice(0, translatedMessage)),
