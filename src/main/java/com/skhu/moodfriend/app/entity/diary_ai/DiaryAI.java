@@ -1,8 +1,9 @@
 package com.skhu.moodfriend.app.entity.diary_ai;
 
-import com.skhu.moodfriend.app.entity.tracker.Tracker;
+import com.skhu.moodfriend.app.entity.member.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -29,6 +30,12 @@ public class DiaryAI {
     private String summary;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TRACKER_ID")
-    private Tracker tracker;
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
+
+    @Builder
+    private DiaryAI(String summary, Member member) {
+        this.summary = summary;
+        this.member = member;
+    }
 }
