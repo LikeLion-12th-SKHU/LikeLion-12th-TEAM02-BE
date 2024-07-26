@@ -2,6 +2,7 @@ package com.skhu.moodfriend.app.service.chat;
 
 import com.skhu.moodfriend.app.dto.chat.Message;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,5 +20,10 @@ public class ConversationService {
 
     public void addMessage(Long memberId, Message message) {
         conversations.computeIfAbsent(memberId, k -> new ArrayList<>()).add(message);
+    }
+
+    @Transactional
+    public void clearConversation(Long memberId) {
+        conversations.put(memberId, new ArrayList<>());
     }
 }

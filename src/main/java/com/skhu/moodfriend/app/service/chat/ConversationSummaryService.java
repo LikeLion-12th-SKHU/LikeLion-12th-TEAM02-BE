@@ -22,7 +22,7 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public class DailySummaryService {
+public class ConversationSummaryService {
 
     private final ConversationService conversationService;
     private final DiaryAIRepository diaryAIRepository;
@@ -37,7 +37,7 @@ public class DailySummaryService {
     private String model;
 
     @Transactional
-    @Scheduled(cron = "0 15 11 * * *")
+    @Scheduled(cron = "0 0 2 * * *")
     public void summarizeConversations() {
         List<Member> members = memberRepository.findAll();
 
