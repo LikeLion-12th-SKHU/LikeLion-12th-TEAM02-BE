@@ -1,6 +1,5 @@
 package com.skhu.moodfriend.app.service.tracker;
 
-import com.skhu.moodfriend.app.dto.tracker.resDto.DiaryAIResDto;
 import com.skhu.moodfriend.app.entity.member.Member;
 import com.skhu.moodfriend.app.entity.tracker.diary_ai.DiaryAI;
 import com.skhu.moodfriend.app.repository.DiaryAIRepository;
@@ -14,18 +13,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public class DiaryAIDisplayService {
+public class DiaryAIModifyService {
 
     private final DiaryAIRepository diaryAIRepository;
     private final MemberRepository memberRepository;
 
-    public ApiResponseTemplate<DiaryAIResDto> getDiarySummaryById(
+    @Transactional
+    public ApiResponseTemplate<Void> deleteDiaryAI(
             Long diaryAIId,
             Long memberId) {
 
@@ -39,30 +36,8 @@ public class DiaryAIDisplayService {
             throw new CustomException(ErrorCode.ONLY_OWN_DIARY_ACCESS_EXCEPTION, ErrorCode.ONLY_OWN_DIARY_ACCESS_EXCEPTION.getMessage());
         }
 
-        DiaryAIResDto resDto = DiaryAIResDto.builder()
-                .diaryAIId(diaryAI.getDiaryAIId())
-                .createdAt(diaryAI.getCreatedAt())
-                .summary(diaryAI.getSummary())
-                .build();
+        diaryAIRepository.delete(diaryAI);
 
-        return ApiResponseTemplate.success(SuccessCode.GET_DIARY_SUMMARY_SUCCESS, resDto);
-    }
-
-    public ApiResponseTemplate<List<DiaryAIResDto>> getAllDiarySummariesByMember(Long memberId) {
-
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
-
-        List<DiaryAI> diaryAIs = diaryAIRepository.findByMemberOrderByCreatedAt(member);
-
-        List<DiaryAIResDto> resDtos = diaryAIs.stream()
-                .map(diaryAI -> DiaryAIResDto.builder()
-                        .diaryAIId(diaryAI.getDiaryAIId())
-                        .createdAt(diaryAI.getCreatedAt())
-                        .summary(diaryAI.getSummary())
-                        .build())
-                .collect(Collectors.toList());
-
-        return ApiResponseTemplate.success(SuccessCode.GET_ALL_DIARY_SUMMARIES_SUCCESS, resDtos);
+        return ApiResponseTemplate.success(SuccessCode.DELETE_DIARY_SUCCESS, null);
     }
 }
