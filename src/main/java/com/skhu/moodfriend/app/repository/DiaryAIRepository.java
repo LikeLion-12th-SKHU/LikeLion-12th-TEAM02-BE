@@ -1,6 +1,6 @@
 package com.skhu.moodfriend.app.repository;
 
-import com.skhu.moodfriend.app.entity.diary_ai.DiaryAI;
+import com.skhu.moodfriend.app.entity.tracker.diary_ai.DiaryAI;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;

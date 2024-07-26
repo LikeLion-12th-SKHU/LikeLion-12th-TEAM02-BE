@@ -1,9 +1,9 @@
 package com.skhu.moodfriend.app.entity.member;
 
-import com.skhu.moodfriend.app.entity.attendance.Attendance;
-import com.skhu.moodfriend.app.entity.feedback.FeedBack;
+import com.skhu.moodfriend.app.entity.member.attendance.Attendance;
+import com.skhu.moodfriend.app.entity.member.feedback.FeedBack;
 import com.skhu.moodfriend.app.entity.friend.Friend;
-import com.skhu.moodfriend.app.entity.member_object.MemberObject;
+import com.skhu.moodfriend.app.entity.member.member_object.MemberObject;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

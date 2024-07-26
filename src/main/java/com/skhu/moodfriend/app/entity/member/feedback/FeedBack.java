@@ -1,4 +1,4 @@
-package com.skhu.moodfriend.app.entity.feedback;
+package com.skhu.moodfriend.app.entity.member.feedback;
 
 import com.skhu.moodfriend.app.entity.member.Member;
 import jakarta.persistence.*;

@@ -3,7 +3,7 @@ package com.skhu.moodfriend.app.service.chat;
 import com.skhu.moodfriend.app.dto.chat.Message;
 import com.skhu.moodfriend.app.dto.chat.reqDto.HoyaReqDto;
 import com.skhu.moodfriend.app.dto.chat.resDto.HoyaResDto;
-import com.skhu.moodfriend.app.entity.diary_ai.DiaryAI;
+import com.skhu.moodfriend.app.entity.tracker.diary_ai.DiaryAI;
 import com.skhu.moodfriend.app.entity.member.Member;
 import com.skhu.moodfriend.app.repository.DiaryAIRepository;
 import com.skhu.moodfriend.app.repository.MemberRepository;

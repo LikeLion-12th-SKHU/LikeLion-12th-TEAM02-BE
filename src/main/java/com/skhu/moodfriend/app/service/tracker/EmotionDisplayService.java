@@ -2,8 +2,8 @@ package com.skhu.moodfriend.app.service.tracker;
 
 import com.skhu.moodfriend.app.dto.tracker.reqDto.MonthlyEmotionReqDto;
 import com.skhu.moodfriend.app.dto.tracker.resDto.MonthlyEmotionResDto;
-import com.skhu.moodfriend.app.entity.diary.Diary;
-import com.skhu.moodfriend.app.entity.diary.EmotionType;
+import com.skhu.moodfriend.app.entity.tracker.diary.Diary;
+import com.skhu.moodfriend.app.entity.tracker.diary.EmotionType;
 import com.skhu.moodfriend.app.entity.member.Member;
 import com.skhu.moodfriend.app.repository.DiaryRepository;
 import com.skhu.moodfriend.app.repository.MemberRepository;

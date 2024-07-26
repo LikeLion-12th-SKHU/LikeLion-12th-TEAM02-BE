@@ -1,4 +1,4 @@
-package com.skhu.moodfriend.app.entity.diary;
+package com.skhu.moodfriend.app.entity.tracker.diary;
 
 import com.skhu.moodfriend.app.entity.member.Member;
 import jakarta.persistence.*;
