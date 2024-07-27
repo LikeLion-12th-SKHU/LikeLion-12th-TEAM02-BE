@@ -1,15 +1,14 @@
-package com.skhu.moodfriend.app.dto.payment.resDto;
+package com.skhu.moodfriend.app.dto.transaction.resDto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.skhu.moodfriend.app.entity.member.order.OrderStatus;
 import com.skhu.moodfriend.app.entity.member.order.PaymentPlatform;
-import com.skhu.moodfriend.app.entity.object_store.ObjectName;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
 
 @Builder
-public record OrderResDto(
+public record PaymentResDto(
         Long orderId,
         Integer chargedMileage,
         Integer totalMileage,

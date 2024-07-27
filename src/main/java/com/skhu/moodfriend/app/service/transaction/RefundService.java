@@ -1,17 +1,14 @@
 package com.skhu.moodfriend.app.service.transaction;
 
-import com.skhu.moodfriend.app.dto.transaction.reqDto.PaymentReqDto;
-import com.skhu.moodfriend.app.dto.transaction.resDto.PaymentResDto;
+import com.skhu.moodfriend.app.dto.transaction.reqDto.RefundReqDto;
+import com.skhu.moodfriend.app.dto.transaction.resDto.RefundResDto;
 import com.skhu.moodfriend.app.entity.member.Member;
 import com.skhu.moodfriend.app.entity.member.order.MemberOrder;
-import com.skhu.moodfriend.app.entity.member.order.OrderStatus;
 import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.app.repository.OrderRepository;
 import com.skhu.moodfriend.global.config.ImpConfig;
 import com.skhu.moodfriend.global.exception.CustomException;
 import com.skhu.moodfriend.global.exception.code.ErrorCode;
-import com.skhu.moodfriend.global.exception.code.SuccessCode;
-import com.skhu.moodfriend.global.template.ApiResponseTemplate;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
@@ -20,19 +17,20 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public class PaymentService {
+public class RefundService {
 
     private final ImpConfig impConfig;
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
 
     @Transactional
-    public ApiResponseTemplate<PaymentResDto> saveOrderAndProcessPayment(
-            PaymentReqDto reqDto,
+    public RefundResDto processRefund(
+            RefundReqDto reqDto,
             Principal principal) {
 
         Long memberId = Long.parseLong(principal.getName());
@@ -40,64 +38,27 @@ public class PaymentService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
-        MemberOrder order = MemberOrder.builder()
-                .mileage(reqDto.mileage())
-                .amount(reqDto.price())
-                .platform(reqDto.platform())
-                .status(OrderStatus.PROCESSING)
-                .member(member)
-                .build();
+        MemberOrder order = orderRepository.findByImpUid(reqDto.impUid())
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ORDER_EXCEPTION, ErrorCode.NOT_FOUND_ORDER_EXCEPTION.getMessage()));
 
-        MemberOrder savedOrder = orderRepository.save(order);
-
-        boolean isValidPayment = validatePayment(savedOrder.getImpUid(), savedOrder);
-        if (isValidPayment) {
-            savedOrder.completePayment(savedOrder.getImpUid());
-            member.updateMileage(reqDto.mileage());
-            memberRepository.save(member);
-        } else {
-            if (refundPayment(savedOrder.getImpUid(), savedOrder.getAmount())) {
-                savedOrder.failPayment(savedOrder.getImpUid());
-            } else {
-                throw new CustomException(ErrorCode.FAILED_REFUND_EXCEPTION, ErrorCode.FAILED_REFUND_EXCEPTION.getMessage());
-            }
+        if (!order.getMember().equals(member)) {
+            throw new CustomException(ErrorCode.FORBIDDEN_ACCESS_EXCEPTION, ErrorCode.FORBIDDEN_ACCESS_EXCEPTION.getMessage());
         }
-        orderRepository.save(savedOrder);
 
-        PaymentResDto resDto = PaymentResDto.builder()
-                .orderId(savedOrder.getOrderId())
-                .chargedMileage(reqDto.mileage())
-                .totalMileage(member.getMileage())
-                .price(savedOrder.getAmount())
-                .platform(savedOrder.getPlatform())
-                .status(savedOrder.getStatus())
-                .orderAt(savedOrder.getOrderAt())
-                .build();
+        boolean isRefunded = refundPayment(reqDto.impUid(), order.getAmount());
+        if (isRefunded) {
+            order.failPayment(reqDto.impUid());
+            member.updateMileage(-order.getAmount());
+            memberRepository.save(member);
+            orderRepository.save(order);
 
-        return ApiResponseTemplate.success(SuccessCode.SAVE_ORDER_SUCCESS, resDto);
-    }
-
-    @Transactional(readOnly = true)
-    protected boolean validatePayment(String impUid, MemberOrder order) {
-        String url = "https://api.iamport.kr/payments/verify";
-        RestTemplate restTemplate = new RestTemplate();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Authorization", getAuthToken());
-
-        String body = String.format("{\"imp_uid\": \"%s\"}", impUid);
-        HttpEntity<String> entity = new HttpEntity<>(body, headers);
-
-        ResponseEntity<IamportRes> response = restTemplate.exchange(url, HttpMethod.POST, entity, IamportRes.class);
-        IamportRes responseBody = response.getBody();
-
-        if (responseBody != null && responseBody.success()) {
-            order.completePayment(impUid);
-            return true;
+            return RefundResDto.builder()
+                    .orderId(order.getOrderId())
+                    .refundedAmount(order.getAmount())
+                    .refundAt(LocalDateTime.now())
+                    .build();
         } else {
-            order.failPayment(impUid);
-            return false;
+            throw new CustomException(ErrorCode.FAILED_REFUND_EXCEPTION, ErrorCode.FAILED_REFUND_EXCEPTION.getMessage());
         }
     }
 
@@ -139,8 +100,6 @@ public class PaymentService {
             throw new CustomException(ErrorCode.FAILED_GET_TOKEN_EXCEPTION, ErrorCode.FAILED_GET_TOKEN_EXCEPTION.getMessage());
         }
     }
-
-    private record IamportRes(boolean success) {}
 
     private record RefundRes(boolean success) {}
 

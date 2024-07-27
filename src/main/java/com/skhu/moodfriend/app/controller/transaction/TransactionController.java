@@ -1,7 +1,11 @@
 package com.skhu.moodfriend.app.controller.transaction;
 
-import com.skhu.moodfriend.app.dto.payment.reqDto.OrderReqDto;
-import com.skhu.moodfriend.app.dto.payment.resDto.OrderResDto;
+import com.skhu.moodfriend.app.dto.transaction.reqDto.PaymentReqDto;
+import com.skhu.moodfriend.app.dto.transaction.reqDto.RefundReqDto;
+import com.skhu.moodfriend.app.dto.transaction.resDto.PaymentResDto;
+import com.skhu.moodfriend.app.dto.transaction.resDto.RefundResDto;
+import com.skhu.moodfriend.app.service.transaction.RefundService;
+import com.skhu.moodfriend.global.exception.code.SuccessCode;
 import com.skhu.moodfriend.global.template.ApiResponseTemplate;
 import com.skhu.moodfriend.app.service.transaction.PaymentService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,6 +25,7 @@ import java.security.Principal;
 public class TransactionController {
 
     private final PaymentService paymentService;
+    private final RefundService refundService;
 
     @PostMapping("/payment")
     @Operation(
@@ -33,12 +38,31 @@ public class TransactionController {
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<OrderResDto>> saveOrderAndProcessPayment(
-            @RequestBody OrderReqDto reqDto,
+    public ResponseEntity<ApiResponseTemplate<PaymentResDto>> saveOrderAndProcessPayment(
+            @RequestBody PaymentReqDto reqDto,
             Principal principal) {
 
-        ApiResponseTemplate<OrderResDto> data = paymentService.saveOrderAndProcessPayment(reqDto, principal);
+        ApiResponseTemplate<PaymentResDto> data = paymentService.saveOrderAndProcessPayment(reqDto, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
+    }
+
+    @PostMapping("/refund")
+    @Operation(
+            summary = "환불 처리",
+            description = "환불을 처리하고 상태를 업데이트합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "환불 처리 성공"),
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청 or 입력값 오류"),
+                    @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
+                    @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
+            }
+    )
+    public ResponseEntity<ApiResponseTemplate<RefundResDto>> processRefund(
+            @RequestBody RefundReqDto reqDto,
+            Principal principal) {
+
+        RefundResDto refundResult = refundService.processRefund(reqDto, principal);
+        return ResponseEntity.ok(ApiResponseTemplate.success(SuccessCode.REFUND_SUCCESS, refundResult));
     }
 }
 

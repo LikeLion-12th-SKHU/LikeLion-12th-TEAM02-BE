@@ -23,6 +23,7 @@ public enum ErrorCode {
     ONLY_OWN_DIARY_ACCESS_EXCEPTION(HttpStatus.UNAUTHORIZED, "본인이 작성한 일기만 접근 가능합니다."),
 
     // 403 Forbidden
+    FORBIDDEN_ACCESS_EXCEPTION(HttpStatus.FORBIDDEN, "해당 주문에 접근 권한이 없습니다."),
     FORBIDDEN_AUTH_EXCEPTION(HttpStatus.FORBIDDEN, "권한 정보가 없는 토큰입니다."),
     EXPIRED_TOKEN_EXCEPTION(HttpStatus.FORBIDDEN, "토큰이 만료되었습니다."),
 
