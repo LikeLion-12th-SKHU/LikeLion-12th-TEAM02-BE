@@ -17,8 +17,9 @@ public class ObjectStore {
     @Column(name = "OBJECT_ID")
     private Long objectId;
 
-    @Column(name = "OBJECT_NAME", nullable = false, length = 100)
-    private String objectName;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "OBJECT_NAME", nullable = false)
+    private ObjectName objectName;
 
     @Column(name = "OBJECT_PRICE", nullable = false)
     private int price;

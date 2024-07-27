@@ -1,6 +1,7 @@
 package com.skhu.moodfriend.app.entity.member.order;
 
 import com.skhu.moodfriend.app.entity.member.Member;
+import com.skhu.moodfriend.app.entity.object_store.ObjectName;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -22,8 +23,9 @@ public class MemberOrder {
     @Column(name = "ORDER_ID")
     private Long orderId;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "OBJECT_NAME", nullable = false)
-    private String objectName;
+    private ObjectName objectName;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "PLATFORM")
@@ -45,7 +47,7 @@ public class MemberOrder {
     private Member member;
 
     @Builder
-    private MemberOrder(String objectName, PaymentPlatform platform, OrderStatus status, Member member) {
+    private MemberOrder(ObjectName objectName, PaymentPlatform platform, OrderStatus status, Member member) {
         this.objectName = objectName;
         this.platform = platform;
         this.status = status;
