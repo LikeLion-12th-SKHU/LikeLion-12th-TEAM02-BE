@@ -46,7 +46,8 @@ public enum ErrorCode {
     // 503 Service Unavailable
     FAILED_GET_TOKEN_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "토큰을 가져오는 중 오류가 발생했습니다."),
     FAILED_TRANSLATION_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "번역하는 중 오류가 발생했습니다."),
-    FAILED_GET_GPT_RESPONSE_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "챗봇 응답 중 오류가 발생했습니다.");
+    FAILED_GET_GPT_RESPONSE_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "챗봇 응답 중 오류가 발생했습니다."),
+    FAILED_REFUND_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "환불 처리 중 오류가 발생했습니다."),;
 
     private final HttpStatus httpStatus;
     private final String message;

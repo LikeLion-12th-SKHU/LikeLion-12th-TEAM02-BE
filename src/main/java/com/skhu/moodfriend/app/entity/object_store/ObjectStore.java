@@ -22,5 +22,5 @@ public class ObjectStore {
     private ObjectName objectName;
 
     @Column(name = "OBJECT_PRICE", nullable = false)
-    private int price;
+    private Integer price;
 }

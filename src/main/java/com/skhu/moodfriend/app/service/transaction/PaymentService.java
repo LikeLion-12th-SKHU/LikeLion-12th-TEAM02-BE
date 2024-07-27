@@ -54,6 +54,7 @@ public class PaymentService {
                 .platform(reqDto.platform())
                 .status(OrderStatus.PROCESSING)
                 .member(member)
+                .amount(reqDto.amount())
                 .build();
 
         MemberOrder savedOrder = orderRepository.save(order);
@@ -63,7 +64,11 @@ public class PaymentService {
             savedOrder.completePayment(savedOrder.getImpUid());
             addMemberObject(reqDto.objectName(), member);
         } else {
-            savedOrder.failPayment(savedOrder.getImpUid());
+            if (refundPayment(savedOrder.getImpUid(), savedOrder.getAmount())) {
+                savedOrder.failPayment(savedOrder.getImpUid());
+            } else {
+                throw new CustomException(ErrorCode.FAILED_REFUND_EXCEPTION, ErrorCode.FAILED_REFUND_EXCEPTION.getMessage());
+            }
         }
         orderRepository.save(savedOrder);
 
@@ -112,6 +117,24 @@ public class PaymentService {
     }
 
     @Transactional(readOnly = true)
+    protected boolean refundPayment(String impUid, Integer amount) {
+        String url = "https://api.iamport.kr/payments/cancel";
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", getAuthToken());
+
+        String body = String.format("{\"imp_uid\": \"%s\", \"amount\": %d}", impUid, amount);
+        HttpEntity<String> entity = new HttpEntity<>(body, headers);
+
+        ResponseEntity<RefundRes> response = restTemplate.exchange(url, HttpMethod.POST, entity, RefundRes.class);
+        RefundRes responseBody = response.getBody();
+
+        return responseBody != null && responseBody.success();
+    }
+
+    @Transactional(readOnly = true)
     protected String getAuthToken() {
         String url = "https://api.iamport.kr/users/getToken";
         RestTemplate restTemplate = new RestTemplate();
@@ -132,9 +155,9 @@ public class PaymentService {
         }
     }
 
-    private record IamportRes(boolean success) {
-    }
+    private record IamportRes(boolean success) {}
 
-    private record AuthRes(boolean success, String accessToken) {
-    }
+    private record RefundRes(boolean success) {}
+
+    private record AuthRes(boolean success, String accessToken) {}
 }

@@ -35,6 +35,9 @@ public class MemberOrder {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
+    @Column(name = "ORDER_AMOUNT")
+    private Integer amount;
+
     @CreatedDate
     @Column(name = "ORDER_DATE", updatable = false)
     private LocalDateTime orderAt;
@@ -47,10 +50,11 @@ public class MemberOrder {
     private Member member;
 
     @Builder
-    private MemberOrder(ObjectName objectName, PaymentPlatform platform, OrderStatus status, Member member) {
+    private MemberOrder(ObjectName objectName, PaymentPlatform platform, OrderStatus status, Integer amount, Member member) {
         this.objectName = objectName;
         this.platform = platform;
         this.status = status;
+        this.amount = amount;
         this.member = member;
     }
 

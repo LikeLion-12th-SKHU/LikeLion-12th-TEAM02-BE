@@ -5,6 +5,7 @@ import com.skhu.moodfriend.app.entity.object_store.ObjectName;
 
 public record OrderReqDto(
         ObjectName objectName,
+        Integer amount,
         PaymentPlatform platform
 ) {
 }
