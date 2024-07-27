@@ -1,4 +1,4 @@
-package com.skhu.moodfriend.app.entity.member.member_object;
+package com.skhu.moodfriend.app.entity.member.object;
 
 import com.skhu.moodfriend.app.entity.object_store.ObjectStore;
 import com.skhu.moodfriend.app.entity.member.Member;
@@ -12,7 +12,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
-public class MemberObject {
+public class Object {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

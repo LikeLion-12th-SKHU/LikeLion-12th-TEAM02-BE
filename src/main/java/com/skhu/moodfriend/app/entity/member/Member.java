@@ -3,7 +3,7 @@ package com.skhu.moodfriend.app.entity.member;
 import com.skhu.moodfriend.app.entity.member.attendance.Attendance;
 import com.skhu.moodfriend.app.entity.member.feedback.FeedBack;
 import com.skhu.moodfriend.app.entity.friend.Friend;
-import com.skhu.moodfriend.app.entity.member.member_object.MemberObject;
+import com.skhu.moodfriend.app.entity.member.object.Object;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -49,7 +49,7 @@ public class Member {
     private List<Attendance> attendances = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MemberObject> userObjects = new ArrayList<>();
+    private List<Object> objects = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Friend> friends = new ArrayList<>();
