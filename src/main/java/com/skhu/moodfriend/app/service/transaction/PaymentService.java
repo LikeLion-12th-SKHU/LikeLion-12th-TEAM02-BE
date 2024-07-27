@@ -76,6 +76,7 @@ public class PaymentService {
     private void addMemberObject(ObjectName objectName, Member member) {
         MemberObject memberObject = MemberObject.builder()
                 .objectName(objectName)
+                .status(false)
                 .member(member)
                 .build();
         memberObjectRepository.save(memberObject);

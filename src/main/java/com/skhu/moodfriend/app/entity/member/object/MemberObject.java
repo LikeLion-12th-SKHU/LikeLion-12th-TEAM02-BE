@@ -26,15 +26,16 @@ public class MemberObject {
     private ObjectName objectName;
 
     @Column(name = "OBJECT_STATUS", nullable = false)
-    private boolean status = false;
+    private boolean status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
     @Builder
-    private MemberObject(ObjectName objectName, Member member) {
+    private MemberObject(ObjectName objectName, boolean status, Member member) {
         this.objectName = objectName;
+        this.status = status;
         this.member = member;
     }
 }
