@@ -1,9 +1,11 @@
 package com.skhu.moodfriend.app.entity.member.object;
 
+import com.skhu.moodfriend.app.entity.object_store.ObjectName;
 import com.skhu.moodfriend.app.entity.object_store.ObjectStore;
 import com.skhu.moodfriend.app.entity.member.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -19,6 +21,10 @@ public class MemberObject {
     @Column(name = "MEMBER_OBJECT_ID")
     private Long memberObjectId;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "OBJECT_NAME", nullable = false)
+    private ObjectName objectName;
+
     @Column(name = "OBJECT_STATUS", nullable = false)
     private boolean status = false;
 
@@ -26,7 +32,9 @@ public class MemberObject {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "OBJECT_ID")
-    private ObjectStore objectStore;
+    @Builder
+    private MemberObject(ObjectName objectName, Member member) {
+        this.objectName = objectName;
+        this.member = member;
+    }
 }

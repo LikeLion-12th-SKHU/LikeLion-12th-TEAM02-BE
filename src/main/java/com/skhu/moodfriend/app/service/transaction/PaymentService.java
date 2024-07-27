@@ -3,8 +3,11 @@ package com.skhu.moodfriend.app.service.transaction;
 import com.skhu.moodfriend.app.dto.payment.reqDto.OrderReqDto;
 import com.skhu.moodfriend.app.dto.payment.resDto.OrderResDto;
 import com.skhu.moodfriend.app.entity.member.Member;
+import com.skhu.moodfriend.app.entity.member.object.MemberObject;
 import com.skhu.moodfriend.app.entity.member.order.MemberOrder;
 import com.skhu.moodfriend.app.entity.member.order.OrderStatus;
+import com.skhu.moodfriend.app.entity.object_store.ObjectName;
+import com.skhu.moodfriend.app.repository.MemberObjectRepository;
 import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.app.repository.OrderRepository;
 import com.skhu.moodfriend.global.config.ImpConfig;
@@ -29,6 +32,7 @@ public class PaymentService {
     private final ImpConfig impConfig;
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
+    private final MemberObjectRepository memberObjectRepository;
 
     @Transactional
     public ApiResponseTemplate<OrderResDto> saveOrderAndProcessPayment(
@@ -52,6 +56,7 @@ public class PaymentService {
         boolean isValidPayment = validatePayment(savedOrder.getImpUid(), savedOrder);
         if (isValidPayment) {
             savedOrder.completePayment(savedOrder.getImpUid());
+            addMemberObject(reqDto.objectName(), member);
         } else {
             savedOrder.failPayment(savedOrder.getImpUid());
         }
@@ -66,6 +71,14 @@ public class PaymentService {
                 .build();
 
         return ApiResponseTemplate.success(SuccessCode.SAVE_ORDER_SUCCESS, resDto);
+    }
+
+    private void addMemberObject(ObjectName objectName, Member member) {
+        MemberObject memberObject = MemberObject.builder()
+                .objectName(objectName)
+                .member(member)
+                .build();
+        memberObjectRepository.save(memberObject);
     }
 
     @Transactional(readOnly = true)
