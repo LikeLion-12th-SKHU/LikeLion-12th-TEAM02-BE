@@ -1,7 +1,6 @@
-package com.skhu.moodfriend.app.entity.member.orders;
+package com.skhu.moodfriend.app.entity.member.order;
 
 import com.skhu.moodfriend.app.entity.member.Member;
-import com.skhu.moodfriend.app.entity.object_store.ObjectStore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -16,7 +15,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
-public class Orders {
+public class MemberOrder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +24,10 @@ public class Orders {
 
     @Column(name = "OBJECT_NAME", nullable = false)
     private String objectName;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "PLATFORM")
+    private PaymentPlatform platform;
 
     @Column(name = "ORDER_STATUS", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -37,23 +40,25 @@ public class Orders {
     @Column(name = "IMP_UID")
     private String impUid;
 
-    @Column(name = "PAYMENT_INFO")
-    private String paymentInfo;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
     @Builder
-    private Orders(String objectName, OrderStatus status, Member member) {
+    private MemberOrder(String objectName, PaymentPlatform platform, OrderStatus status, Member member) {
         this.objectName = objectName;
+        this.platform = platform;
         this.status = status;
         this.member = member;
     }
 
-    public void completePayment(String impUid, String paymentInfo) {
+    public void completePayment(String impUid) {
         this.status = OrderStatus.PAID;
         this.impUid = impUid;
-        this.paymentInfo = paymentInfo;
+    }
+
+    public void failPayment(String impUid) {
+        this.status = OrderStatus.FAILED;
+        this.impUid = impUid;
     }
 }

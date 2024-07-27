@@ -35,9 +35,7 @@ public class AttendanceService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
-        LocalDate today = LocalDate.now();
-
-        Optional<Attendance> attendance = attendanceRepository.findByMemberAndAttendanceDate(member, today);
+        Optional<Attendance> attendance = attendanceRepository.findByMemberAndAttendanceDate(member, LocalDate.now());
         if (attendance.isPresent()) {
             throw new CustomException(ErrorCode.ALREADY_EXIST_ATTENDED_EXCEPTION, ErrorCode.ALREADY_EXIST_ATTENDED_EXCEPTION.getMessage());
         }

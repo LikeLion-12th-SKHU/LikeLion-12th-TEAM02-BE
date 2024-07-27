@@ -12,14 +12,14 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
-public class Object {
+public class MemberObject {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "USER_OBJECT_ID")
-    private Long userObjectId;
+    @Column(name = "MEMBER_OBJECT_ID")
+    private Long memberObjectId;
 
-    @Column(name = "USER_OBJECT_STATUS", nullable = false)
+    @Column(name = "OBJECT_STATUS", nullable = false)
     private boolean status = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
