@@ -44,6 +44,11 @@ public class PaymentService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
+        ObjectName objectName = reqDto.objectName();
+        if (memberObjectRepository.findByObjectNameAndMember(objectName, member).isPresent()) {
+            throw new CustomException(ErrorCode.DUPLICATE_OBJECT_EXCEPTION, ErrorCode.DUPLICATE_OBJECT_EXCEPTION.getMessage());
+        }
+
         MemberOrder order = MemberOrder.builder()
                 .objectName(reqDto.objectName())
                 .platform(reqDto.platform())
