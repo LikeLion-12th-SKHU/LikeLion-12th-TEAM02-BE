@@ -23,7 +23,7 @@ import java.util.Optional;
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class AttendanceService {
 
-    private static final long MILEAGE_INCREMENT = 3;
+    private static final Integer MILEAGE_INCREMENT = 3;
 
     private final AttendanceRepository attendanceRepository;
     private final MemberRepository memberRepository;

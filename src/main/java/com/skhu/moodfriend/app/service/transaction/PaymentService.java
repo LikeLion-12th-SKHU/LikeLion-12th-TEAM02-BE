@@ -3,11 +3,8 @@ package com.skhu.moodfriend.app.service.transaction;
 import com.skhu.moodfriend.app.dto.payment.reqDto.OrderReqDto;
 import com.skhu.moodfriend.app.dto.payment.resDto.OrderResDto;
 import com.skhu.moodfriend.app.entity.member.Member;
-import com.skhu.moodfriend.app.entity.member.object.MemberObject;
 import com.skhu.moodfriend.app.entity.member.order.MemberOrder;
 import com.skhu.moodfriend.app.entity.member.order.OrderStatus;
-import com.skhu.moodfriend.app.entity.object_store.ObjectName;
-import com.skhu.moodfriend.app.repository.MemberObjectRepository;
 import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.app.repository.OrderRepository;
 import com.skhu.moodfriend.global.config.ImpConfig;
@@ -32,7 +29,6 @@ public class PaymentService {
     private final ImpConfig impConfig;
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
-    private final MemberObjectRepository memberObjectRepository;
 
     @Transactional
     public ApiResponseTemplate<OrderResDto> saveOrderAndProcessPayment(
@@ -44,17 +40,12 @@ public class PaymentService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
-        ObjectName objectName = reqDto.objectName();
-        if (memberObjectRepository.findByObjectNameAndMember(objectName, member).isPresent()) {
-            throw new CustomException(ErrorCode.DUPLICATE_OBJECT_EXCEPTION, ErrorCode.DUPLICATE_OBJECT_EXCEPTION.getMessage());
-        }
-
         MemberOrder order = MemberOrder.builder()
-                .objectName(reqDto.objectName())
+                .mileage(reqDto.mileage())
+                .amount(reqDto.price())
                 .platform(reqDto.platform())
                 .status(OrderStatus.PROCESSING)
                 .member(member)
-                .amount(reqDto.amount())
                 .build();
 
         MemberOrder savedOrder = orderRepository.save(order);
@@ -62,7 +53,8 @@ public class PaymentService {
         boolean isValidPayment = validatePayment(savedOrder.getImpUid(), savedOrder);
         if (isValidPayment) {
             savedOrder.completePayment(savedOrder.getImpUid());
-            addMemberObject(reqDto.objectName(), member);
+            member.updateMileage(reqDto.mileage());
+            memberRepository.save(member);
         } else {
             if (refundPayment(savedOrder.getImpUid(), savedOrder.getAmount())) {
                 savedOrder.failPayment(savedOrder.getImpUid());
@@ -74,22 +66,15 @@ public class PaymentService {
 
         OrderResDto resDto = OrderResDto.builder()
                 .orderId(savedOrder.getOrderId())
-                .objectName(savedOrder.getObjectName())
+                .chargedMileage(reqDto.mileage())
+                .totalMileage(member.getMileage())
+                .price(savedOrder.getAmount())
                 .platform(savedOrder.getPlatform())
                 .status(savedOrder.getStatus())
                 .orderAt(savedOrder.getOrderAt())
                 .build();
 
         return ApiResponseTemplate.success(SuccessCode.SAVE_ORDER_SUCCESS, resDto);
-    }
-
-    private void addMemberObject(ObjectName objectName, Member member) {
-        MemberObject memberObject = MemberObject.builder()
-                .objectName(objectName)
-                .status(false)
-                .member(member)
-                .build();
-        memberObjectRepository.save(memberObject);
     }
 
     @Transactional(readOnly = true)

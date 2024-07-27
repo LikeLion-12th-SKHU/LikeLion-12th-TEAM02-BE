@@ -11,7 +11,9 @@ import java.time.LocalDateTime;
 @Builder
 public record OrderResDto(
         Long orderId,
-        ObjectName objectName,
+        Integer chargedMileage,
+        Integer totalMileage,
+        Integer price,
         PaymentPlatform platform,
         OrderStatus status,
         @JsonFormat(pattern = "yyyy-MM-dd - HH:mm", timezone = "Asia/Seoul")
