@@ -50,9 +50,11 @@ public class PaymentService {
 
         MemberOrder savedOrder = orderRepository.save(order);
 
-        boolean isValidPayment = validatePayment(savedOrder.getImpUid(), savedOrder);
-        if (isValidPayment) {
-            savedOrder.completePayment(savedOrder.getImpUid());
+        PaymentResponse paymentResponse = processPaymentRequest(savedOrder, reqDto);
+
+        if (paymentResponse.success()) {
+            String impUid = paymentResponse.impUid();
+            savedOrder.completePayment(impUid);
             member.updateMileage(reqDto.mileage());
             memberRepository.save(member);
         } else {
@@ -66,6 +68,7 @@ public class PaymentService {
 
         PaymentResDto resDto = PaymentResDto.builder()
                 .orderId(savedOrder.getOrderId())
+                .impUid(savedOrder.getImpUid())
                 .chargedMileage(reqDto.mileage())
                 .totalMileage(member.getMileage())
                 .price(savedOrder.getAmount())
@@ -78,26 +81,25 @@ public class PaymentService {
     }
 
     @Transactional(readOnly = true)
-    protected boolean validatePayment(String impUid, MemberOrder order) {
-        String url = "https://api.iamport.kr/payments/verify";
+    protected PaymentResponse processPaymentRequest(MemberOrder order, PaymentReqDto reqDto) {
+        String url = "https://api.iamport.kr/payments/prepare";
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", getAuthToken());
 
-        String body = String.format("{\"imp_uid\": \"%s\"}", impUid);
+        String body = String.format("{\"amount\": %d, \"merchant_uid\": \"%s\", \"name\": \"%s\"}",
+                reqDto.price(), order.getOrderId(), "Payment for order " + order.getOrderId());
         HttpEntity<String> entity = new HttpEntity<>(body, headers);
 
-        ResponseEntity<IamportRes> response = restTemplate.exchange(url, HttpMethod.POST, entity, IamportRes.class);
-        IamportRes responseBody = response.getBody();
+        ResponseEntity<PaymentResponse> response = restTemplate.exchange(url, HttpMethod.POST, entity, PaymentResponse.class);
+        PaymentResponse responseBody = response.getBody();
 
         if (responseBody != null && responseBody.success()) {
-            order.completePayment(impUid);
-            return true;
+            return responseBody;
         } else {
-            order.failPayment(impUid);
-            return false;
+            throw new CustomException(ErrorCode.FAILED_PAYMENT_EXCEPTION, ErrorCode.FAILED_PAYMENT_EXCEPTION.getMessage());
         }
     }
 
@@ -140,7 +142,7 @@ public class PaymentService {
         }
     }
 
-    private record IamportRes(boolean success) {}
+    private record PaymentResponse(boolean success, String impUid) {}
 
     private record RefundRes(boolean success) {}
 

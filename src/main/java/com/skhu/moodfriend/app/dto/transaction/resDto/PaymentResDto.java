@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Builder
 public record PaymentResDto(
         Long orderId,
+        String impUid,
         Integer chargedMileage,
         Integer totalMileage,
         Integer price,
