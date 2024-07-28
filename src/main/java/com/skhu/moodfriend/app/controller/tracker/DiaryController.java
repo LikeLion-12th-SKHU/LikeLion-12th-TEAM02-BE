@@ -4,6 +4,7 @@ import com.skhu.moodfriend.app.dto.tracker.reqDto.DiaryCreateReqDto;
 import com.skhu.moodfriend.app.dto.tracker.reqDto.DiaryUpdateReqDto;
 import com.skhu.moodfriend.app.dto.tracker.resDto.DiaryResDto;
 import com.skhu.moodfriend.app.service.tracker.DiaryCreateService;
+import com.skhu.moodfriend.app.service.tracker.DiaryDisplayService;
 import com.skhu.moodfriend.app.service.tracker.DiaryModifyService;
 import com.skhu.moodfriend.global.template.ApiResponseTemplate;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,14 +16,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-@Tag(name = "일기 작성/수정/삭제", description = "일기를 작성/수정/삭제하는 api 그룹")
+@Tag(name = "일기", description = "일기를 담당하는 api 그룹")
 @RequestMapping("/api/v1/diary")
 public class DiaryController {
 
     private final DiaryCreateService diaryCreateService;
     private final DiaryModifyService diaryModifyService;
+    private final DiaryDisplayService diaryDisplayService;
 
     @PostMapping("/create")
     @Operation(
@@ -78,6 +82,41 @@ public class DiaryController {
             @RequestParam Long memberId) {
 
         ApiResponseTemplate<Void> data = diaryModifyService.deleteDiary(diaryId, memberId);
+        return ResponseEntity.status(data.getStatus()).body(data);
+    }
+
+    @GetMapping("/display/{diaryId}")
+    @Operation(
+            summary = "사용자의 특정 일기 조회",
+            description = "사용자의 특정 일기를 조회합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "특정 일기 조회 성공"),
+                    @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
+                    @ApiResponse(responseCode = "404", description = "해당 일기를 찾을 수 없음"),
+                    @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
+            }
+    )
+    public ResponseEntity<ApiResponseTemplate<DiaryResDto>> getDiaryById(
+            @PathVariable Long diaryId,
+            Long memberId) {
+
+        ApiResponseTemplate<DiaryResDto> data = diaryDisplayService.getDiaryById(diaryId, memberId);
+        return ResponseEntity.status(data.getStatus()).body(data);
+    }
+
+    @GetMapping("/display")
+    @Operation(
+            summary = "사용자의 모든 일기 조회",
+            description = "사용자의 모든 일기를 조회합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "모든 일기 조회 성공"),
+                    @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
+                    @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
+            }
+    )
+    public ResponseEntity<ApiResponseTemplate<List<DiaryResDto>>> getAllDiariesByUser(Long memberId) {
+
+        ApiResponseTemplate<List<DiaryResDto>> data = diaryDisplayService.getAllDiariesByMember(memberId);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 }

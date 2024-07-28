@@ -1,7 +1,7 @@
-package com.skhu.moodfriend.app.service.tracker;
+package com.skhu.moodfriend.app.service.member;
 
-import com.skhu.moodfriend.app.dto.tracker.reqDto.HospitalReqDto;
-import com.skhu.moodfriend.app.dto.tracker.resDto.HospitalResDto;
+import com.skhu.moodfriend.app.dto.member.reqDto.HospitalReqDto;
+import com.skhu.moodfriend.app.dto.member.resDto.HospitalResDto;
 import com.skhu.moodfriend.global.exception.code.SuccessCode;
 import com.skhu.moodfriend.global.template.ApiResponseTemplate;
 import lombok.AccessLevel;
