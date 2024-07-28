@@ -11,13 +11,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @Tag(name = "결제", description = "주문 및 결제 처리 api 그룹")
@@ -38,8 +36,6 @@ public class PaymentController {
             }
     )
     public IamportResponse<Payment> validateIamport(@PathVariable String imp_uid) {
-        log.info("imp_uid: {}", imp_uid);
-        log.info("validateIamport");
         return paymentService.validateIamport(imp_uid);
     }
 
@@ -54,7 +50,6 @@ public class PaymentController {
             }
     )
     public ResponseEntity<ApiResponseTemplate<OrderResDto>> processOrder(@RequestBody OrderReqDto reqDto, Principal principal) {
-        log.info("Received orders: {}", reqDto.toString());
         ApiResponseTemplate<OrderResDto> data = paymentService.saveOrder(reqDto, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
