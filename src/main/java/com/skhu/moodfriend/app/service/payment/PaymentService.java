@@ -74,6 +74,7 @@ public class PaymentService {
                     .impUid(order.getImpUid())
                     .merchantUid(order.getMerchantUid())
                     .updatedMileage(member.getMileage())
+                    .createdAt(order.getCreatedAt())
                     .build();
 
             return ApiResponseTemplate.success(SuccessCode.ORDER_SAVE_SUCCESS, resDto);
