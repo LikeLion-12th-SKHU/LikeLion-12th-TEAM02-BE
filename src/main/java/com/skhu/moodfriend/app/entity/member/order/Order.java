@@ -2,6 +2,7 @@ package com.skhu.moodfriend.app.entity.member.order;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,4 +31,13 @@ public class Order {
 
     @Column(name = "MERCHANT_UID")
     private String merchantUid;
+
+    @Builder
+    private Order(Long productId, String productName, int price, String impUid, String merchantUid) {
+        this.productId = productId;
+        this.productName = productName;
+        this.price = price;
+        this.impUid = impUid;
+        this.merchantUid = merchantUid;
+    }
 }
