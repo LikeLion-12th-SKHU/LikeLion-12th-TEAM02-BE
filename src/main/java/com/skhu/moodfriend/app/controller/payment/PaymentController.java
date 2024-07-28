@@ -6,6 +6,8 @@ import com.skhu.moodfriend.app.dto.order.reqDto.OrderReqDto;
 import com.skhu.moodfriend.app.dto.order.resDto.OrderResDto;
 import com.skhu.moodfriend.app.service.payment.PaymentService;
 import com.skhu.moodfriend.global.template.ApiResponseTemplate;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,16 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @PostMapping("/validation/{imp_uid}")
+    @Operation(
+            summary = "결제 정보 검증",
+            description = "imp_uid를 통해 아임포트 결제 정보를 검증합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "결제 정보 검증 성공"),
+                    @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
+                    @ApiResponse(responseCode = "404", description = "결제 정보를 찾을 수 없음"),
+                    @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
+            }
+    )
     public IamportResponse<Payment> validateIamport(@PathVariable String imp_uid) {
         log.info("imp_uid: {}", imp_uid);
         log.info("validateIamport");
@@ -32,13 +44,32 @@ public class PaymentController {
     }
 
     @PostMapping("/order")
-    public ResponseEntity<ApiResponseTemplate<OrderResDto>> processOrder(@RequestBody OrderReqDto reqDto, @RequestParam Long memberId) {
+    @Operation(
+            summary = "주문 처리",
+            description = "주문 정보를 받아 결제를 요청하고, 주문 정보를 저장합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "결제 요청 및 주문 정보 저장 성공"),
+                    @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
+                    @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
+            }
+    )
+    public ResponseEntity<ApiResponseTemplate<OrderResDto>> processOrder(@RequestBody OrderReqDto reqDto, Principal principal) {
         log.info("Received orders: {}", reqDto.toString());
-        ApiResponseTemplate<OrderResDto> data = paymentService.saveOrder(reqDto, memberId);
+        ApiResponseTemplate<OrderResDto> data = paymentService.saveOrder(reqDto, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
     @PostMapping("/cancel/{imp_uid}")
+    @Operation(
+            summary = "결제 취소",
+            description = "imp_uid를 통해 아임포트 결제를 취소합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "결제 취소 성공"),
+                    @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
+                    @ApiResponse(responseCode = "404", description = "결제 정보를 찾을 수 없음"),
+                    @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
+            }
+    )
     public IamportResponse<Payment> cancelPayment(@PathVariable String imp_uid) {
         return paymentService.cancelPayment(imp_uid);
     }

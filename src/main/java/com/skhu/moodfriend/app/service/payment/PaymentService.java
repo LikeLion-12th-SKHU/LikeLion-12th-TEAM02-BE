@@ -55,8 +55,10 @@ public class PaymentService {
     }
 
     // 주문 정보 저장
-    public ApiResponseTemplate<OrderResDto> saveOrder(OrderReqDto reqDto, Long memberId) {
+    public ApiResponseTemplate<OrderResDto> saveOrder(OrderReqDto reqDto, Principal principal) {
         try {
+            Long memberId = Long.parseLong(principal.getName());
+
             Member member = memberRepository.findById(memberId)
                     .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
