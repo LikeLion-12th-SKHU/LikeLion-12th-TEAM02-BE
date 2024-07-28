@@ -73,7 +73,6 @@ public class PaymentService {
                     .price(order.getPrice())
                     .impUid(order.getImpUid())
                     .merchantUid(order.getMerchantUid())
-                    .updatedMileage(member.getMileage())
                     .createdAt(order.getCreatedAt())
                     .build();
 

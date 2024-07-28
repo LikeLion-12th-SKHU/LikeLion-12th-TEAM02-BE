@@ -7,12 +7,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "orders")
 public class Order {
 
@@ -20,9 +22,6 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ORDER_ID")
     private Long orderId;
-
-    @Column(name = "PRODUCT_ID")
-    private Long productId;
 
     @Column(name = "PRODUCT_NAME")
     private String productName;
@@ -45,8 +44,7 @@ public class Order {
     private Member member;
 
     @Builder
-    private Order(Long productId, String productName, int price, String impUid, String merchantUid, Member member) {
-        this.productId = productId;
+    private Order(String productName, int price, String impUid, String merchantUid, Member member) {
         this.productName = productName;
         this.price = price;
         this.impUid = impUid;

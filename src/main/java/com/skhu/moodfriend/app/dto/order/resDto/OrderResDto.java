@@ -12,7 +12,6 @@ public record OrderResDto(
         int price,
         String impUid,
         String merchantUid,
-        int updatedMileage,
         @JsonFormat(pattern = "yyyy-MM-dd - HH:mm", timezone = "Asia/Seoul")
         LocalDateTime createdAt
 ) {

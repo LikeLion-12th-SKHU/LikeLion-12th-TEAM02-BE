@@ -4,7 +4,6 @@ import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
 import com.skhu.moodfriend.app.dto.order.reqDto.OrderReqDto;
 import com.skhu.moodfriend.app.dto.order.resDto.OrderResDto;
-import com.skhu.moodfriend.app.service.payment.OrderDisplayService;
 import com.skhu.moodfriend.app.service.payment.PaymentService;
 import com.skhu.moodfriend.global.template.ApiResponseTemplate;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
@@ -25,7 +23,6 @@ import java.util.List;
 public class PaymentController {
 
     private final PaymentService paymentService;
-    private final OrderDisplayService orderDisplayService;
 
     @PostMapping("/validation/{imp_uid}")
     @Operation(
@@ -70,37 +67,5 @@ public class PaymentController {
     )
     public IamportResponse<Payment> cancelPayment(@PathVariable String imp_uid) {
         return paymentService.cancelPayment(imp_uid);
-    }
-
-    @GetMapping("/display")
-    @Operation(
-            summary = "모든 주문 내역 조회",
-            description = "현재 로그인된 사용자의 모든 주문 내역을 조회합니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "모든 주문 내역 조회 성공"),
-                    @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
-                    @ApiResponse(responseCode = "404", description = "주문 내역을 찾을 수 없음"),
-                    @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
-            }
-    )
-    public ResponseEntity<ApiResponseTemplate<List<OrderResDto>>> getOrderHistory(Principal principal) {
-        ApiResponseTemplate<List<OrderResDto>> data = orderDisplayService.getOrderHistory(principal);
-        return ResponseEntity.status(data.getStatus()).body(data);
-    }
-
-    @GetMapping("/display/{order_id}")
-    @Operation(
-            summary = "특정 주문 내역 조회",
-            description = "현재 로그인된 사용자의 특정 주문 내역을 조회합니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "특정 주문 내역 조회 성공"),
-                    @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
-                    @ApiResponse(responseCode = "404", description = "주문 내역을 찾을 수 없음"),
-                    @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
-            }
-    )
-    public ResponseEntity<ApiResponseTemplate<OrderResDto>> getOrderDetail(@PathVariable Long orderId, Principal principal) {
-        ApiResponseTemplate<OrderResDto> data = orderDisplayService.getOrderDetail(orderId, principal);
-        return ResponseEntity.status(data.getStatus()).body(data);
     }
 }
