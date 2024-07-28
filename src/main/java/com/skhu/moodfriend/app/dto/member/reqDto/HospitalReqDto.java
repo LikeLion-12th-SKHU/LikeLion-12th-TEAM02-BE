@@ -1,4 +1,4 @@
-package com.skhu.moodfriend.app.dto.tracker.reqDto;
+package com.skhu.moodfriend.app.dto.member.reqDto;
 
 public record HospitalReqDto(
         String query,

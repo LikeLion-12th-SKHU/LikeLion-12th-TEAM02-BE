@@ -1,4 +1,4 @@
-package com.skhu.moodfriend.app.dto.tracker.reqDto;
+package com.skhu.moodfriend.app.dto.member.reqDto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;

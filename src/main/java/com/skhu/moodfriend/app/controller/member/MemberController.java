@@ -2,13 +2,13 @@ package com.skhu.moodfriend.app.controller.member;
 
 import com.skhu.moodfriend.app.dto.member.reqDto.MemberInfoUpdateReqDto;
 import com.skhu.moodfriend.app.dto.member.resDto.MemberInfoResDto;
-import com.skhu.moodfriend.app.dto.tracker.reqDto.MonthlyEmotionReqDto;
-import com.skhu.moodfriend.app.dto.tracker.resDto.HospitalResDto;
-import com.skhu.moodfriend.app.dto.tracker.resDto.MonthlyEmotionResDto;
+import com.skhu.moodfriend.app.dto.member.reqDto.MonthlyEmotionReqDto;
+import com.skhu.moodfriend.app.dto.member.resDto.HospitalResDto;
+import com.skhu.moodfriend.app.dto.member.resDto.MonthlyEmotionResDto;
 import com.skhu.moodfriend.app.service.member.AttendanceService;
 import com.skhu.moodfriend.app.service.member.MemberInfoService;
-import com.skhu.moodfriend.app.service.tracker.EmotionDisplayService;
-import com.skhu.moodfriend.app.service.tracker.HospitalDisplayService;
+import com.skhu.moodfriend.app.service.member.EmotionDisplayService;
+import com.skhu.moodfriend.app.service.member.HospitalDisplayService;
 import com.skhu.moodfriend.global.template.ApiResponseTemplate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
