@@ -2,14 +2,18 @@ package com.skhu.moodfriend.app.controller.payment;
 
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
-import com.skhu.moodfriend.app.dto.order.OrderDto;
+import com.skhu.moodfriend.app.dto.order.reqDto.OrderReqDto;
+import com.skhu.moodfriend.app.dto.order.resDto.OrderResDto;
 import com.skhu.moodfriend.app.service.payment.PaymentService;
+import com.skhu.moodfriend.global.template.ApiResponseTemplate;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @Slf4j
 @RestController
@@ -28,9 +32,10 @@ public class PaymentController {
     }
 
     @PostMapping("/order")
-    public ResponseEntity<String> processOrder(@RequestBody OrderDto orderDto) {
-        log.info("Received orders: {}", orderDto.toString());
-        return ResponseEntity.ok(paymentService.saveOrder(orderDto));
+    public ResponseEntity<ApiResponseTemplate<OrderResDto>> processOrder(@RequestBody OrderReqDto reqDto, @RequestParam Long memberId) {
+        log.info("Received orders: {}", reqDto.toString());
+        ApiResponseTemplate<OrderResDto> data = paymentService.saveOrder(reqDto, memberId);
+        return ResponseEntity.status(data.getStatus()).body(data);
     }
 
     @PostMapping("/cancel/{imp_uid}")

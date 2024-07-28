@@ -4,12 +4,22 @@ import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.request.CancelData;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
-import com.skhu.moodfriend.app.dto.order.OrderDto;
+import com.skhu.moodfriend.app.dto.order.reqDto.OrderReqDto;
+import com.skhu.moodfriend.app.dto.order.resDto.OrderResDto;
+import com.skhu.moodfriend.app.entity.member.Member;
+import com.skhu.moodfriend.app.entity.member.order.Order;
+import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.app.repository.OrderRepository;
+import com.skhu.moodfriend.global.exception.CustomException;
+import com.skhu.moodfriend.global.exception.code.ErrorCode;
+import com.skhu.moodfriend.global.exception.code.SuccessCode;
+import com.skhu.moodfriend.global.template.ApiResponseTemplate;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.security.Principal;
 
 @Slf4j
 @Service
@@ -18,6 +28,7 @@ public class PaymentService {
 
     private final IamportClient iamportClient;
     private final OrderRepository orderRepository;
+    private final MemberRepository memberRepository;
 
     // iamport 서버로부터 결제 정보 검증
     public IamportResponse<Payment> validateIamport(String imp_uid) {
@@ -44,14 +55,38 @@ public class PaymentService {
     }
 
     // 주문 정보 저장
-    public String saveOrder(OrderDto orderDto) {
+    public ApiResponseTemplate<OrderResDto> saveOrder(OrderReqDto reqDto, Long memberId) {
         try {
-            orderRepository.save(orderDto.toEntity());
-            return "주문 정보가 성공적으로 저장되었습니다.";
+            Member member = memberRepository.findById(memberId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
+
+            Order order = Order.builder()
+                    .productName(reqDto.productName())
+                    .price(reqDto.price())
+                    .impUid(reqDto.impUid())
+                    .merchantUid(reqDto.merchantUid())
+                    .member(member)
+                    .build();
+
+            orderRepository.save(order);
+
+            member.updateMileage(reqDto.mileageIncrement());
+            memberRepository.save(member);
+
+            OrderResDto resDto = OrderResDto.builder()
+                    .orderId(order.getOrderId())
+                    .productName(order.getProductName())
+                    .price(order.getPrice())
+                    .impUid(order.getImpUid())
+                    .merchantUid(order.getMerchantUid())
+                    .updatedMileage(member.getMileage())
+                    .build();
+
+            return ApiResponseTemplate.success(SuccessCode.ORDER_SAVE_SUCCESS, resDto);
         } catch (Exception e) {
             log.info(e.getMessage());
-            cancelPayment(orderDto.getImpUid());
-            return "주문 정보 저장에 실패했습니다.";
+            cancelPayment(reqDto.impUid());
+            throw new CustomException(ErrorCode.FAILED_ORDER_SAVE_EXCEPTION, ErrorCode.FAILED_ORDER_SAVE_EXCEPTION.getMessage());
         }
     }
 }

@@ -46,7 +46,6 @@ deepl:
     url: ${DEEPL_API_URL}
 
 imp:
-  code: ${IMP_CODE}
   api:
     key: ${IMP_API_KEY}
     secret-key: ${IMP_API_SECRET_KEY}

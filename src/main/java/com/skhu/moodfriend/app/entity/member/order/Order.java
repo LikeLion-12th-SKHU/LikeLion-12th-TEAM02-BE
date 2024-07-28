@@ -1,5 +1,6 @@
 package com.skhu.moodfriend.app.entity.member.order;
 
+import com.skhu.moodfriend.app.entity.member.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -32,12 +33,17 @@ public class Order {
     @Column(name = "MERCHANT_UID")
     private String merchantUid;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
+
     @Builder
-    private Order(Long productId, String productName, int price, String impUid, String merchantUid) {
+    private Order(Long productId, String productName, int price, String impUid, String merchantUid, Member member) {
         this.productId = productId;
         this.productName = productName;
         this.price = price;
         this.impUid = impUid;
         this.merchantUid = merchantUid;
+        this.member = member;
     }
 }
