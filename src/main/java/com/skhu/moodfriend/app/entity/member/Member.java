@@ -1,18 +1,11 @@
 package com.skhu.moodfriend.app.entity.member;
 
-import com.skhu.moodfriend.app.entity.member.attendance.Attendance;
-import com.skhu.moodfriend.app.entity.member.feedback.FeedBack;
-import com.skhu.moodfriend.app.entity.friend.Friend;
-import com.skhu.moodfriend.app.entity.member.member_object.MemberObject;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -35,7 +28,7 @@ public class Member {
     private String name;
 
     @Column(name = "MILEAGE")
-    private long mileage;
+    private Integer mileage;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "LOGIN_TYPE", nullable = false)
@@ -45,20 +38,8 @@ public class Member {
     @Column(name = "ROLE_TYPE", nullable = false)
     private RoleType roleType;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Attendance> attendances = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MemberObject> userObjects = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Friend> friends = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<FeedBack> feedBacks = new ArrayList<>();
-
     @Builder
-    private Member(String email, String password, String name, long mileage, LoginType loginType, RoleType roleType) {
+    private Member(String email, String password, String name, Integer mileage, LoginType loginType, RoleType roleType) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -71,7 +52,7 @@ public class Member {
         this.name = name;
     }
 
-    public void updateMileage(long mileageIncrement) {
+    public void updateMileage(Integer mileageIncrement) {
         this.mileage += mileageIncrement;
     }
 }
