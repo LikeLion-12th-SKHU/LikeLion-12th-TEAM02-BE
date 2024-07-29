@@ -2,15 +2,15 @@ package com.skhu.moodfriend.app.entity.friend;
 
 import com.skhu.moodfriend.app.entity.member.Member;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Getter
+@Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@Builder(toBuilder = true)
 public class Friend {
 
     @Id
@@ -28,4 +28,8 @@ public class Friend {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "REQUESTER_ID")
+    private Member requester;
 }

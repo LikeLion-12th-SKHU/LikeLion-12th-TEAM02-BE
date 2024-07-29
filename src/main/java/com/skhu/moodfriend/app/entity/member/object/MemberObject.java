@@ -1,7 +1,6 @@
 package com.skhu.moodfriend.app.entity.member.object;
 
 import com.skhu.moodfriend.app.entity.object_store.ObjectName;
-import com.skhu.moodfriend.app.entity.object_store.ObjectStore;
 import com.skhu.moodfriend.app.entity.member.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

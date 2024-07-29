@@ -32,12 +32,15 @@ public enum ErrorCode {
     NOT_FOUND_EMAIL_EXCEPTION(HttpStatus.NOT_FOUND, "해당 이메일의 사용자를 찾을 수 없습니다."),
     NOT_FOUND_MEMBER_EXCEPTION(HttpStatus.NOT_FOUND, "해당 사용자를 찾을 수 없습니다."),
     NOT_FOUND_DIARY_EXCEPTION(HttpStatus.NOT_FOUND, "해당 일기를 찾을 수 없습니다."),
+    NOT_FOUND_REQUESTED_MEMBER_EXCEPTION(HttpStatus.NOT_FOUND, "요청한 친구를 찾을 수 없습니다."),
+    FRIEND_REQUEST_NOT_FOUND(HttpStatus.NOT_FOUND, "이미 친구를 추가 했거나 찾을 수 없습니다."),
     NOT_FOUND_ORDER_EXCEPTION(HttpStatus.NOT_FOUND, "주문 내역을 찾을 수 없습니다."),
 
     // 409 Conflict
     ALREADY_EXIST_MEMBER_EXCEPTION(HttpStatus.CONFLICT, "이미 회원가입이 완료된 사용자입니다."),
     ALREADY_EXIST_DIARY_EXCEPTION(HttpStatus.CONFLICT, "해당 날짜에 이미 작성된 일기가 존재합니다."),
     ALREADY_EXIST_ATTENDED_EXCEPTION(HttpStatus.CONFLICT, "이미 오늘 출석했습니다."),
+    ALREADY_FRIEND_REQUEST_EXCEPTION(HttpStatus.CONFLICT,"이미 친구 추가 요청 중입니다."),
     DUPLICATE_OBJECT_EXCEPTION(HttpStatus.CONFLICT, "이미 구매한 오브제입니다."),
 
     // 500 Internal Server Exception
