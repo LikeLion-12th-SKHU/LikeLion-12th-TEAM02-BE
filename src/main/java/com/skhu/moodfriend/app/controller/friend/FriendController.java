@@ -32,7 +32,7 @@ public class FriendController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "친구 추가 요청 완료"),
                     @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
-                    @ApiResponse(responseCode = "404", description = "사용자 정보를 찾을 수 없음"),
+                    @ApiResponse(responseCode = "404", description = "친구 정보를 찾을 수 없음"),
                     @ApiResponse(responseCode = "409", description = "이미 친구입니다"),
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
@@ -49,6 +49,7 @@ public class FriendController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "친구 추가 요청 리스트 조회"),
                     @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
+                    @ApiResponse(responseCode = "404", description = "친구 정보를 찾을 수 없음"),
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
@@ -64,6 +65,7 @@ public class FriendController {
             responses = {
                     @ApiResponse(responseCode = "204", description = "친구 추가 요청 수락"),
                     @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
+                    @ApiResponse(responseCode = "404", description = "친구 정보를 찾을 수 없음"),
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
@@ -79,11 +81,28 @@ public class FriendController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "친구 리스트 조회 완료"),
                     @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
+                    @ApiResponse(responseCode = "404", description = "친구 정보를 찾을 수 없음"),
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
     public ResponseEntity<ApiResponseTemplate<List<FriendResDto>>> getFriends(Principal principal) {
         ApiResponseTemplate<List<FriendResDto>> data = friendDisplayService.getFriends(principal);
+        return ResponseEntity.status(data.getStatus()).body(data);
+    }
+
+    @GetMapping("/detail")
+    @Operation(
+            summary = "친구 상세 조회",
+            description = "친구 상세 정보를 조회합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "친구 상세 조회 완료"),
+                    @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
+                    @ApiResponse(responseCode = "404", description = "친구 정보를 찾을 수 없음"),
+                    @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
+            }
+    )
+    public ResponseEntity<ApiResponseTemplate<FriendResDto>> getFriendDetail(@RequestParam String friendEmail, Principal principal) {
+        ApiResponseTemplate<FriendResDto> data = friendDisplayService.getFriend(principal, friendEmail);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
@@ -94,7 +113,7 @@ public class FriendController {
             responses = {
                     @ApiResponse(responseCode = "204", description = "친구 삭제 완료"),
                     @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
-                    @ApiResponse(responseCode = "404", description = "사용자 정보를 찾을 수 없음"),
+                    @ApiResponse(responseCode = "404", description = "친구 정보를 찾을 수 없음"),
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
