@@ -26,7 +26,7 @@ public class FriendService {
     private final MemberRepository memberRepository;
     private final FriendRepository friendRepository;
 
-    public ApiResponseTemplate<String> sendFriendRequest(
+    public ApiResponseTemplate<Void> sendFriendRequest(
             FriendReqDto friendReqDto,
             Principal principal) {
 
@@ -50,10 +50,10 @@ public class FriendService {
         Friend friendRequest = Friend.createFriendRequest(friendReqDto.receiverEmail(), receiver, requester);
         friendRepository.save(friendRequest);
 
-        return ApiResponseTemplate.success(SuccessCode.REQUEST_FRIEND_SUCCESS, SuccessCode.REQUEST_FRIEND_SUCCESS.getMessage());
+        return ApiResponseTemplate.success(SuccessCode.REQUEST_FRIEND_SUCCESS, null);
     }
 
-    public ApiResponseTemplate<String> acceptFriendRequest(
+    public ApiResponseTemplate<Void> acceptFriendRequest(
             String friendEmail,
             Principal principal) {
 
@@ -74,10 +74,10 @@ public class FriendService {
         newFriendForCurrentMember.acceptRequest();
         friendRepository.save(newFriendForCurrentMember);
 
-        return ApiResponseTemplate.success(SuccessCode.ACCEPT_FRIEND_REQUEST, SuccessCode.ACCEPT_FRIEND_REQUEST.getMessage());
+        return ApiResponseTemplate.success(SuccessCode.ACCEPT_FRIEND_REQUEST, null);
     }
 
-    public ApiResponseTemplate<String> deleteFriend(
+    public ApiResponseTemplate<Void> deleteFriend(
             String friendEmail,
             Principal principal) {
 
@@ -94,7 +94,7 @@ public class FriendService {
         if (friendInMyList.isPresent()) {
             friendRepository.delete(friendInMyList.get());
             friendInFriendList.ifPresent(friendRepository::delete);
-            return ApiResponseTemplate.success(SuccessCode.DELETE_FRIEND_SUCCESS, SuccessCode.DELETE_FRIEND_SUCCESS.getMessage());
+            return ApiResponseTemplate.success(SuccessCode.DELETE_FRIEND_SUCCESS, null);
         } else {
             return ApiResponseTemplate.error(ErrorCode.NOT_FOUND_FRIEND_REQUEST_EXCEPTION, ErrorCode.NOT_FOUND_FRIEND_REQUEST_EXCEPTION.getMessage());
         }
