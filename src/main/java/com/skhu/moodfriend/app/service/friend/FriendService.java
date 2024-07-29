@@ -42,20 +42,23 @@ public class FriendService {
         Long memberId = Long.parseLong(principal.getName());
 
         Member requester = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, "Member not found"));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, "해당 사용자를 찾을 수 없습니다"));
 
 
         Member receiver = memberRepository.findByEmail(friendEmail)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_EMAIL_EXCEPTION, "Email not found"));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_EMAIL_EXCEPTION, "해당 이메일의 사용자를 찾을 수 없습니다."));
 
 
         boolean requestExists = friendRepository.existsByRequesterAndMemberAndStatus(requester, receiver, Status.WAITING);
         boolean reverseRequestExists = friendRepository.existsByRequesterAndMemberAndStatus(receiver, requester, Status.WAITING);
 
+        boolean duplicatedFriend = friendRepository.existsByRequesterAndMemberAndStatus(requester, receiver, Status.ACCEPTED);
         if (requestExists || reverseRequestExists) {
-            throw new CustomException(ErrorCode.ALREADY_FRIEND_REQUEST_EXCEPTION, "Friend request already exists");
+            throw new CustomException(ErrorCode.ALREADY_FRIEND_REQUEST_EXCEPTION, "이미 친구 추가 요청 중입니다.");
         }
-
+        if(duplicatedFriend){
+            throw new CustomException(ErrorCode.ALREADY_FRIEND_REQUEST_EXCEPTION, "이미 친구 입니다");
+        }
 
         Friend friendRequest = Friend.builder()
                 .receiverEmail(friendEmail)
@@ -114,8 +117,8 @@ public class FriendService {
         System.out.println(currentUser.getMemberId());
         System.out.println(friendUser.getMemberId());
 
-        Friend friendRequest = friendRepository.findByRequesterAndMemberAndStatus(friendUser.getMemberId(), currentUser.getMemberId(), Status.WAITING)
-                .orElseThrow(() -> new CustomException(ErrorCode.FRIEND_REQUEST_NOT_FOUND, "Friend request not found or already processed"));
+        Friend friendRequest = friendRepository.findByRequesterAndMemberAndStatus(currentUser.getMemberId(),friendUser.getMemberId(),  Status.WAITING)
+                .orElseThrow(() -> new CustomException(ErrorCode.FRIEND_REQUEST_NOT_FOUND, "친구 요청이 없거나 이미 존재합니다"));
 
 
         friendRequest.setStatus(Status.ACCEPTED);

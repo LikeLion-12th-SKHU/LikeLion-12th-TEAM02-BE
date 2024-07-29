@@ -3,7 +3,7 @@ package com.skhu.moodfriend.app.entity.member;
 import com.skhu.moodfriend.app.entity.member.attendance.Attendance;
 import com.skhu.moodfriend.app.entity.member.feedback.FeedBack;
 import com.skhu.moodfriend.app.entity.friend.Friend;
-import com.skhu.moodfriend.app.entity.member.member_object.MemberObject;
+import com.skhu.moodfriend.app.entity.member.object.MemberObject;
 import com.skhu.moodfriend.app.entity.tracker.diary.Diary;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -36,7 +36,7 @@ public class Member {
     private String name;
 
     @Column(name = "MILEAGE")
-    private long mileage;
+    private Integer mileage;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "LOGIN_TYPE", nullable = false)
@@ -62,7 +62,7 @@ public class Member {
     private List<Diary> diaries = new ArrayList<>();
 
     @Builder
-    private Member(String email, String password, String name, long mileage, LoginType loginType, RoleType roleType) {
+    private Member(String email, String password, String name, Integer mileage, LoginType loginType, RoleType roleType) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -75,7 +75,7 @@ public class Member {
         this.name = name;
     }
 
-    public void updateMileage(long mileageIncrement) {
+    public void updateMileage(Integer mileageIncrement) {
         this.mileage += mileageIncrement;
     }
 }

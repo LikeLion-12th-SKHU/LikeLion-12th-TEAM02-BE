@@ -99,7 +99,7 @@ public class FriendController {
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
-    @DeleteMapping
+    @DeleteMapping("delete")
     @Operation(
             summary = "친구 삭제",
             description = "친구를 삭제합니다.",

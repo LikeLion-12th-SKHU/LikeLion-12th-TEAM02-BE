@@ -23,6 +23,7 @@ public enum ErrorCode {
     ONLY_OWN_DIARY_ACCESS_EXCEPTION(HttpStatus.UNAUTHORIZED, "본인이 작성한 일기만 접근 가능합니다."),
 
     // 403 Forbidden
+    FORBIDDEN_ACCESS_EXCEPTION(HttpStatus.FORBIDDEN, "해당 주문에 접근 권한이 없습니다."),
     FORBIDDEN_AUTH_EXCEPTION(HttpStatus.FORBIDDEN, "권한 정보가 없는 토큰입니다."),
     EXPIRED_TOKEN_EXCEPTION(HttpStatus.FORBIDDEN, "토큰이 만료되었습니다."),
 
@@ -33,12 +34,14 @@ public enum ErrorCode {
     NOT_FOUND_DIARY_EXCEPTION(HttpStatus.NOT_FOUND, "해당 일기를 찾을 수 없습니다."),
     NOT_FOUND_REQUESTED_MEMBER_EXCEPTION(HttpStatus.NOT_FOUND, "요청한 친구를 찾을 수 없습니다."),
     FRIEND_REQUEST_NOT_FOUND(HttpStatus.NOT_FOUND, "이미 친구를 추가 했거나 찾을 수 없습니다."),
+    NOT_FOUND_ORDER_EXCEPTION(HttpStatus.NOT_FOUND, "주문 내역을 찾을 수 없습니다."),
 
     // 409 Conflict
     ALREADY_EXIST_MEMBER_EXCEPTION(HttpStatus.CONFLICT, "이미 회원가입이 완료된 사용자입니다."),
     ALREADY_EXIST_DIARY_EXCEPTION(HttpStatus.CONFLICT, "해당 날짜에 이미 작성된 일기가 존재합니다."),
     ALREADY_EXIST_ATTENDED_EXCEPTION(HttpStatus.CONFLICT, "이미 오늘 출석했습니다."),
     ALREADY_FRIEND_REQUEST_EXCEPTION(HttpStatus.CONFLICT,"이미 친구 추가 요청 중입니다."),
+    DUPLICATE_OBJECT_EXCEPTION(HttpStatus.CONFLICT, "이미 구매한 오브제입니다."),
 
     // 500 Internal Server Exception
     INTERNAL_SERVER_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "서버에서 오류가 발생했습니다."),
@@ -47,7 +50,8 @@ public enum ErrorCode {
     // 503 Service Unavailable
     FAILED_GET_TOKEN_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "토큰을 가져오는 중 오류가 발생했습니다."),
     FAILED_TRANSLATION_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "번역하는 중 오류가 발생했습니다."),
-    FAILED_GET_GPT_RESPONSE_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "챗봇 응답 중 오류가 발생했습니다.");
+    FAILED_GET_GPT_RESPONSE_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "챗봇 응답 중 오류가 발생했습니다."),
+    FAILED_ORDER_SAVE_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "주문 중 오류가 발생했습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

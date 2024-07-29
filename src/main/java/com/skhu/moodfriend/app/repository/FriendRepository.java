@@ -17,14 +17,14 @@ public interface FriendRepository extends JpaRepository<Friend,Long> {
     boolean existsByRequesterAndMemberAndStatus(Member requester, Member member, Status status);
 
 
-    @Query("SELECT f FROM Friend f JOIN FETCH f.member m where m.memberId=:memberId and f.status=:status")
+    @Query("SELECT f FROM Friend f JOIN FETCH f.requester m where m.memberId=:memberId and f.status=:status")
     Page<Friend> findByMemberAndStatus(PageRequest pageRequest, Long memberId, Status status);
 
     @Query("SELECT f FROM Friend f JOIN FETCH f.member m JOIN FETCH f.requester r where m.memberId=:requestedMemberId  and r.memberId=:memberId and f.status=:waiting")
     Optional<Friend> findByRequesterAndMemberAndStatus(Long memberId, Long requestedMemberId, Status waiting);
 
 
-    @Query("SELECT f FROM Friend f JOIN FETCH f.member m LEFT JOIN FETCH m.diaries d where m.memberId=:memberId  ORDER BY m.name ASC")
+    @Query("SELECT f FROM Friend f JOIN FETCH f.member m  JOIN FETCH f.requester r LEFT JOIN FETCH m.diaries d where r.memberId=:memberId  ORDER BY m.name ASC")
     Page<Friend> findFriendsByMember(Long memberId, Pageable pageable);
 
 
