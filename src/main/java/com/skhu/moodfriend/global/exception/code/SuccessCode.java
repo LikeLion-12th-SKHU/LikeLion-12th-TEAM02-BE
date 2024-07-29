@@ -30,6 +30,7 @@ public enum SuccessCode {
     GET_ORDER_SUCCESS(HttpStatus.OK, "주문 내역을 성공적으로 가져왔습니다."),
     GET_ALL_ORDERS_SUCCESS(HttpStatus.OK, "모든 주문 내역을 성공적으로 가져왔습니다."),
     REQUEST_FRIEND_SUCCESS(HttpStatus.OK, "친구 요청이 성공적으로 전송되었습니다."),
+    GET_RECEIVED_FRIENDS_REQUEST_SUCCESS(HttpStatus.OK, "받은 친구 요청 조회에 성공했습니다."),
 
     // 201 Created
     CREATE_MEMBER_SUCCESS(HttpStatus.CREATED, "회원가입에 성공했습니다."),

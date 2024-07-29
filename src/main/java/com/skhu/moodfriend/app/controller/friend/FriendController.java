@@ -58,6 +58,22 @@ public class FriendController {
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
+    @GetMapping("/requests/received")
+    @Operation(
+            summary = "받은 친구 요청 리스트",
+            description = "받은 친구 요청 리스트를 조회합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "받은 친구 요청 리스트 조회"),
+                    @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
+                    @ApiResponse(responseCode = "404", description = "친구 정보를 찾을 수 없음"),
+                    @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
+            }
+    )
+    public ResponseEntity<ApiResponseTemplate<List<FriendReqDto>>> getReceivedFriendRequests(Principal principal) {
+        ApiResponseTemplate<List<FriendReqDto>> data = friendDisplayService.getReceivedFriendRequests(principal);
+        return ResponseEntity.status(data.getStatus()).body(data);
+    }
+
     @PutMapping("/accept")
     @Operation(
             summary = "친구 요청 수락",
