@@ -38,17 +38,7 @@ public class DiaryDisplayService {
             throw new CustomException(ErrorCode.ONLY_OWN_DIARY_ACCESS_EXCEPTION, ErrorCode.ONLY_OWN_DIARY_ACCESS_EXCEPTION.getMessage());
         }
 
-        DiaryResDto resDto = DiaryResDto.builder()
-                .diaryId(diary.getDiaryId())
-                .emotionType(diary.getEmotionType())
-                .weatherType(diary.getWeatherType())
-                .title(diary.getTitle())
-                .content(diary.getContent())
-                .createdAt(diary.getCreatedAt())
-                .updatedAt(diary.getUpdatedAt())
-                .build();
-
-        return ApiResponseTemplate.success(SuccessCode.GET_DIARY_SUCCESS, resDto);
+        return ApiResponseTemplate.success(SuccessCode.GET_DIARY_SUCCESS, DiaryResDto.of(diary));
     }
 
     public ApiResponseTemplate<List<DiaryResDto>> getAllDiariesByMember(Long memberId) {
@@ -59,15 +49,7 @@ public class DiaryDisplayService {
         List<Diary> diaries = diaryRepository.findByMemberOrderByCreatedAtAsc(member);
 
         List<DiaryResDto> resDtos = diaries.stream()
-                .map(diary -> DiaryResDto.builder()
-                        .diaryId(diary.getDiaryId())
-                        .emotionType(diary.getEmotionType())
-                        .weatherType(diary.getWeatherType())
-                        .title(diary.getTitle())
-                        .content(diary.getContent())
-                        .createdAt(diary.getCreatedAt())
-                        .updatedAt(diary.getUpdatedAt())
-                        .build())
+                .map(DiaryResDto::of)
                 .collect(Collectors.toList());
 
         return ApiResponseTemplate.success(SuccessCode.GET_ALL_DIARIES_SUCCESS, resDtos);
