@@ -25,18 +25,10 @@ public class MemberInfoService {
     public ApiResponseTemplate<MemberInfoResDto> getMemberInfo(Principal principal) {
 
         Long memberId = Long.parseLong(principal.getName());
-
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
-        MemberInfoResDto resDto = MemberInfoResDto.builder()
-                .email(member.getEmail())
-                .name(member.getName())
-                .mileage(member.getMileage())
-                .loginType(member.getLoginType().getDisplayName())
-                .build();
-
-        return ApiResponseTemplate.success(SuccessCode.GET_MEMBER_INFO_SUCCESS, resDto);
+        return ApiResponseTemplate.success(SuccessCode.GET_MEMBER_INFO_SUCCESS, MemberInfoResDto.of(member));
     }
 
     @Transactional
@@ -44,19 +36,12 @@ public class MemberInfoService {
             MemberInfoUpdateReqDto reqDto, Principal principal) {
 
         Long memberId = Long.parseLong(principal.getName());
-
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
-        member.updateInfo(reqDto.name());
+        reqDto.updateEntity(member);
+        memberRepository.save(member);
 
-        MemberInfoResDto resDto = MemberInfoResDto.builder()
-                .email(member.getEmail())
-                .name(member.getName())
-                .mileage(member.getMileage())
-                .loginType(member.getLoginType().getDisplayName())
-                .build();
-
-        return ApiResponseTemplate.success(SuccessCode.UPDATE_MEMBER_INFO_SUCCESS, resDto);
+        return ApiResponseTemplate.success(SuccessCode.UPDATE_MEMBER_INFO_SUCCESS, MemberInfoResDto.of(member));
     }
 }
