@@ -42,7 +42,7 @@ public class FriendService {
         Long memberId = Long.parseLong(principal.getName());
 
         Member requester = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, "해당 사용자를 찾을 수 없습니다"));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, "해당 사용자를 찾을 수 없습니다."));
 
 
         Member receiver = memberRepository.findByEmail(friendEmail)
@@ -52,6 +52,7 @@ public class FriendService {
         boolean requestExists = friendRepository.existsByRequesterAndMemberAndStatus(requester, receiver, Status.WAITING);
         boolean reverseRequestExists = friendRepository.existsByRequesterAndMemberAndStatus(receiver, requester, Status.WAITING);
 
+
         boolean duplicatedFriend = friendRepository.existsByRequesterAndMemberAndStatus(requester, receiver, Status.ACCEPTED);
         if (requestExists || reverseRequestExists) {
             throw new CustomException(ErrorCode.ALREADY_FRIEND_REQUEST_EXCEPTION, "이미 친구 추가 요청 중입니다.");
@@ -59,6 +60,8 @@ public class FriendService {
         if(duplicatedFriend){
             throw new CustomException(ErrorCode.ALREADY_FRIEND_REQUEST_EXCEPTION, "이미 친구 입니다");
         }
+
+
 
         Friend friendRequest = Friend.builder()
                 .receiverEmail(friendEmail)
