@@ -4,6 +4,7 @@ import com.skhu.moodfriend.app.entity.member.attendance.Attendance;
 import com.skhu.moodfriend.app.entity.member.feedback.FeedBack;
 import com.skhu.moodfriend.app.entity.friend.Friend;
 import com.skhu.moodfriend.app.entity.member.member_object.MemberObject;
+import com.skhu.moodfriend.app.entity.tracker.diary.Diary;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -57,6 +58,8 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FeedBack> feedBacks = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Diary> diaries = new ArrayList<>();
 
     @Builder
     private Member(String email, String password, String name, long mileage, LoginType loginType, RoleType roleType) {

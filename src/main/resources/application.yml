@@ -12,7 +12,7 @@ spring:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
     properties:
       hibernate:
@@ -44,3 +44,8 @@ deepl:
   api:
     key: ${DEEPL_API_KEY}
     url: ${DEEPL_API_URL}
+
+imp:
+  api:
+    key: ${IMP_API_KEY}
+    secret-key: ${IMP_API_SECRET_KEY}
