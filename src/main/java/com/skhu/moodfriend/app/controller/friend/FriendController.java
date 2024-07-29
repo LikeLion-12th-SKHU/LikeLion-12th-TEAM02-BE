@@ -44,8 +44,8 @@ public class FriendController {
 
     @GetMapping("/requests/display")
     @Operation(
-            summary = "친구 추가 요청 리스트",
-            description = "요청한 친구 리스트를 조회합니다.",
+            summary = "요청 보낸 리스트",
+            description = "요청 보낸 친구 리스트를 조회합니다.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "친구 추가 요청 리스트 조회"),
                     @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
@@ -60,10 +60,10 @@ public class FriendController {
 
     @GetMapping("/requests/received")
     @Operation(
-            summary = "받은 친구 요청 리스트",
-            description = "받은 친구 요청 리스트를 조회합니다.",
+            summary = "요청 받은 리스트",
+            description = "요청 받은 친구 리스트를 조회합니다.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "받은 친구 요청 리스트 조회"),
+                    @ApiResponse(responseCode = "200", description = "친구 추가 요청받은 리스트 조회"),
                     @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
                     @ApiResponse(responseCode = "404", description = "친구 정보를 찾을 수 없음"),
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
