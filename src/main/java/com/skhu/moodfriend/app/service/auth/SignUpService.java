@@ -36,17 +36,10 @@ public class SignUpService {
             throw new CustomException(ErrorCode.ALREADY_EXIST_MEMBER_EXCEPTION, ErrorCode.ALREADY_EXIST_MEMBER_EXCEPTION.getMessage());
         }
 
-        String encodePassword = passwordEncoder.encode(signUpReqDto.password());
+        String encodedPassword = passwordEncoder.encode(signUpReqDto.password());
 
-        Member member = memberRepository.save(Member.builder()
-                .email(signUpReqDto.email())
-                .password(encodePassword)
-                .name("호야집사")
-                .mileage(0)
-                .loginType(LoginType.NATIVE_LOGIN)
-                .roleType(RoleType.ROLE_USER)
-                .build()
-        );
+        Member member = signUpReqDto.toEntity(encodedPassword);
+        memberRepository.save(member);
 
         String accessToken = tokenProvider.createAccessToken(member);
         String refreshToken = tokenProvider.createRefreshToken(member);
