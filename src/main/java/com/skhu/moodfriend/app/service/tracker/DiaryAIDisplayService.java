@@ -39,13 +39,7 @@ public class DiaryAIDisplayService {
             throw new CustomException(ErrorCode.ONLY_OWN_DIARY_ACCESS_EXCEPTION, ErrorCode.ONLY_OWN_DIARY_ACCESS_EXCEPTION.getMessage());
         }
 
-        DiaryAIResDto resDto = DiaryAIResDto.builder()
-                .diaryAIId(diaryAI.getDiaryAIId())
-                .createdAt(diaryAI.getCreatedAt())
-                .summary(diaryAI.getSummary())
-                .build();
-
-        return ApiResponseTemplate.success(SuccessCode.GET_DIARY_SUMMARY_SUCCESS, resDto);
+        return ApiResponseTemplate.success(SuccessCode.GET_DIARY_SUMMARY_SUCCESS, DiaryAIResDto.of(diaryAI));
     }
 
     public ApiResponseTemplate<List<DiaryAIResDto>> getAllDiarySummariesByMember(Long memberId) {
@@ -56,11 +50,7 @@ public class DiaryAIDisplayService {
         List<DiaryAI> diaryAIs = diaryAIRepository.findByMemberOrderByCreatedAt(member);
 
         List<DiaryAIResDto> resDtos = diaryAIs.stream()
-                .map(diaryAI -> DiaryAIResDto.builder()
-                        .diaryAIId(diaryAI.getDiaryAIId())
-                        .createdAt(diaryAI.getCreatedAt())
-                        .summary(diaryAI.getSummary())
-                        .build())
+                .map(DiaryAIResDto::of)
                 .collect(Collectors.toList());
 
         return ApiResponseTemplate.success(SuccessCode.GET_ALL_DIARY_SUMMARIES_SUCCESS, resDtos);
