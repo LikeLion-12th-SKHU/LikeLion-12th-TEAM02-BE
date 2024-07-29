@@ -2,9 +2,7 @@ package com.skhu.moodfriend.app.controller.auth;
 
 import com.skhu.moodfriend.app.dto.auth.reqDto.LoginReqDto;
 import com.skhu.moodfriend.app.dto.auth.reqDto.SignUpReqDto;
-import com.skhu.moodfriend.app.dto.auth.resDto.LoginResDto;
-import com.skhu.moodfriend.app.dto.auth.resDto.OAuthResDto;
-import com.skhu.moodfriend.app.dto.auth.resDto.SignUpResDto;
+import com.skhu.moodfriend.app.dto.auth.resDto.AuthResDto;
 import com.skhu.moodfriend.app.service.auth.GoogleOAuthService;
 import com.skhu.moodfriend.app.service.auth.KakaoOAuthService;
 import com.skhu.moodfriend.app.service.auth.LoginService;
@@ -41,8 +39,8 @@ public class AuthController {
                     @ApiResponse(responseCode = "500", description = "관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<SignUpResDto>> signUp(@Valid @RequestBody SignUpReqDto signUpReqDto) {
-        ApiResponseTemplate<SignUpResDto> data = signUpService.signUp(signUpReqDto);
+    public ResponseEntity<ApiResponseTemplate<AuthResDto>> signUp(@Valid @RequestBody SignUpReqDto signUpReqDto) {
+        ApiResponseTemplate<AuthResDto> data = signUpService.signUp(signUpReqDto);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
@@ -57,8 +55,8 @@ public class AuthController {
                     @ApiResponse(responseCode = "500", description = "관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<LoginResDto>> login(@Valid @RequestBody LoginReqDto loginReqDto) {
-        ApiResponseTemplate<LoginResDto> data = loginService.login(loginReqDto);
+    public ResponseEntity<ApiResponseTemplate<AuthResDto>> login(@Valid @RequestBody LoginReqDto loginReqDto) {
+        ApiResponseTemplate<AuthResDto> data = loginService.login(loginReqDto);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
@@ -72,8 +70,8 @@ public class AuthController {
                     @ApiResponse(responseCode = "500", description = "관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<OAuthResDto>> googleCallback(@RequestParam(name = "code") String code) {
-        ApiResponseTemplate<OAuthResDto> data = googleOauthService.signUpOrLogin(googleOauthService.getGoogleAccessToken(code).getData());
+    public ResponseEntity<ApiResponseTemplate<AuthResDto>> googleCallback(@RequestParam(name = "code") String code) {
+        ApiResponseTemplate<AuthResDto> data = googleOauthService.signUpOrLogin(googleOauthService.getGoogleAccessToken(code).getData());
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
@@ -87,8 +85,8 @@ public class AuthController {
                     @ApiResponse(responseCode = "500", description = "관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<OAuthResDto>> kakaoCallback(@RequestParam(name = "code") String code) {
-        ApiResponseTemplate<OAuthResDto> data = kakaoOAuthService.signUpOrLogin(kakaoOAuthService.getKakaoAccessToken(code).getData());
+    public ResponseEntity<ApiResponseTemplate<AuthResDto>> kakaoCallback(@RequestParam(name = "code") String code) {
+        ApiResponseTemplate<AuthResDto> data = kakaoOAuthService.signUpOrLogin(kakaoOAuthService.getKakaoAccessToken(code).getData());
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 }

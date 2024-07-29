@@ -3,7 +3,7 @@ package com.skhu.moodfriend.app.dto.auth.resDto;
 import lombok.Builder;
 
 @Builder
-public record OAuthResDto(
+public record AuthResDto(
         String accessToken,
         String refreshToken
 ) {

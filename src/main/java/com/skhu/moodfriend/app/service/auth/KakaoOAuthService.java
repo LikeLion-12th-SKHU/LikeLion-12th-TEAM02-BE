@@ -2,7 +2,7 @@ package com.skhu.moodfriend.app.service.auth;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.skhu.moodfriend.app.dto.auth.resDto.OAuthResDto;
+import com.skhu.moodfriend.app.dto.auth.resDto.AuthResDto;
 import com.skhu.moodfriend.app.domain.member.LoginType;
 import com.skhu.moodfriend.app.domain.member.Member;
 import com.skhu.moodfriend.app.domain.member.RoleType;
@@ -66,7 +66,7 @@ public class KakaoOAuthService {
 
 
     @Transactional
-    public ApiResponseTemplate<OAuthResDto> signUpOrLogin(String kakaoAccessToken) {
+    public ApiResponseTemplate<AuthResDto> signUpOrLogin(String kakaoAccessToken) {
         MemberInfo memberInfo = getMemberInfo(kakaoAccessToken);
 
         Member member = memberRepository.findByEmail(memberInfo.email())
@@ -80,7 +80,7 @@ public class KakaoOAuthService {
                         .build())
                 );
 
-        OAuthResDto resDto = OAuthResDto.builder()
+        AuthResDto resDto = AuthResDto.builder()
                 .accessToken(tokenProvider.createAccessToken(member))
                 .refreshToken(tokenProvider.createRefreshToken(member))
                 .build();

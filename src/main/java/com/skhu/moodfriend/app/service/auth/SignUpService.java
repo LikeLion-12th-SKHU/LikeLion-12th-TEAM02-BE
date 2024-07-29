@@ -1,8 +1,8 @@
 package com.skhu.moodfriend.app.service.auth;
 
 import com.skhu.moodfriend.app.dto.auth.reqDto.SignUpReqDto;
-import com.skhu.moodfriend.app.dto.auth.resDto.SignUpResDto;
 import com.skhu.moodfriend.app.domain.member.*;
+import com.skhu.moodfriend.app.dto.auth.resDto.AuthResDto;
 import com.skhu.moodfriend.app.repository.MemberRefreshTokenRepository;
 import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.global.exception.CustomException;
@@ -26,7 +26,7 @@ public class SignUpService {
     private final TokenProvider tokenProvider;
 
     @Transactional
-    public ApiResponseTemplate<SignUpResDto> signUp(SignUpReqDto signUpReqDto) {
+    public ApiResponseTemplate<AuthResDto> signUp(SignUpReqDto signUpReqDto) {
 
         if (!signUpReqDto.password().equals(signUpReqDto.confirmPassword())) {
             throw new CustomException(ErrorCode.PASSWORD_MISMATCH_EXCEPTION, ErrorCode.PASSWORD_MISMATCH_EXCEPTION.getMessage());
@@ -51,7 +51,7 @@ public class SignUpService {
         memberRefreshTokenRepository.deleteByMember(member);
         memberRefreshTokenRepository.save(memberRefreshToken);
 
-        SignUpResDto resDto = SignUpResDto.builder()
+        AuthResDto resDto = AuthResDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
