@@ -1,7 +1,7 @@
 package com.skhu.moodfriend.app.dto.tracker.reqDto;
 
-import com.skhu.moodfriend.app.entity.tracker.diary.EmotionType;
-import com.skhu.moodfriend.app.entity.tracker.diary.WeatherType;
+import com.skhu.moodfriend.app.domain.tracker.diary.EmotionType;
+import com.skhu.moodfriend.app.domain.tracker.diary.WeatherType;
 import com.skhu.moodfriend.global.exception.EnumValid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

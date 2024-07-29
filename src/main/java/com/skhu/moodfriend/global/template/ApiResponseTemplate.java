@@ -25,15 +25,6 @@ public class ApiResponseTemplate<T> {
                 .build();
     }
 
-    public static <T> ApiResponseTemplate<T> success(SuccessCode successCode) {
-        return ApiResponseTemplate.<T>builder()
-                .status(successCode.getHttpStatus().value())
-                .success(true)
-                .message(successCode.getMessage())
-                .data(null)
-                .build();
-    }
-
     public static <T> ApiResponseTemplate<T> error(ErrorCode errorCode, String message) {
         return ApiResponseTemplate.<T>builder()
                 .status(errorCode.getHttpStatus().value())

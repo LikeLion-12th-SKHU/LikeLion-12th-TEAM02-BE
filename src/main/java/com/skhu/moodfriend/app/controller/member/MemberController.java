@@ -25,7 +25,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-@Tag(name = "사용자", description = "사용자를 담당하는 api 그룹")
+@Tag(name = "사용자 정보", description = "사용자 정보를 담당하는 api 그룹")
 @RequestMapping("/api/v1/member")
 public class MemberController {
 

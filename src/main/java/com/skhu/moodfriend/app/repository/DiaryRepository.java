@@ -1,7 +1,7 @@
 package com.skhu.moodfriend.app.repository;
 
-import com.skhu.moodfriend.app.entity.tracker.diary.Diary;
-import com.skhu.moodfriend.app.entity.member.Member;
+import com.skhu.moodfriend.app.domain.tracker.diary.Diary;
+import com.skhu.moodfriend.app.domain.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

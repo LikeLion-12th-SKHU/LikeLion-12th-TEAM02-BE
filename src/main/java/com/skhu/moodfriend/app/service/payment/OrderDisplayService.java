@@ -1,8 +1,8 @@
 package com.skhu.moodfriend.app.service.payment;
 
-import com.skhu.moodfriend.app.dto.order.resDto.OrderResDto;
-import com.skhu.moodfriend.app.entity.member.Member;
-import com.skhu.moodfriend.app.entity.member.order.Order;
+import com.skhu.moodfriend.app.dto.payment.resDto.OrderResDto;
+import com.skhu.moodfriend.app.domain.member.Member;
+import com.skhu.moodfriend.app.domain.payment.Order;
 import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.app.repository.OrderRepository;
 import com.skhu.moodfriend.global.exception.CustomException;
@@ -36,14 +36,7 @@ public class OrderDisplayService {
         List<Order> orders = orderRepository.findByMember(member);
 
         List<OrderResDto> resDtos = orders.stream()
-                .map(order -> OrderResDto.builder()
-                        .orderId(order.getOrderId())
-                        .productName(order.getProductName())
-                        .price(order.getPrice())
-                        .impUid(order.getImpUid())
-                        .merchantUid(order.getMerchantUid())
-                        .createdAt(order.getCreatedAt())
-                        .build())
+                .map(OrderResDto::of)
                 .collect(Collectors.toList());
 
         return ApiResponseTemplate.success(SuccessCode.GET_ALL_ORDERS_SUCCESS, resDtos);
@@ -62,15 +55,6 @@ public class OrderDisplayService {
             throw new CustomException(ErrorCode.FORBIDDEN_ACCESS_EXCEPTION, ErrorCode.FORBIDDEN_ACCESS_EXCEPTION.getMessage());
         }
 
-        OrderResDto resDto = OrderResDto.builder()
-                .orderId(order.getOrderId())
-                .productName(order.getProductName())
-                .price(order.getPrice())
-                .impUid(order.getImpUid())
-                .merchantUid(order.getMerchantUid())
-                .createdAt(order.getCreatedAt())
-                .build();
-
-        return ApiResponseTemplate.success(SuccessCode.GET_ORDER_SUCCESS, resDto);
+        return ApiResponseTemplate.success(SuccessCode.GET_ORDER_SUCCESS, OrderResDto.of(order));
     }
 }

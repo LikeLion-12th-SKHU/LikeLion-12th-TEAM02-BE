@@ -1,5 +1,6 @@
 package com.skhu.moodfriend.app.dto.member.reqDto;
 
+import com.skhu.moodfriend.app.domain.member.Member;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -8,4 +9,7 @@ public record MemberInfoUpdateReqDto(
         @Size(max = 10, message = "이름은 최대 10자까지 입력 가능합니다.")
         String name
 ) {
+        public void updateEntity(Member member) {
+                member.updateInfo(this.name);
+        }
 }

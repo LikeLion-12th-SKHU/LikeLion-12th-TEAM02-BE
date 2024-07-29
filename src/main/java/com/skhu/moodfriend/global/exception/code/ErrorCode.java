@@ -14,6 +14,7 @@ public enum ErrorCode {
     INVALID_SIGNATURE_EXCEPTION(HttpStatus.BAD_REQUEST, "JWT 토큰의 서명이 올바르지 않습니다."),
     INVALID_ENUM_VALUE(HttpStatus.BAD_REQUEST, "유효하지 않은 Enum 타입 값이 있습니다."),
     INVALID_PROMPT_EXCEPTION(HttpStatus.BAD_REQUEST, "프롬프트는 감정에 관한 내용이어야 합니다."),
+    INVALID_FRIEND_REQUEST_EXCEPTION(HttpStatus.BAD_REQUEST, "본인에게는 친구 요청을 보낼 수 없습니다."),
     JSON_SYNTAX_ERROR(HttpStatus.BAD_REQUEST, "JSON 파싱 오류 발생"),
     JSON_SERIALIZATION_ERROR(HttpStatus.BAD_REQUEST, "JSON 직렬화 오류 발생"),
     VALIDATION_EXCEPTION(HttpStatus.BAD_REQUEST, "유효성 검사에 맞지않습니다."),
@@ -32,15 +33,14 @@ public enum ErrorCode {
     NOT_FOUND_EMAIL_EXCEPTION(HttpStatus.NOT_FOUND, "해당 이메일의 사용자를 찾을 수 없습니다."),
     NOT_FOUND_MEMBER_EXCEPTION(HttpStatus.NOT_FOUND, "해당 사용자를 찾을 수 없습니다."),
     NOT_FOUND_DIARY_EXCEPTION(HttpStatus.NOT_FOUND, "해당 일기를 찾을 수 없습니다."),
-    NOT_FOUND_REQUESTED_MEMBER_EXCEPTION(HttpStatus.NOT_FOUND, "요청한 친구를 찾을 수 없습니다."),
-    FRIEND_REQUEST_NOT_FOUND(HttpStatus.NOT_FOUND, "이미 친구를 추가 했거나 찾을 수 없습니다."),
+    NOT_FOUND_FRIEND_REQUEST_EXCEPTION(HttpStatus.NOT_FOUND, "친구 요청을 찾을 수 없습니다."),
     NOT_FOUND_ORDER_EXCEPTION(HttpStatus.NOT_FOUND, "주문 내역을 찾을 수 없습니다."),
 
     // 409 Conflict
     ALREADY_EXIST_MEMBER_EXCEPTION(HttpStatus.CONFLICT, "이미 회원가입이 완료된 사용자입니다."),
     ALREADY_EXIST_DIARY_EXCEPTION(HttpStatus.CONFLICT, "해당 날짜에 이미 작성된 일기가 존재합니다."),
     ALREADY_EXIST_ATTENDED_EXCEPTION(HttpStatus.CONFLICT, "이미 오늘 출석했습니다."),
-    ALREADY_FRIEND_REQUEST_EXCEPTION(HttpStatus.CONFLICT,"이미 친구 추가 요청 중입니다."),
+    ALREADY_FRIEND_REQUEST_EXCEPTION(HttpStatus.CONFLICT,"이미 친구 요청이 진행 중이거나 친구입니다."),
     DUPLICATE_OBJECT_EXCEPTION(HttpStatus.CONFLICT, "이미 구매한 오브제입니다."),
 
     // 500 Internal Server Exception

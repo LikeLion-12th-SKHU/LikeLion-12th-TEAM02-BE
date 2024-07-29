@@ -1,5 +1,8 @@
 package com.skhu.moodfriend.app.dto.auth.reqDto;
 
+import com.skhu.moodfriend.app.domain.member.LoginType;
+import com.skhu.moodfriend.app.domain.member.Member;
+import com.skhu.moodfriend.app.domain.member.RoleType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
@@ -21,4 +24,14 @@ public record SignUpReqDto(
         @NotBlank(message = "비밀번호 재확인은 필수 입력 항목입니다.")
         String confirmPassword
 ) {
+    public Member toEntity(String encodedPassword) {
+        return Member.builder()
+                .email(this.email)
+                .password(encodedPassword)
+                .name("호야집사")
+                .mileage(0)
+                .loginType(LoginType.NATIVE_LOGIN)
+                .roleType(RoleType.ROLE_USER)
+                .build();
+    }
 }

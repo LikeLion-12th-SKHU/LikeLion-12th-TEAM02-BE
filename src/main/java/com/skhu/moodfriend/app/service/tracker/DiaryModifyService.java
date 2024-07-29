@@ -2,8 +2,8 @@ package com.skhu.moodfriend.app.service.tracker;
 
 import com.skhu.moodfriend.app.dto.tracker.reqDto.DiaryUpdateReqDto;
 import com.skhu.moodfriend.app.dto.tracker.resDto.DiaryResDto;
-import com.skhu.moodfriend.app.entity.tracker.diary.Diary;
-import com.skhu.moodfriend.app.entity.member.Member;
+import com.skhu.moodfriend.app.domain.tracker.diary.Diary;
+import com.skhu.moodfriend.app.domain.member.Member;
 import com.skhu.moodfriend.app.repository.DiaryRepository;
 import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.global.exception.CustomException;
@@ -45,17 +45,7 @@ public class DiaryModifyService {
         diary.update(reqDto.emotionType(), reqDto.weatherType(), reqDto.title(), reqDto.content(), reqDto.createdAt());
         diaryRepository.save(diary);
 
-        DiaryResDto resDto = DiaryResDto.builder()
-                .diaryId(diary.getDiaryId())
-                .emotionType(diary.getEmotionType())
-                .weatherType(diary.getWeatherType())
-                .title(diary.getTitle())
-                .content(diary.getContent())
-                .createdAt(diary.getCreatedAt())
-                .updatedAt(diary.getUpdatedAt())
-                .build();
-
-        return ApiResponseTemplate.success(SuccessCode.UPDATE_DIARY_SUCCESS, resDto);
+        return ApiResponseTemplate.success(SuccessCode.UPDATE_DIARY_SUCCESS, DiaryResDto.of(diary));
     }
 
     @Transactional

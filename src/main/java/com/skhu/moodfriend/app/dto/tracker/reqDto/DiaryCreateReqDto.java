@@ -1,7 +1,9 @@
 package com.skhu.moodfriend.app.dto.tracker.reqDto;
 
-import com.skhu.moodfriend.app.entity.tracker.diary.EmotionType;
-import com.skhu.moodfriend.app.entity.tracker.diary.WeatherType;
+import com.skhu.moodfriend.app.domain.member.Member;
+import com.skhu.moodfriend.app.domain.tracker.diary.Diary;
+import com.skhu.moodfriend.app.domain.tracker.diary.EmotionType;
+import com.skhu.moodfriend.app.domain.tracker.diary.WeatherType;
 import com.skhu.moodfriend.global.exception.EnumValid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -31,4 +33,14 @@ public record DiaryCreateReqDto(
         @PastOrPresent(message = "작성일은 과거 또는 현재 날짜여야 합니다.")
         LocalDate createdAt
 ) {
+    public Diary toEntity(Member member) {
+        return Diary.builder()
+                .emotionType(this.emotionType)
+                .weatherType(this.weatherType)
+                .title(this.title)
+                .content(this.content)
+                .createdAt(this.createdAt)
+                .member(member)
+                .build();
+    }
 }

@@ -4,10 +4,10 @@ import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.request.CancelData;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
-import com.skhu.moodfriend.app.dto.order.reqDto.OrderReqDto;
-import com.skhu.moodfriend.app.dto.order.resDto.OrderResDto;
-import com.skhu.moodfriend.app.entity.member.Member;
-import com.skhu.moodfriend.app.entity.member.order.Order;
+import com.skhu.moodfriend.app.dto.payment.reqDto.OrderReqDto;
+import com.skhu.moodfriend.app.dto.payment.resDto.OrderResDto;
+import com.skhu.moodfriend.app.domain.member.Member;
+import com.skhu.moodfriend.app.domain.payment.Order;
 import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.app.repository.OrderRepository;
 import com.skhu.moodfriend.global.exception.CustomException;
@@ -30,8 +30,7 @@ public class PaymentService {
 
     public IamportResponse<Payment> validateIamport(String imp_uid) {
         try {
-            IamportResponse<Payment> payment = iamportClient.paymentByImpUid(imp_uid);
-            return payment;
+            return iamportClient.paymentByImpUid(imp_uid);
         } catch (Exception e) {
             return null;
         }
@@ -40,8 +39,7 @@ public class PaymentService {
     public IamportResponse<Payment> cancelPayment(String imp_uid) {
         try {
             CancelData cancelData = new CancelData(imp_uid, true);
-            IamportResponse<Payment> payment = iamportClient.cancelPaymentByImpUid(cancelData);
-            return payment;
+            return iamportClient.cancelPaymentByImpUid(cancelData);
         } catch (Exception e) {
             return null;
         }
@@ -54,13 +52,7 @@ public class PaymentService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
-        Order order = Order.builder()
-                .productName(reqDto.productName())
-                .price(reqDto.price())
-                .impUid(reqDto.impUid())
-                .merchantUid(reqDto.merchantUid())
-                .member(member)
-                .build();
+        Order order = reqDto.toEntity(member);
 
         try {
             orderRepository.save(order);

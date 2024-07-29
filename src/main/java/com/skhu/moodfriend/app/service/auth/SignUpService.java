@@ -1,8 +1,8 @@
 package com.skhu.moodfriend.app.service.auth;
 
 import com.skhu.moodfriend.app.dto.auth.reqDto.SignUpReqDto;
-import com.skhu.moodfriend.app.dto.auth.resDto.SignUpResDto;
-import com.skhu.moodfriend.app.entity.member.*;
+import com.skhu.moodfriend.app.domain.member.*;
+import com.skhu.moodfriend.app.dto.auth.resDto.AuthResDto;
 import com.skhu.moodfriend.app.repository.MemberRefreshTokenRepository;
 import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.global.exception.CustomException;
@@ -26,7 +26,7 @@ public class SignUpService {
     private final TokenProvider tokenProvider;
 
     @Transactional
-    public ApiResponseTemplate<SignUpResDto> signUp(SignUpReqDto signUpReqDto) {
+    public ApiResponseTemplate<AuthResDto> signUp(SignUpReqDto signUpReqDto) {
 
         if (!signUpReqDto.password().equals(signUpReqDto.confirmPassword())) {
             throw new CustomException(ErrorCode.PASSWORD_MISMATCH_EXCEPTION, ErrorCode.PASSWORD_MISMATCH_EXCEPTION.getMessage());
@@ -36,17 +36,10 @@ public class SignUpService {
             throw new CustomException(ErrorCode.ALREADY_EXIST_MEMBER_EXCEPTION, ErrorCode.ALREADY_EXIST_MEMBER_EXCEPTION.getMessage());
         }
 
-        String encodePassword = passwordEncoder.encode(signUpReqDto.password());
+        String encodedPassword = passwordEncoder.encode(signUpReqDto.password());
 
-        Member member = memberRepository.save(Member.builder()
-                .email(signUpReqDto.email())
-                .password(encodePassword)
-                .name("호야집사")
-                .mileage(0)
-                .loginType(LoginType.NATIVE_LOGIN)
-                .roleType(RoleType.ROLE_USER)
-                .build()
-        );
+        Member member = signUpReqDto.toEntity(encodedPassword);
+        memberRepository.save(member);
 
         String accessToken = tokenProvider.createAccessToken(member);
         String refreshToken = tokenProvider.createRefreshToken(member);
@@ -58,7 +51,7 @@ public class SignUpService {
         memberRefreshTokenRepository.deleteByMember(member);
         memberRefreshTokenRepository.save(memberRefreshToken);
 
-        SignUpResDto resDto = SignUpResDto.builder()
+        AuthResDto resDto = AuthResDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();

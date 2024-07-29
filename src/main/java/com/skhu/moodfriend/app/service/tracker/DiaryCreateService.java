@@ -2,8 +2,8 @@ package com.skhu.moodfriend.app.service.tracker;
 
 import com.skhu.moodfriend.app.dto.tracker.reqDto.DiaryCreateReqDto;
 import com.skhu.moodfriend.app.dto.tracker.resDto.DiaryResDto;
-import com.skhu.moodfriend.app.entity.tracker.diary.Diary;
-import com.skhu.moodfriend.app.entity.member.Member;
+import com.skhu.moodfriend.app.domain.tracker.diary.Diary;
+import com.skhu.moodfriend.app.domain.member.Member;
 import com.skhu.moodfriend.app.repository.DiaryRepository;
 import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.global.exception.CustomException;
@@ -34,27 +34,9 @@ public class DiaryCreateService {
             throw new CustomException(ErrorCode.ALREADY_EXIST_DIARY_EXCEPTION, ErrorCode.ALREADY_EXIST_DIARY_EXCEPTION.getMessage());
         }
 
-        Diary diary = Diary.builder()
-                .emotionType(reqDto.emotionType())
-                .weatherType(reqDto.weatherType())
-                .title(reqDto.title())
-                .content(reqDto.content())
-                .createdAt(reqDto.createdAt())
-                .member(member)
-                .build();
-
+        Diary diary = reqDto.toEntity(member);
         diaryRepository.save(diary);
 
-        DiaryResDto resDto = DiaryResDto.builder()
-                .diaryId(diary.getDiaryId())
-                .emotionType(diary.getEmotionType())
-                .weatherType(diary.getWeatherType())
-                .title(diary.getTitle())
-                .content(diary.getContent())
-                .createdAt(diary.getCreatedAt())
-                .updatedAt(diary.getUpdatedAt())
-                .build();
-
-        return ApiResponseTemplate.success(SuccessCode.CREATE_DIARY_SUCCESS, resDto);
+        return ApiResponseTemplate.success(SuccessCode.CREATE_DIARY_SUCCESS, DiaryResDto.of(diary));
     }
 }

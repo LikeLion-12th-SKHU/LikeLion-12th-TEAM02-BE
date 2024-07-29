@@ -2,8 +2,8 @@ package com.skhu.moodfriend.app.controller.payment;
 
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
-import com.skhu.moodfriend.app.dto.order.reqDto.OrderReqDto;
-import com.skhu.moodfriend.app.dto.order.resDto.OrderResDto;
+import com.skhu.moodfriend.app.dto.payment.reqDto.OrderReqDto;
+import com.skhu.moodfriend.app.dto.payment.resDto.OrderResDto;
 import com.skhu.moodfriend.app.service.payment.OrderDisplayService;
 import com.skhu.moodfriend.app.service.payment.PaymentService;
 import com.skhu.moodfriend.global.template.ApiResponseTemplate;

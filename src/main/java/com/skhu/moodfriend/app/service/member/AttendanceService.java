@@ -1,8 +1,8 @@
 package com.skhu.moodfriend.app.service.member;
 
 import com.skhu.moodfriend.app.dto.member.resDto.MemberInfoResDto;
-import com.skhu.moodfriend.app.entity.member.attendance.Attendance;
-import com.skhu.moodfriend.app.entity.member.Member;
+import com.skhu.moodfriend.app.domain.member.attendance.Attendance;
+import com.skhu.moodfriend.app.domain.member.Member;
 import com.skhu.moodfriend.app.repository.AttendanceRepository;
 import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.global.exception.CustomException;
@@ -30,8 +30,8 @@ public class AttendanceService {
 
     @Transactional
     public ApiResponseTemplate<MemberInfoResDto> recordAttendance(Principal principal) {
-        Long memberId = Long.parseLong(principal.getName());
 
+        Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
@@ -48,13 +48,6 @@ public class AttendanceService {
         member.updateMileage(MILEAGE_INCREMENT);
         memberRepository.save(member);
 
-        MemberInfoResDto resDto = MemberInfoResDto.builder()
-                .email(member.getEmail())
-                .name(member.getName())
-                .mileage(member.getMileage())
-                .loginType(member.getLoginType().getDisplayName())
-                .build();
-
-        return ApiResponseTemplate.success(SuccessCode.ATTENDANCE_SUCCESS, resDto);
+        return ApiResponseTemplate.success(SuccessCode.ATTENDANCE_SUCCESS, MemberInfoResDto.of(member));
     }
 }

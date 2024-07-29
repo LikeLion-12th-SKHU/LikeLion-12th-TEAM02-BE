@@ -2,9 +2,9 @@ package com.skhu.moodfriend.app.service.auth;
 
 import com.skhu.moodfriend.app.dto.auth.RenewAccessTokenDto;
 import com.skhu.moodfriend.app.dto.auth.reqDto.LoginReqDto;
-import com.skhu.moodfriend.app.dto.auth.resDto.LoginResDto;
-import com.skhu.moodfriend.app.entity.member.Member;
-import com.skhu.moodfriend.app.entity.member.MemberRefreshToken;
+import com.skhu.moodfriend.app.domain.member.Member;
+import com.skhu.moodfriend.app.domain.member.MemberRefreshToken;
+import com.skhu.moodfriend.app.dto.auth.resDto.AuthResDto;
 import com.skhu.moodfriend.app.repository.MemberRefreshTokenRepository;
 import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.global.exception.CustomException;
@@ -30,7 +30,7 @@ public class LoginService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public ApiResponseTemplate<LoginResDto> login(LoginReqDto loginReqDto) {
+    public ApiResponseTemplate<AuthResDto> login(LoginReqDto loginReqDto) {
 
         Member member = memberRepository.findByEmail(loginReqDto.email())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_EMAIL_EXCEPTION,
@@ -58,7 +58,7 @@ public class LoginService {
         RenewAccessTokenDto renewAccessTokenDto = tokenRenewService.renewAccessTokenDtoFromRefreshToken(renewRefreshToken);
         String renewAccessToken = renewAccessTokenDto.renewAccessToken();
 
-        LoginResDto resDto = LoginResDto.builder()
+        AuthResDto resDto = AuthResDto.builder()
                 .accessToken(renewAccessToken)
                 .refreshToken(renewRefreshToken)
                 .build();
