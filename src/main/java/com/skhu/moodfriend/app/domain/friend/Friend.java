@@ -3,14 +3,10 @@ package com.skhu.moodfriend.app.domain.friend;
 import com.skhu.moodfriend.app.domain.member.Member;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Data
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
-@Builder(toBuilder = true)
 public class Friend {
 
     @Id
@@ -32,4 +28,19 @@ public class Friend {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "REQUESTER_ID")
     private Member requester;
+
+    private Friend(String receiverEmail, Member member, Member requester) {
+        this.receiverEmail = receiverEmail;
+        this.status = Status.WAITING;
+        this.member = member;
+        this.requester = requester;
+    }
+
+    public static Friend createFriendRequest(String receiverEmail, Member member, Member requester) {
+        return new Friend(receiverEmail, member, requester);
+    }
+
+    public void acceptRequest() {
+        this.status = Status.ACCEPTED;
+    }
 }

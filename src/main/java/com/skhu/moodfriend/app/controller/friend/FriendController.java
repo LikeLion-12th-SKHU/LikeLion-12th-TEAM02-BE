@@ -1,10 +1,9 @@
 package com.skhu.moodfriend.app.controller.friend;
 
-
-import com.skhu.moodfriend.app.dto.friend.reqDto.FriendRequestDto;
-import com.skhu.moodfriend.app.dto.friend.resDto.FriendListDto;
+import com.skhu.moodfriend.app.dto.friend.reqDto.FriendReqDto;
+import com.skhu.moodfriend.app.dto.friend.resDto.FriendResDto;
 import com.skhu.moodfriend.app.service.friend.FriendService;
-import com.skhu.moodfriend.global.dto.PagedResponse;
+import com.skhu.moodfriend.app.service.friend.FriendDisplayService;
 import com.skhu.moodfriend.global.template.ApiResponseTemplate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -15,105 +14,92 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-@Tag(name = "친구 관리", description = "친구 관리 api 그룹")
+@Tag(name = "친구 관리", description = "친구 관리를 담당하는 api 그룹")
 @RequestMapping("/api/v1/friend")
 public class FriendController {
 
     private final FriendService friendService;
+    private final FriendDisplayService friendDisplayService;
 
-    @PostMapping("add")
+    @PostMapping("/request")
     @Operation(
-            summary = "친구 추가",
-            description = "새로운 친구를 추가합니다.",
+            summary = "친구 추가 요청",
+            description = "친구 추가 요청을 보냅니다.",
             responses = {
-                    @ApiResponse(responseCode = "201", description = "친구 추가 완료 "),
+                    @ApiResponse(responseCode = "200", description = "친구 추가 요청 완료"),
                     @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
                     @ApiResponse(responseCode = "404", description = "사용자 정보를 찾을 수 없음"),
-                    @ApiResponse(responseCode = "409", description = "이미 친구 입니다"),
+                    @ApiResponse(responseCode = "409", description = "이미 친구입니다"),
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
-
-    public ResponseEntity<ApiResponseTemplate<?>> addNewFriend(@RequestParam(name = "friendEmail") String friendEmail, Principal principal) {
-        ApiResponseTemplate<?> data = friendService.addNewFriend(friendEmail, principal);
+    public ResponseEntity<ApiResponseTemplate<String>> sendFriendRequest(@RequestBody FriendReqDto friendReqDto, Principal principal) {
+        ApiResponseTemplate<String> data = friendService.sendFriendRequest(friendReqDto, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
-    @GetMapping("list/add")
+    @GetMapping("/requests/display")
     @Operation(
-            summary = "친구 추가 요청 리스트 ",
-            description = "요청된 리스트를 확인합니다.",
+            summary = "친구 추가 요청 리스트",
+            description = "요청한 친구 리스트를 조회합니다.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "친구 추가 요청 리스트 조회 "),
+                    @ApiResponse(responseCode = "200", description = "친구 추가 요청 리스트 조회"),
                     @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
-                    @ApiResponse(responseCode = "404", description = "사용자 정보를 찾을 수 없음"),
-                    @ApiResponse(responseCode = "409", description = "이미 친구 입니다"),
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<PagedResponse<FriendRequestDto>>> listFriendRequest(@RequestParam(defaultValue = "1") Integer page,
-                                                                                                  @RequestParam(defaultValue = "10") Integer size,
-                                                                                                  Principal principal) {
-        ApiResponseTemplate<PagedResponse<FriendRequestDto>> data = friendService.fetchFriendRequest(page-1, size, principal);
+    public ResponseEntity<ApiResponseTemplate<List<FriendReqDto>>> getFriendRequests(Principal principal) {
+        ApiResponseTemplate<List<FriendReqDto>> data = friendDisplayService.getFriendRequests(principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
-
-    @PutMapping("friend-request/accept")
+    @PutMapping("/accept")
     @Operation(
-            summary = "친구 요청 수락 ",
-            description = "요청된 친구 요청을 수락 합니다.",
+            summary = "친구 요청 수락",
+            description = "요청된 친구 요청을 수락합니다.",
             responses = {
                     @ApiResponse(responseCode = "204", description = "친구 추가 요청 수락"),
                     @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
-                    @ApiResponse(responseCode = "404", description = "사용자 정보를 찾을 수 없음"),
-                    @ApiResponse(responseCode = "409", description = "이미 친구 입니다"),
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<?>> acceptFriendRequest(@RequestParam Long friendMemberId, Principal principal) {
-        ApiResponseTemplate<?> data = friendService.updateFriendRequest(friendMemberId, principal);
+    public ResponseEntity<ApiResponseTemplate<String>> acceptFriendRequest(@RequestParam String friendEmail, Principal principal) {
+        ApiResponseTemplate<String> data = friendService.acceptFriendRequest(friendEmail, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
-
-    @GetMapping
+    @GetMapping("/list")
     @Operation(
             summary = "친구 리스트 조회",
             description = "친구 리스트를 조회합니다.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "친구 리스트 조회 완료 "),
+                    @ApiResponse(responseCode = "200", description = "친구 리스트 조회 완료"),
                     @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
-                    @ApiResponse(responseCode = "404", description = "사용자 정보를 찾을 수 없음"),
-                    @ApiResponse(responseCode = "409", description = "이미 친구 입니다"),
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<PagedResponse<FriendListDto>>> friendLists(@RequestParam(defaultValue = "1") Integer page,
-                                                                                         @RequestParam(defaultValue = "10") Integer size,
-                                                                                         Principal principal) {
-        ApiResponseTemplate<PagedResponse<FriendListDto>> data = friendService.fetchFriendList(page-1,size,principal);
+    public ResponseEntity<ApiResponseTemplate<List<FriendResDto>>> getFriends(Principal principal) {
+        ApiResponseTemplate<List<FriendResDto>> data = friendDisplayService.getFriends(principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
-    @DeleteMapping("delete")
+    @DeleteMapping("/delete")
     @Operation(
             summary = "친구 삭제",
             description = "친구를 삭제합니다.",
             responses = {
-                    @ApiResponse(responseCode = "204", description = "친구 삭제 완료 "),
+                    @ApiResponse(responseCode = "204", description = "친구 삭제 완료"),
                     @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
                     @ApiResponse(responseCode = "404", description = "사용자 정보를 찾을 수 없음"),
-                    @ApiResponse(responseCode = "409", description = "이미 친구 입니다"),
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
-    public ResponseEntity<?> deleteFriend(@RequestParam Long friendMemberId,
-                                          Principal principal) {
-        ApiResponseTemplate<?> data = friendService.deleteFriend(friendMemberId,principal);
+    public ResponseEntity<ApiResponseTemplate<String>> deleteFriend(@RequestParam String friendEmail, Principal principal) {
+        ApiResponseTemplate<String> data = friendService.deleteFriend(friendEmail, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 }

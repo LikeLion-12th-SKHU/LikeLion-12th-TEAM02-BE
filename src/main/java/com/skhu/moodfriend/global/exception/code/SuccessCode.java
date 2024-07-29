@@ -29,15 +29,16 @@ public enum SuccessCode {
     ORDER_SAVE_SUCCESS(HttpStatus.OK, "주문에 성공했습니다."),
     GET_ORDER_SUCCESS(HttpStatus.OK, "주문 내역을 성공적으로 가져왔습니다."),
     GET_ALL_ORDERS_SUCCESS(HttpStatus.OK, "모든 주문 내역을 성공적으로 가져왔습니다."),
+    REQUEST_FRIEND_SUCCESS(HttpStatus.OK, "친구 요청이 성공적으로 전송되었습니다."),
 
     // 201 Created
     CREATE_MEMBER_SUCCESS(HttpStatus.CREATED, "회원가입에 성공했습니다."),
     CREATE_DIARY_SUCCESS(HttpStatus.CREATED, "일기 작성에 성공했습니다."),
-    ADD_FRIEND_SUCCESS(HttpStatus.OK, "친구 추가에 성공했습니다."),
 
     // 204 No Content
     DELETE_DIARY_SUCCESS(HttpStatus.NO_CONTENT, "일기 삭제에 성공했습니다."),
-    DELETE_FRIEND_SUCCESS(HttpStatus.OK, "친구 삭제에 성공했습니다.");
+    ACCEPT_FRIEND_REQUEST(HttpStatus.NO_CONTENT, "친구 요청을 수락했습니다."),
+    DELETE_FRIEND_SUCCESS(HttpStatus.NO_CONTENT, "친구 삭제에 성공했습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
