@@ -25,7 +25,6 @@ public enum SuccessCode {
     GET_HOYA_SUCCESS(HttpStatus.OK, "챗봇 응답을 성공적으로 가져왔습니다."),
     GET_DIARY_SUMMARY_SUCCESS(HttpStatus.OK, "일기 AI 조회에 성공했습니다."),
     GET_ALL_DIARY_SUMMARIES_SUCCESS(HttpStatus.OK, "모든 일기 AI 조회에 성공했습니다."),
-    UPDATE_FRIEND_REQUEST(HttpStatus.OK, "친구 요청 처리에 성공했습니다."),
     ORDER_SAVE_SUCCESS(HttpStatus.OK, "주문에 성공했습니다."),
     GET_ORDER_SUCCESS(HttpStatus.OK, "주문 내역을 성공적으로 가져왔습니다."),
     GET_ALL_ORDERS_SUCCESS(HttpStatus.OK, "모든 주문 내역을 성공적으로 가져왔습니다."),
