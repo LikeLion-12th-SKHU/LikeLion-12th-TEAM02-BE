@@ -2,9 +2,9 @@ package com.skhu.moodfriend.app.service.member;
 
 import com.skhu.moodfriend.app.dto.member.reqDto.MonthlyEmotionReqDto;
 import com.skhu.moodfriend.app.dto.member.resDto.MonthlyEmotionResDto;
-import com.skhu.moodfriend.app.entity.tracker.diary.Diary;
-import com.skhu.moodfriend.app.entity.tracker.diary.EmotionType;
-import com.skhu.moodfriend.app.entity.member.Member;
+import com.skhu.moodfriend.app.domain.tracker.diary.Diary;
+import com.skhu.moodfriend.app.domain.tracker.diary.EmotionType;
+import com.skhu.moodfriend.app.domain.member.Member;
 import com.skhu.moodfriend.app.repository.DiaryRepository;
 import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.global.exception.CustomException;

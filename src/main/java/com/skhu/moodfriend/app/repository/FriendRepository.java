@@ -1,8 +1,8 @@
 package com.skhu.moodfriend.app.repository;
 
-import com.skhu.moodfriend.app.entity.friend.Friend;
-import com.skhu.moodfriend.app.entity.friend.Status;
-import com.skhu.moodfriend.app.entity.member.Member;
+import com.skhu.moodfriend.app.domain.friend.Friend;
+import com.skhu.moodfriend.app.domain.friend.Status;
+import com.skhu.moodfriend.app.domain.member.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

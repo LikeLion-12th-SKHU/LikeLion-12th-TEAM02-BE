@@ -2,7 +2,7 @@ package com.skhu.moodfriend.app.service.auth;
 
 import com.skhu.moodfriend.app.dto.auth.RefreshTokenParsingDto;
 import com.skhu.moodfriend.app.dto.auth.RenewAccessTokenDto;
-import com.skhu.moodfriend.app.entity.member.Member;
+import com.skhu.moodfriend.app.domain.member.Member;
 import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.global.exception.CustomException;
 import com.skhu.moodfriend.global.exception.code.ErrorCode;

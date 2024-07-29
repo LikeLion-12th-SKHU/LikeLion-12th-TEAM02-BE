@@ -1,7 +1,7 @@
 package com.skhu.moodfriend.app.dto.friend.reqDto;
 
 
-import com.skhu.moodfriend.app.entity.friend.Status;
+import com.skhu.moodfriend.app.domain.friend.Status;
 import lombok.Builder;
 
 @Builder

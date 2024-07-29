@@ -2,9 +2,9 @@ package com.skhu.moodfriend.app.service.auth;
 
 import com.google.gson.Gson;
 import com.skhu.moodfriend.app.dto.auth.resDto.OAuthResDto;
-import com.skhu.moodfriend.app.entity.member.LoginType;
-import com.skhu.moodfriend.app.entity.member.Member;
-import com.skhu.moodfriend.app.entity.member.RoleType;
+import com.skhu.moodfriend.app.domain.member.LoginType;
+import com.skhu.moodfriend.app.domain.member.Member;
+import com.skhu.moodfriend.app.domain.member.RoleType;
 import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.global.dto.MemberInfo;
 import com.skhu.moodfriend.global.dto.Token;

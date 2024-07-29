@@ -1,6 +1,6 @@
 package com.skhu.moodfriend.global.jwt;
 
-import com.skhu.moodfriend.app.entity.member.Member;
+import com.skhu.moodfriend.app.domain.member.Member;
 import com.skhu.moodfriend.global.exception.code.ErrorCode;
 import com.skhu.moodfriend.global.exception.CustomException;
 import io.jsonwebtoken.Claims;

@@ -1,8 +1,8 @@
 package com.skhu.moodfriend.app.service.payment;
 
-import com.skhu.moodfriend.app.dto.order.resDto.OrderResDto;
-import com.skhu.moodfriend.app.entity.member.Member;
-import com.skhu.moodfriend.app.entity.member.order.Order;
+import com.skhu.moodfriend.app.dto.payment.resDto.OrderResDto;
+import com.skhu.moodfriend.app.domain.member.Member;
+import com.skhu.moodfriend.app.domain.payment.Order;
 import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.app.repository.OrderRepository;
 import com.skhu.moodfriend.global.exception.CustomException;

@@ -1,7 +1,7 @@
 package com.skhu.moodfriend.app.dto.friend.resDto;
 
 
-import com.skhu.moodfriend.app.entity.tracker.diary.EmotionType;
+import com.skhu.moodfriend.app.domain.tracker.diary.EmotionType;
 import lombok.Builder;
 
 @Builder
