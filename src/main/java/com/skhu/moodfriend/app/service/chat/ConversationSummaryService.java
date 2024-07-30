@@ -45,6 +45,10 @@ public class ConversationSummaryService {
             Long memberId = member.getMemberId();
             List<Message> messages = conversationService.getConversation(memberId);
 
+            if (isOnlySummaryPrompt(messages)) {
+                continue;
+            }
+
             String prompt = "Here is the user's conversation history. Please summarize the main points of the conversation in a concise manner. The summary should not exceed 1024 characters and must include the key points and important information.";
 
             messages.add(new Message("user", prompt));
@@ -68,5 +72,13 @@ public class ConversationSummaryService {
 
             diaryAIRepository.save(diaryAI);
         }
+    }
+
+    private boolean isOnlySummaryPrompt(List<Message> messages) {
+        if (messages.size() == 1) {
+            Message message = messages.get(0);
+            return "user".equals(message.role()) && message.content().startsWith("Respond to the user's input as if you are their close friend");
+        }
+        return false;
     }
 }

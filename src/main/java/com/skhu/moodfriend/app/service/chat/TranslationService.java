@@ -34,8 +34,7 @@ public class TranslationService {
     private final ObjectMapper objectMapper;
 
     public String translate(String text, String targetLang) {
-
-        String prompt = "친한 친구와 대화하듯 격식을 차리지 않고 일상적인 한국어로 번역하세요: ";
+        String prompt = "다음 텍스트를 친한 친구와 대화하듯 격식을 차리지 않고 일상적인 한국어로 번역하세요: ";
         String textWithPrompt = prompt + text;
 
         TranslationReqDto reqDto = new TranslationReqDto(Collections.singletonList(textWithPrompt), targetLang);
