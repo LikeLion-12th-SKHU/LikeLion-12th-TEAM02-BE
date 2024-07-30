@@ -1,5 +1,6 @@
 package com.skhu.moodfriend.app.service.chat;
 
+import com.skhu.moodfriend.app.domain.member.Member;
 import com.skhu.moodfriend.app.dto.chat.Message;
 import com.skhu.moodfriend.app.dto.chat.reqDto.HoyaReqDto;
 import com.skhu.moodfriend.app.dto.chat.resDto.HoyaResDto;
@@ -40,13 +41,16 @@ public class HoyaService {
 
         Long memberId = Long.parseLong(principal.getName());
 
-        memberRepository.findById(memberId)
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
+        String userName = member.getName();
+
         String translatedPromptToEn = translationService.translate(prompt, "EN");
+        String emotionPrompt = generateEmotionPrompt(translatedPromptToEn, userName);
 
         List<Message> messages = new ArrayList<>(conversationService.getConversation(memberId));
-        messages.add(new Message("user", translatedPromptToEn));
+        messages.add(new Message("user", emotionPrompt));
 
         HoyaReqDto reqDto = new HoyaReqDto(model, messages);
         HoyaResDto resDto = restTemplate.postForObject(apiURL, reqDto, HoyaResDto.class);
@@ -71,5 +75,12 @@ public class HoyaService {
         );
 
         return ApiResponseTemplate.success(SuccessCode.GET_HOYA_SUCCESS, responseDto);
+    }
+
+    private String generateEmotionPrompt(String userInput, String userName) {
+        return String.format(
+                "The user's input is: \"%s\". Analyze the emotion conveyed and respond empathetically. Include the user's name, %s, in the response if appropriate.",
+                userInput, userName
+        );
     }
 }
