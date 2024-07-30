@@ -14,11 +14,13 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class TranslationService {
 
@@ -32,7 +34,11 @@ public class TranslationService {
     private final ObjectMapper objectMapper;
 
     public String translate(String text, String targetLang) {
-        TranslationReqDto reqDto = new TranslationReqDto(Collections.singletonList(text), targetLang);
+
+        String prompt = "친한 친구와 대화하듯 격식을 차리지 않고 일상적인 한국어로 번역하세요: ";
+        String textWithPrompt = prompt + text;
+
+        TranslationReqDto reqDto = new TranslationReqDto(Collections.singletonList(textWithPrompt), targetLang);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -54,6 +60,12 @@ public class TranslationService {
             throw new CustomException(ErrorCode.FAILED_TRANSLATION_EXCEPTION, ErrorCode.FAILED_TRANSLATION_EXCEPTION.getMessage());
         }
 
-        return resDto.translations().get(0).text();
+        String translatedText = resDto.translations().get(0).text();
+
+        if (translatedText.startsWith(prompt)) {
+            translatedText = translatedText.substring(prompt.length()).trim();
+        }
+
+        return translatedText;
     }
 }

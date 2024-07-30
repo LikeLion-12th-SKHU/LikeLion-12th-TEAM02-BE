@@ -40,14 +40,13 @@ public class HoyaService {
     public ApiResponseTemplate<HoyaResDto> getResponse(String prompt, Principal principal) {
 
         Long memberId = Long.parseLong(principal.getName());
-
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
         String userName = member.getName();
 
         String translatedPromptToEn = translationService.translate(prompt, "EN");
-        String emotionPrompt = generateEmotionPrompt(translatedPromptToEn, userName);
+        String emotionPrompt = generateFriendlyEmotionPrompt(translatedPromptToEn, userName);
 
         List<Message> messages = new ArrayList<>(conversationService.getConversation(memberId));
         messages.add(new Message("user", emotionPrompt));
@@ -77,9 +76,9 @@ public class HoyaService {
         return ApiResponseTemplate.success(SuccessCode.GET_HOYA_SUCCESS, responseDto);
     }
 
-    private String generateEmotionPrompt(String userInput, String userName) {
+    private String generateFriendlyEmotionPrompt(String userInput, String userName) {
         return String.format(
-                "The user's input is: \"%s\". Analyze the emotion conveyed and respond empathetically. Include the user's name, %s, in the response if appropriate.",
+                "Respond to the user's input as if you are their close friend, using a very friendly and casual tone. The user's input is: \"%s\". Focus on the emotions conveyed in their message and continue the conversation in an empathetic and supportive manner. Use informal language and include the user's name, %s, to make the response feel personal and comforting. The response should be very informal, casual, and supportive, just like a close friend talking.",
                 userInput, userName
         );
     }
