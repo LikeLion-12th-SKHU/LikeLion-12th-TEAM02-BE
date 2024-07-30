@@ -43,10 +43,20 @@ public class ConversationCleanupService {
             conversationService.clearConversation(memberId);
 
             String summary = summaries.get(memberId);
+            if (summary == null) {
+                summary = getLastSummary(member);
+            }
+
             if (summary != null) {
                 Message summaryMessage = new Message("system", summary);
                 conversationService.addMessage(memberId, summaryMessage);
             }
         }
+    }
+
+    private String getLastSummary(Member member) {
+        return diaryAIRepository.findTopByMemberOrderByCreatedAtDesc(member)
+                .map(DiaryAI::getSummary)
+                .orElse(null);
     }
 }
