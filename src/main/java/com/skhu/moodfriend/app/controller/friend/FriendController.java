@@ -42,7 +42,7 @@ public class FriendController {
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
-    @GetMapping("/requests/display")
+    @GetMapping("/request/display")
     @Operation(
             summary = "요청 보낸 리스트",
             description = "요청 보낸 친구 리스트를 조회합니다.",
@@ -58,7 +58,7 @@ public class FriendController {
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
-    @GetMapping("/requests/received")
+    @GetMapping("/received/display")
     @Operation(
             summary = "요청 받은 리스트",
             description = "요청 받은 친구 리스트를 조회합니다.",
