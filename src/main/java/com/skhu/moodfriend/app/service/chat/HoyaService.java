@@ -1,5 +1,6 @@
 package com.skhu.moodfriend.app.service.chat;
 
+import com.skhu.moodfriend.app.domain.member.Member;
 import com.skhu.moodfriend.app.dto.chat.Message;
 import com.skhu.moodfriend.app.dto.chat.reqDto.HoyaReqDto;
 import com.skhu.moodfriend.app.dto.chat.resDto.HoyaResDto;
@@ -39,14 +40,23 @@ public class HoyaService {
     public ApiResponseTemplate<HoyaResDto> getResponse(String prompt, Principal principal) {
 
         Long memberId = Long.parseLong(principal.getName());
-
-        memberRepository.findById(memberId)
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
-        String translatedPromptToEn = translationService.translate(prompt, "EN");
+        String userName = member.getName();
+
+        String emotionPrompt = generateFriendlyEmotionPrompt(prompt, userName);
+        String translatedPromptToEn = translationService.translate(emotionPrompt, "EN");
 
         List<Message> messages = new ArrayList<>(conversationService.getConversation(memberId));
-        messages.add(new Message("user", translatedPromptToEn));
+
+        if (messages.isEmpty()) {
+            messages.add(new Message("system", "This is the beginning of the conversation."));
+        }
+
+        Message userMessage = new Message("user", translatedPromptToEn);
+        conversationService.addMessage(memberId, userMessage);
+        messages.add(userMessage);
 
         HoyaReqDto reqDto = new HoyaReqDto(model, messages);
         HoyaResDto resDto = restTemplate.postForObject(apiURL, reqDto, HoyaResDto.class);
@@ -71,5 +81,12 @@ public class HoyaService {
         );
 
         return ApiResponseTemplate.success(SuccessCode.GET_HOYA_SUCCESS, responseDto);
+    }
+
+    private String generateFriendlyEmotionPrompt(String userInput, String userName) {
+        return String.format(
+                "Respond to the user's input as if you are their close friend, using a very friendly and casual tone. The user's name is %s. The user's input is: \"%s\". Focus on the emotions conveyed in their message and continue the conversation in an empathetic and supportive manner. Use informal language and include the user's name only when necessary to make the response feel personal and comforting. Please do not use any emojis or symbols in the response. The response should be very informal, casual, and supportive, just like a close friend talking.",
+                userName, userInput
+        );
     }
 }

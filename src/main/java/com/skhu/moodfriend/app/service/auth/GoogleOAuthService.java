@@ -34,8 +34,10 @@ public class GoogleOAuthService {
     @Value("${oauth.google.client-secret}")
     private String GOOGLE_CLIENT_SECRET;
 
+    @Value("${oauth.google.redirect-uri}")
+    private String GOOGLE_REDIRECT_URI;
+
     private final String GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
-    private final String GOOGLE_REDIRECT_URI = "https://moodfriend.site/api/v1/auth/callback/google";
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
 

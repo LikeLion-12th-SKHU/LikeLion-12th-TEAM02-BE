@@ -32,8 +32,10 @@ public class KakaoOAuthService {
     @Value("${oauth.kakao.client-id}")
     private String KAKAO_CLIENT_ID;
 
+    @Value("${oauth.kakao.redirect-uri}")
+    private String KAKAO_REDIRECT_URI;
+
     private final String KAKAO_TOKEN_URL = "https://kauth.kakao.com/oauth/token";
-    private final String KAKAO_REDIRECT_URI = "https://moodfriend.site/api/v1/auth/callback/kakao";
 
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
