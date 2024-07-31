@@ -85,8 +85,8 @@ public class HoyaService {
 
     private String generateFriendlyEmotionPrompt(String userInput, String userName) {
         return String.format(
-                "Respond to the user's input as if you are their close friend, using a very friendly and casual tone. The user's input is: \"%s\". Focus on the emotions conveyed in their message and continue the conversation in an empathetic and supportive manner. Use informal language and include the user's name, %s, when necessary to make the response feel personal and comforting. The response should be very informal, casual, and supportive, just like a close friend talking.",
-                userInput, userName
+                "Respond to the user's input as if you are their close friend, using a very friendly and casual tone. The user's name is %s. The user's input is: \"%s\". Focus on the emotions conveyed in their message and continue the conversation in an empathetic and supportive manner. Use informal language and include the user's name only when necessary to make the response feel personal and comforting. Please do not use any emojis or symbols in the response. The response should be very informal, casual, and supportive, just like a close friend talking.",
+                userName, userInput
         );
     }
 }
