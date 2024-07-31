@@ -40,15 +40,15 @@ public class ConversationSummaryService {
     private String model;
 
     @Transactional
-    @Scheduled(cron = "0 0 2 * * *")
+    @Scheduled(cron = "0 50 16 * * *")
     public void summarizeConversations() {
         List<Member> members = memberRepository.findAll();
 
         for (Member member : members) {
             Long memberId = member.getMemberId();
-            List<Message> messages = conversationService.getConversation(memberId);
-
             if (hasUserMessagesToday(memberId)) {
+                List<Message> messages = conversationService.getConversation(memberId);
+
                 String prompt = "Here is the user's conversation history. Please summarize the main points of the conversation in a concise manner. The summary should not exceed 1024 characters and must include the key points and important information.";
 
                 messages.add(new Message("user", prompt));
