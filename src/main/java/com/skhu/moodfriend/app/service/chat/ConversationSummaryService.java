@@ -40,7 +40,7 @@ public class ConversationSummaryService {
     private String model;
 
     @Transactional
-    @Scheduled(cron = "0 10 17 * * *")
+    @Scheduled(cron = "0 0 2 * * *")
     public void summarizeConversations() {
         List<Member> members = memberRepository.findAll();
 
