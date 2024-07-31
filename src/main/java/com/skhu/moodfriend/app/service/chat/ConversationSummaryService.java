@@ -17,6 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Service
@@ -45,40 +48,36 @@ public class ConversationSummaryService {
             Long memberId = member.getMemberId();
             List<Message> messages = conversationService.getConversation(memberId);
 
-            if (isOnlySummaryPrompt(messages)) {
-                continue;
+            if (hasUserMessagesToday(memberId)) {
+                String prompt = "Here is the user's conversation history. Please summarize the main points of the conversation in a concise manner. The summary should not exceed 1024 characters and must include the key points and important information.";
+
+                messages.add(new Message("user", prompt));
+
+                HoyaReqDto reqDto = new HoyaReqDto(model, messages);
+                HoyaResDto resDto = restTemplate.postForObject(apiURL, reqDto, HoyaResDto.class);
+
+                if (resDto == null || resDto.choices().isEmpty()) {
+                    throw new CustomException(ErrorCode.FAILED_GET_GPT_RESPONSE_EXCEPTION, ErrorCode.FAILED_GET_GPT_RESPONSE_EXCEPTION.getMessage());
+                }
+
+                HoyaResDto.Choice choice = resDto.choices().get(0);
+                String summaryInEN = choice.message().content();
+
+                String summaryInKO = translationService.translate(summaryInEN, "KO");
+
+                DiaryAI diaryAI = DiaryAI.builder()
+                        .summary(summaryInKO)
+                        .member(member)
+                        .build();
+
+                diaryAIRepository.save(diaryAI);
             }
-
-            String prompt = "Here is the user's conversation history. Please summarize the main points of the conversation in a concise manner. The summary should not exceed 1024 characters and must include the key points and important information.";
-
-            messages.add(new Message("user", prompt));
-
-            HoyaReqDto reqDto = new HoyaReqDto(model, messages);
-            HoyaResDto resDto = restTemplate.postForObject(apiURL, reqDto, HoyaResDto.class);
-
-            if (resDto == null || resDto.choices().isEmpty()) {
-                throw new CustomException(ErrorCode.FAILED_GET_GPT_RESPONSE_EXCEPTION, ErrorCode.FAILED_GET_GPT_RESPONSE_EXCEPTION.getMessage());
-            }
-
-            HoyaResDto.Choice choice = resDto.choices().get(0);
-            String summaryInEN = choice.message().content();
-
-            String summaryInKO = translationService.translate(summaryInEN, "KO");
-
-            DiaryAI diaryAI = DiaryAI.builder()
-                    .summary(summaryInKO)
-                    .member(member)
-                    .build();
-
-            diaryAIRepository.save(diaryAI);
         }
     }
 
-    private boolean isOnlySummaryPrompt(List<Message> messages) {
-        if (messages.size() == 1) {
-            Message message = messages.get(0);
-            return "user".equals(message.role()) && message.content().startsWith("Respond to the user's input as if you are their close friend");
-        }
-        return false;
+    private boolean hasUserMessagesToday(Long memberId) {
+        LocalDate today = LocalDate.now(ZoneId.systemDefault());
+        List<LocalDateTime> timestamps = conversationService.getMessageTimestamps(memberId);
+        return timestamps.stream().anyMatch(timestamp -> timestamp.toLocalDate().isEqual(today));
     }
 }
