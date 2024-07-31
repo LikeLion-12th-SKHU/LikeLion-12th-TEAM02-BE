@@ -26,7 +26,7 @@ public class ConversationCleanupService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    @Scheduled(cron = "0 55 16 * * *")
+    @Scheduled(cron = "0 15 17 * * *")
     public void clearAndInsertSummary() {
 
         List<Member> members = memberRepository.findAll();

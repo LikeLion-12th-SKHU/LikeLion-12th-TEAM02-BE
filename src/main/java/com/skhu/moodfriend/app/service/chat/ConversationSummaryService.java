@@ -40,7 +40,7 @@ public class ConversationSummaryService {
     private String model;
 
     @Transactional
-    @Scheduled(cron = "0 50 16 * * *")
+    @Scheduled(cron = "0 10 17 * * *")
     public void summarizeConversations() {
         List<Member> members = memberRepository.findAll();
 
@@ -49,9 +49,9 @@ public class ConversationSummaryService {
             if (hasUserMessagesToday(memberId)) {
                 List<Message> messages = conversationService.getConversation(memberId);
 
-                String prompt = "Here is the user's conversation history. Please summarize the main points of the conversation in a concise manner. The summary should not exceed 1024 characters and must include the key points and important information.";
+                String prompt = "Here is the user's conversation history. Please summarize the main points of the conversation in a concise and casual manner, as if the user is writing a diary entry. The summary should not exceed 1024 characters and must include the key points and important information.";
 
-                messages.add(new Message("user", prompt));
+                messages.add(new Message("system", prompt));
 
                 HoyaReqDto reqDto = new HoyaReqDto(model, messages);
                 HoyaResDto resDto = restTemplate.postForObject(apiURL, reqDto, HoyaResDto.class);
