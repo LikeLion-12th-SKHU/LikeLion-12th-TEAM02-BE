@@ -22,7 +22,9 @@ public class ConversationService {
 
     public void addMessage(Long memberId, Message message) {
         conversations.computeIfAbsent(memberId, k -> new ArrayList<>()).add(message);
-        messageTimestamps.computeIfAbsent(memberId, k -> new ArrayList<>()).add(LocalDateTime.now());
+        if ("user".equals(message.role())) {
+            messageTimestamps.computeIfAbsent(memberId, k -> new ArrayList<>()).add(LocalDateTime.now());
+        }
     }
 
     @Transactional
