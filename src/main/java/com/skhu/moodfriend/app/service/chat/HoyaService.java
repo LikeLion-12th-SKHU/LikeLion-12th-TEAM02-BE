@@ -45,11 +45,11 @@ public class HoyaService {
 
         String userName = member.getName();
 
-        String translatedPromptToEn = translationService.translate(prompt, "EN");
-        String emotionPrompt = generateFriendlyEmotionPrompt(translatedPromptToEn, userName);
+        String emotionPrompt = generateFriendlyEmotionPrompt(prompt, userName);
+        String translatedPromptToEn = translationService.translate(emotionPrompt, "EN");
 
         List<Message> messages = new ArrayList<>(conversationService.getConversation(memberId));
-        messages.add(new Message("user", emotionPrompt));
+        messages.add(new Message("user", translatedPromptToEn));
 
         HoyaReqDto reqDto = new HoyaReqDto(model, messages);
         HoyaResDto resDto = restTemplate.postForObject(apiURL, reqDto, HoyaResDto.class);
