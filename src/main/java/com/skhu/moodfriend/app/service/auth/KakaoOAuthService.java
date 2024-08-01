@@ -5,7 +5,9 @@ import com.google.gson.JsonObject;
 import com.skhu.moodfriend.app.dto.auth.resDto.AuthResDto;
 import com.skhu.moodfriend.app.domain.member.LoginType;
 import com.skhu.moodfriend.app.domain.member.Member;
+import com.skhu.moodfriend.app.domain.member.MemberRefreshToken;
 import com.skhu.moodfriend.app.domain.member.RoleType;
+import com.skhu.moodfriend.app.repository.MemberRefreshTokenRepository;
 import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.global.dto.MemberInfo;
 import com.skhu.moodfriend.global.dto.Token;
@@ -38,6 +40,7 @@ public class KakaoOAuthService {
     private final String KAKAO_TOKEN_URL = "https://kauth.kakao.com/oauth/token";
 
     private final MemberRepository memberRepository;
+    private final MemberRefreshTokenRepository memberRefreshTokenRepository;
     private final TokenProvider tokenProvider;
 
     public ApiResponseTemplate<String> getKakaoAccessToken(String code) {
@@ -66,7 +69,6 @@ public class KakaoOAuthService {
         throw new CustomException(ErrorCode.FAILED_GET_TOKEN_EXCEPTION, ErrorCode.FAILED_GET_TOKEN_EXCEPTION.getMessage());
     }
 
-
     @Transactional
     public ApiResponseTemplate<AuthResDto> signUpOrLogin(String kakaoAccessToken) {
         MemberInfo memberInfo = getMemberInfo(kakaoAccessToken);
@@ -82,14 +84,23 @@ public class KakaoOAuthService {
                         .build())
                 );
 
+        String accessToken = tokenProvider.createAccessToken(member);
+        String refreshToken = tokenProvider.createRefreshToken(member);
+
+        MemberRefreshToken memberRefreshToken = new MemberRefreshToken();
+        memberRefreshToken.setRefreshToken(refreshToken);
+        memberRefreshToken.setMember(member);
+
+        memberRefreshTokenRepository.deleteByMember(member);
+        memberRefreshTokenRepository.save(memberRefreshToken);
+
         AuthResDto resDto = AuthResDto.builder()
-                .accessToken(tokenProvider.createAccessToken(member))
-                .refreshToken(tokenProvider.createRefreshToken(member))
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .build();
 
         return ApiResponseTemplate.success(SuccessCode.LOGIN_MEMBER_SUCCESS, resDto);
     }
-
 
     public MemberInfo getMemberInfo(String accessToken) {
         RestTemplate restTemplate = new RestTemplate();
@@ -116,5 +127,4 @@ public class KakaoOAuthService {
 
         throw new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage());
     }
-
 }

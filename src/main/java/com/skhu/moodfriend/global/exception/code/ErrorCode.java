@@ -51,7 +51,9 @@ public enum ErrorCode {
     FAILED_GET_TOKEN_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "토큰을 가져오는 중 오류가 발생했습니다."),
     FAILED_TRANSLATION_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "번역하는 중 오류가 발생했습니다."),
     FAILED_GET_GPT_RESPONSE_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "챗봇 응답 중 오류가 발생했습니다."),
-    FAILED_ORDER_SAVE_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "주문 중 오류가 발생했습니다.");
+    FAILED_ORDER_SAVE_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "주문 중 오류가 발생했습니다."),
+    FAILED_LOGOUT_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "로그아웃 중 오류가 발생했습니다."),
+    FAILED_WITHDRAW_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "회원탈퇴 중 오류가 발생했습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

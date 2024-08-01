@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import com.skhu.moodfriend.app.dto.auth.resDto.AuthResDto;
 import com.skhu.moodfriend.app.domain.member.LoginType;
 import com.skhu.moodfriend.app.domain.member.Member;
+import com.skhu.moodfriend.app.domain.member.MemberRefreshToken;
 import com.skhu.moodfriend.app.domain.member.RoleType;
+import com.skhu.moodfriend.app.repository.MemberRefreshTokenRepository;
 import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.global.dto.MemberInfo;
 import com.skhu.moodfriend.global.dto.Token;
@@ -39,6 +41,7 @@ public class GoogleOAuthService {
 
     private final String GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
     private final MemberRepository memberRepository;
+    private final MemberRefreshTokenRepository memberRefreshTokenRepository;
     private final TokenProvider tokenProvider;
 
     public ApiResponseTemplate<String> getGoogleAccessToken(String code) {
@@ -78,9 +81,19 @@ public class GoogleOAuthService {
                         .build())
                 );
 
+        String accessToken = tokenProvider.createAccessToken(member);
+        String refreshToken = tokenProvider.createRefreshToken(member);
+
+        MemberRefreshToken memberRefreshToken = new MemberRefreshToken();
+        memberRefreshToken.setRefreshToken(refreshToken);
+        memberRefreshToken.setMember(member);
+
+        memberRefreshTokenRepository.deleteByMember(member);
+        memberRefreshTokenRepository.save(memberRefreshToken);
+
         AuthResDto resDto = AuthResDto.builder()
-                .accessToken(tokenProvider.createAccessToken(member))
-                .refreshToken(tokenProvider.createRefreshToken(member))
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .build();
 
         return ApiResponseTemplate.success(SuccessCode.LOGIN_MEMBER_SUCCESS, resDto);

@@ -12,7 +12,7 @@ spring:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
@@ -29,9 +29,12 @@ oauth:
     client-id: ${GOOGLE_CLIENT_ID}
     client-secret: ${GOOGLE_CLIENT_SECRET}
     redirect-uri: ${GOOGLE_REDIRECT_URI}
+    logout-url: ${GOOGLE_LOGOUT_URL}
+    revoke-url: ${GOOGLE_REVOKE_URL}
   kakao:
     client-id: ${KAKAO_CLIENT_ID}
     redirect-uri: ${KAKAO_REDIRECT_URI}
+    admin-key: ${KAKAO_ADMIN_KEY}
 
 kakao-map:
   client-id: ${KAKAO_CLIENT_ID}
