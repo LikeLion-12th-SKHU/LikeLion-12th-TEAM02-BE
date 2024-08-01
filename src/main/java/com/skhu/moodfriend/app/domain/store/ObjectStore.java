@@ -2,6 +2,7 @@ package com.skhu.moodfriend.app.domain.store;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -18,9 +19,15 @@ public class ObjectStore {
     private Long objectId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "OBJECT_NAME", nullable = false)
-    private ObjectName objectName;
+    @Column(name = "OBJECT", nullable = false)
+    private Object object;
 
     @Column(name = "OBJECT_PRICE", nullable = false)
-    private Integer price;
+    private int price;
+
+    @Builder
+    private ObjectStore(Object object) {
+        this.object = object;
+        this.price = object.getPrice();
+    }
 }
