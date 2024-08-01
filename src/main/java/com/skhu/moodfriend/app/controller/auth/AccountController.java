@@ -1,6 +1,7 @@
 package com.skhu.moodfriend.app.controller.auth;
 
 import com.skhu.moodfriend.app.service.auth.LogoutService;
+import com.skhu.moodfriend.app.service.auth.WithDrawService;
 import com.skhu.moodfriend.global.template.ApiResponseTemplate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -21,6 +22,7 @@ import java.security.Principal;
 public class AccountController {
 
     private final LogoutService logoutService;
+    private final WithDrawService withDrawService;
 
     @PostMapping("/logout")
     @Operation(
@@ -33,6 +35,20 @@ public class AccountController {
     )
     public ResponseEntity<ApiResponseTemplate<Void>> logout(Principal principal) {
         ApiResponseTemplate<Void> response = logoutService.logout(principal);
+        return ResponseEntity.status(response.getStatus()).body(response);
+    }
+
+    @PostMapping("/withdraw")
+    @Operation(
+            summary = "회원탈퇴",
+            description = "사용자의 계정을 삭제하고, 소셜의 경우 연결을 해제합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "회원탈퇴 성공"),
+                    @ApiResponse(responseCode = "500", description = "관리자 문의")
+            }
+    )
+    public ResponseEntity<ApiResponseTemplate<Void>> withdraw(Principal principal) {
+        ApiResponseTemplate<Void> response = withDrawService.withdraw(principal);
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 }
