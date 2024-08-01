@@ -1,6 +1,6 @@
 package com.skhu.moodfriend.app.domain.member.object;
 
-import com.skhu.moodfriend.app.domain.store.ObjectName;
+import com.skhu.moodfriend.app.domain.store.Object;
 import com.skhu.moodfriend.app.domain.member.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -21,8 +21,8 @@ public class MemberObject {
     private Long memberObjectId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "OBJECT_NAME", nullable = false)
-    private ObjectName objectName;
+    @Column(name = "MEMBER_OBJECT", nullable = false)
+    private Object object;
 
     @Column(name = "OBJECT_STATUS", nullable = false)
     private boolean status;
@@ -32,8 +32,8 @@ public class MemberObject {
     private Member member;
 
     @Builder
-    private MemberObject(ObjectName objectName, boolean status, Member member) {
-        this.objectName = objectName;
+    private MemberObject(Object object, boolean status, Member member) {
+        this.object = object;
         this.status = status;
         this.member = member;
     }
