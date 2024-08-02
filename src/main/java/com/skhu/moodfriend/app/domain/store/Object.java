@@ -4,11 +4,18 @@ import lombok.Getter;
 
 @Getter
 public enum Object {
-    ITEM_ONE("Item One", 10),
-    ITEM_TWO("Item Two", 20),
-    ITEM_THREE("Item Three", 30),
-    ITEM_FOUR("Item FOUR", 40),
-    ITEM_FIVE("Item FIVE", 50);
+    LEFT_WALL("Left Wall", 50),
+    FURNITURE("Furniture", 50),
+    SOFA("Sofa", 50),
+    RIGHT_WALL("Right Wall", 50),
+    LEFT_PROP("Left Prop", 50),
+    TABLE("Table", 50),
+    TOY("Toy", 50),
+    RIGHT_PROP("Right Prop", 50),
+    WALL_PAPER("Wall Paper", 50),
+    FLOOR("Floor", 50),
+    LUG("Lug", 50),
+    GIFT("Gift", 50);
 
     private final String displayName;
     private final int price;

@@ -35,6 +35,7 @@ public enum ErrorCode {
     NOT_FOUND_DIARY_EXCEPTION(HttpStatus.NOT_FOUND, "해당 일기를 찾을 수 없습니다."),
     NOT_FOUND_FRIEND_REQUEST_EXCEPTION(HttpStatus.NOT_FOUND, "친구 요청을 찾을 수 없습니다."),
     NOT_FOUND_ORDER_EXCEPTION(HttpStatus.NOT_FOUND, "주문 내역을 찾을 수 없습니다."),
+    NOT_FOUND_OBJECT_EXCEPTION(HttpStatus.NOT_FOUND, "오브제를 찾을 수 없습니다."),
 
     // 409 Conflict
     ALREADY_EXIST_MEMBER_EXCEPTION(HttpStatus.CONFLICT, "이미 회원가입이 완료된 사용자입니다."),

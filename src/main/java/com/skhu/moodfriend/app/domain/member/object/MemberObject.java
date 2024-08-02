@@ -1,7 +1,7 @@
 package com.skhu.moodfriend.app.domain.member.object;
 
-import com.skhu.moodfriend.app.domain.store.Object;
 import com.skhu.moodfriend.app.domain.member.Member;
+import com.skhu.moodfriend.app.domain.store.ObjectStore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -20,20 +20,20 @@ public class MemberObject {
     @Column(name = "MEMBER_OBJECT_ID")
     private Long memberObjectId;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "MEMBER_OBJECT", nullable = false)
-    private Object object;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "OBJECT_STORE_ID", nullable = false)
+    private ObjectStore objectStore;
 
     @Column(name = "OBJECT_STATUS", nullable = false)
     private boolean status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_ID")
+    @JoinColumn(name = "MEMBER_ID", nullable = false)
     private Member member;
 
     @Builder
-    private MemberObject(Object object, boolean status, Member member) {
-        this.object = object;
+    public MemberObject(ObjectStore objectStore, boolean status, Member member) {
+        this.objectStore = objectStore;
         this.status = status;
         this.member = member;
     }

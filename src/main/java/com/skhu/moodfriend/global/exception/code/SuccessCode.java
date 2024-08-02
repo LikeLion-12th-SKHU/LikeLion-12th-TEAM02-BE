@@ -33,10 +33,13 @@ public enum SuccessCode {
     GET_ALL_ORDERS_SUCCESS(HttpStatus.OK, "모든 주문 내역을 성공적으로 가져왔습니다."),
     REQUEST_FRIEND_SUCCESS(HttpStatus.OK, "친구 요청이 성공적으로 전송되었습니다."),
     GET_RECEIVED_FRIENDS_REQUEST_SUCCESS(HttpStatus.OK, "받은 친구 요청 조회에 성공했습니다."),
+    GET_OBJECTS_SUCCESS(HttpStatus.OK,"오브제 조회에 성공했습니다." ),
+    UPDATE_MEMBER_OEBJECT(HttpStatus.OK, "오브제 업데이트에 성공했습니다."),
 
     // 201 Created
     CREATE_MEMBER_SUCCESS(HttpStatus.CREATED, "회원가입에 성공했습니다."),
     CREATE_DIARY_SUCCESS(HttpStatus.CREATED, "일기 작성에 성공했습니다."),
+    CREATE_OBJECT_SUCCESS(HttpStatus.CREATED, "오브제 생성에 성공했습니다."),
 
     // 204 No Content
     DELETE_DIARY_SUCCESS(HttpStatus.NO_CONTENT, "일기 삭제에 성공했습니다."),
