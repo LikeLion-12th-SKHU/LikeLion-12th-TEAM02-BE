@@ -39,8 +39,8 @@ public class ObjectController {
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<PurchaseResDto>> purchaseObject(Principal principal, @RequestBody PurchaseReqDto reqDto) {
-        ApiResponseTemplate<PurchaseResDto> data = purchaseService.purchaseObject(principal, reqDto);
+    public ResponseEntity<ApiResponseTemplate<PurchaseResDto>> purchaseObject(@RequestBody PurchaseReqDto reqDto, Principal principal) {
+        ApiResponseTemplate<PurchaseResDto> data = purchaseService.purchaseObject(reqDto, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 

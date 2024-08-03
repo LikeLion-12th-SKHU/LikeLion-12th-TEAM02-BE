@@ -6,13 +6,13 @@ import lombok.Builder;
 @Builder
 public record PurchaseResDto(
         Long memberObjectId,
-        Object object,
+        String objectName,
         boolean status
 ) {
     public static PurchaseResDto of(MemberObject memberObject) {
         return PurchaseResDto.builder()
                 .memberObjectId(memberObject.getMemberObjectId())
-                .object(memberObject.getObject())
+                .objectName(memberObject.getObject().getDisplayName())
                 .status(memberObject.isStatus())
                 .build();
     }
