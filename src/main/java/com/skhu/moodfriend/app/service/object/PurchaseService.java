@@ -5,7 +5,7 @@ import com.skhu.moodfriend.app.domain.member.object.MemberObject;
 import com.skhu.moodfriend.app.domain.store.ObjectEnum;
 import com.skhu.moodfriend.app.domain.store.ObjectStore;
 import com.skhu.moodfriend.app.dto.object.reqDto.PurchaseReqDto;
-import com.skhu.moodfriend.app.dto.object.resDto.PurchaseResDto;
+import com.skhu.moodfriend.app.dto.object.resDto.ObjectResDto;
 import com.skhu.moodfriend.app.repository.MemberObjectRepository;
 import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.app.repository.ObjectStoreRepository;
@@ -29,9 +29,9 @@ public class PurchaseService {
     private final MemberObjectRepository memberObjectRepository;
 
     @Transactional
-    public ApiResponseTemplate<PurchaseResDto> purchaseObject(
-            Principal principal,
-            PurchaseReqDto reqDto) {
+    public ApiResponseTemplate<ObjectResDto> purchaseObject(
+            PurchaseReqDto reqDto,
+            Principal principal) {
 
         Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)
@@ -65,6 +65,6 @@ public class PurchaseService {
 
         memberObjectRepository.save(memberObject);
 
-        return ApiResponseTemplate.success(SuccessCode.PURCHASE_OBJECT_SUCCESS, PurchaseResDto.of(memberObject));
+        return ApiResponseTemplate.success(SuccessCode.PURCHASE_OBJECT_SUCCESS, ObjectResDto.of(memberObject));
     }
 }

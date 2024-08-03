@@ -2,6 +2,7 @@ package com.skhu.moodfriend.app.service.object;
 
 import com.skhu.moodfriend.app.domain.member.Member;
 import com.skhu.moodfriend.app.domain.member.object.MemberObject;
+import com.skhu.moodfriend.app.dto.object.reqDto.UpdateObjectStatusReqDto;
 import com.skhu.moodfriend.app.dto.object.resDto.ObjectResDto;
 import com.skhu.moodfriend.app.repository.MemberObjectRepository;
 import com.skhu.moodfriend.app.repository.MemberRepository;
@@ -15,29 +16,33 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public class ObjectDisplayService {
+public class ObjectStatusService {
 
     private final MemberRepository memberRepository;
     private final MemberObjectRepository memberObjectRepository;
 
-    public ApiResponseTemplate<List<ObjectResDto>> getOwnedObjects(Principal principal) {
+    @Transactional
+    public ApiResponseTemplate<ObjectResDto> updateObjectStatus(
+            UpdateObjectStatusReqDto reqDto,
+            Principal principal) {
 
         Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
-        List<MemberObject> ownedObjects = memberObjectRepository.findByMember(member);
+        MemberObject memberObject = memberObjectRepository.findById(reqDto.memberObjectId())
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_OBJECT_EXCEPTION, ErrorCode.NOT_FOUND_OBJECT_EXCEPTION.getMessage()));
 
-        List<ObjectResDto> resDtos = ownedObjects.stream()
-                .map(ObjectResDto::of)
-                .collect(Collectors.toList());
+        if (!memberObject.getMember().equals(member)) {
+            throw new CustomException(ErrorCode.FORBIDDEN_ACCESS_EXCEPTION, ErrorCode.FORBIDDEN_ACCESS_EXCEPTION.getMessage());
+        }
 
-        return ApiResponseTemplate.success(SuccessCode.GET_OBJECTS_SUCCESS, resDtos);
+        memberObject.updateStatus(reqDto.status());
+        memberObjectRepository.save(memberObject);
+
+        return ApiResponseTemplate.success(SuccessCode.UPDATE_OBJECT_STATUS_SUCCESS, ObjectResDto.of(memberObject));
     }
 }

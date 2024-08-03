@@ -35,6 +35,7 @@ public enum SuccessCode {
     GET_RECEIVED_FRIENDS_REQUEST_SUCCESS(HttpStatus.OK, "받은 친구 요청 조회에 성공했습니다."),
     PURCHASE_OBJECT_SUCCESS(HttpStatus.OK, "오브제 구매에 성공했습니다."),
     GET_OBJECTS_SUCCESS(HttpStatus.OK, "보유 오브제 조회에 성공했습니다."),
+    UPDATE_OBJECT_STATUS_SUCCESS(HttpStatus.OK, "보유 오브제 상태 관리에 성공했습니다."),
 
     // 201 Created
     CREATE_MEMBER_SUCCESS(HttpStatus.CREATED, "회원가입에 성공했습니다."),

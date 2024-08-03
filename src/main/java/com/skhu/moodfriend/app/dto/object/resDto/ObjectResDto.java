@@ -4,15 +4,15 @@ import com.skhu.moodfriend.app.domain.member.object.MemberObject;
 import lombok.Builder;
 
 @Builder
-public record PurchaseResDto(
+public record ObjectResDto(
         Long memberObjectId,
-        Object object,
+        String objectName,
         boolean status
 ) {
-    public static PurchaseResDto of(MemberObject memberObject) {
-        return PurchaseResDto.builder()
+    public static ObjectResDto of(MemberObject memberObject) {
+        return ObjectResDto.builder()
                 .memberObjectId(memberObject.getMemberObjectId())
-                .object(memberObject.getObject())
+                .objectName(memberObject.getObject().getDisplayName())
                 .status(memberObject.isStatus())
                 .build();
     }

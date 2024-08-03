@@ -37,4 +37,8 @@ public class MemberObject {
         this.status = status;
         this.member = member;
     }
+
+    public void updateStatus(boolean status) {
+        this.status = status;
+    }
 }
