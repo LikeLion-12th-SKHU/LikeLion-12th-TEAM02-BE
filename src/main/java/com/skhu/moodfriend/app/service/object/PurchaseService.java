@@ -2,6 +2,7 @@ package com.skhu.moodfriend.app.service.object;
 
 import com.skhu.moodfriend.app.domain.member.Member;
 import com.skhu.moodfriend.app.domain.member.object.MemberObject;
+import com.skhu.moodfriend.app.domain.store.ObjectEnum;
 import com.skhu.moodfriend.app.domain.store.ObjectStore;
 import com.skhu.moodfriend.app.dto.object.reqDto.PurchaseReqDto;
 import com.skhu.moodfriend.app.dto.object.resDto.PurchaseResDto;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.util.Arrays;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +37,12 @@ public class PurchaseService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
-        ObjectStore objectStore = objectStoreRepository.findByObject(reqDto.object())
+        ObjectEnum objectEnum = Arrays.stream(ObjectEnum.values())
+                .filter(obj -> obj.getDisplayName().equalsIgnoreCase(reqDto.objectName()))
+                .findFirst()
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_OBJECT_EXCEPTION, ErrorCode.NOT_FOUND_OBJECT_EXCEPTION.getMessage()));
+
+        ObjectStore objectStore = objectStoreRepository.findByObject(objectEnum)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_OBJECT_EXCEPTION, ErrorCode.NOT_FOUND_OBJECT_EXCEPTION.getMessage()));
 
         if (memberObjectRepository.existsByMemberAndObject(member, objectStore.getObject())) {
