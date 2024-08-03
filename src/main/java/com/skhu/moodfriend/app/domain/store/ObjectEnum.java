@@ -5,10 +5,10 @@ import lombok.Getter;
 @Getter
 public enum ObjectEnum {
     ITEM_ONE("Item One", 1),
-    ITEM_TWO("Item Two", 2),
-    ITEM_THREE("Item Three", 30),
-    ITEM_FOUR("Item FOUR", 40),
-    ITEM_FIVE("Item FIVE", 50);
+    ITEM_TWO("Item Two", 1),
+    ITEM_THREE("Item Three", 1),
+    ITEM_FOUR("Item FOUR", 1),
+    ITEM_FIVE("Item FIVE", 1);
 
     private final String displayName;
     private final int price;
