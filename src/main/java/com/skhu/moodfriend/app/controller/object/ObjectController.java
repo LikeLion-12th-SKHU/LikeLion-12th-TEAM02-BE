@@ -2,9 +2,7 @@ package com.skhu.moodfriend.app.controller.object;
 
 import com.skhu.moodfriend.app.dto.object.reqDto.PurchaseReqDto;
 import com.skhu.moodfriend.app.dto.object.reqDto.UpdateObjectStatusReqDto;
-import com.skhu.moodfriend.app.dto.object.resDto.OwnedObjectResDto;
-import com.skhu.moodfriend.app.dto.object.resDto.PurchaseResDto;
-import com.skhu.moodfriend.app.dto.object.resDto.UpdateObjectStatusResDto;
+import com.skhu.moodfriend.app.dto.object.resDto.ObjectResDto;
 import com.skhu.moodfriend.app.service.object.ObjectDisplayService;
 import com.skhu.moodfriend.app.service.object.ObjectStatusService;
 import com.skhu.moodfriend.app.service.object.PurchaseService;
@@ -43,8 +41,8 @@ public class ObjectController {
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<PurchaseResDto>> purchaseObject(@RequestBody PurchaseReqDto reqDto, Principal principal) {
-        ApiResponseTemplate<PurchaseResDto> data = purchaseService.purchaseObject(reqDto, principal);
+    public ResponseEntity<ApiResponseTemplate<ObjectResDto>> purchaseObject(@RequestBody PurchaseReqDto reqDto, Principal principal) {
+        ApiResponseTemplate<ObjectResDto> data = purchaseService.purchaseObject(reqDto, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
@@ -59,8 +57,8 @@ public class ObjectController {
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<List<OwnedObjectResDto>>> getMemberObjects(Principal principal) {
-        ApiResponseTemplate<List<OwnedObjectResDto>> data = objectDisplayService.getOwnedObjects(principal);
+    public ResponseEntity<ApiResponseTemplate<List<ObjectResDto>>> getMemberObjects(Principal principal) {
+        ApiResponseTemplate<List<ObjectResDto>> data = objectDisplayService.getOwnedObjects(principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
@@ -76,8 +74,8 @@ public class ObjectController {
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<UpdateObjectStatusResDto>> updateObjectStatus(@RequestBody UpdateObjectStatusReqDto reqDto, Principal principal) {
-        ApiResponseTemplate<UpdateObjectStatusResDto> data = objectStatusService.updateObjectStatus(reqDto, principal);
+    public ResponseEntity<ApiResponseTemplate<ObjectResDto>> updateObjectStatus(@RequestBody UpdateObjectStatusReqDto reqDto, Principal principal) {
+        ApiResponseTemplate<ObjectResDto> data = objectStatusService.updateObjectStatus(reqDto, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 }

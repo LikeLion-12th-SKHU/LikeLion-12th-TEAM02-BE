@@ -2,7 +2,7 @@ package com.skhu.moodfriend.app.service.object;
 
 import com.skhu.moodfriend.app.domain.member.Member;
 import com.skhu.moodfriend.app.domain.member.object.MemberObject;
-import com.skhu.moodfriend.app.dto.object.resDto.OwnedObjectResDto;
+import com.skhu.moodfriend.app.dto.object.resDto.ObjectResDto;
 import com.skhu.moodfriend.app.repository.MemberObjectRepository;
 import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.global.exception.CustomException;
@@ -26,7 +26,7 @@ public class ObjectDisplayService {
     private final MemberRepository memberRepository;
     private final MemberObjectRepository memberObjectRepository;
 
-    public ApiResponseTemplate<List<OwnedObjectResDto>> getOwnedObjects(Principal principal) {
+    public ApiResponseTemplate<List<ObjectResDto>> getOwnedObjects(Principal principal) {
 
         Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)
@@ -34,8 +34,8 @@ public class ObjectDisplayService {
 
         List<MemberObject> ownedObjects = memberObjectRepository.findByMember(member);
 
-        List<OwnedObjectResDto> resDtos = ownedObjects.stream()
-                .map(OwnedObjectResDto::of)
+        List<ObjectResDto> resDtos = ownedObjects.stream()
+                .map(ObjectResDto::of)
                 .collect(Collectors.toList());
 
         return ApiResponseTemplate.success(SuccessCode.GET_OBJECTS_SUCCESS, resDtos);

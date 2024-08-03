@@ -4,13 +4,13 @@ import com.skhu.moodfriend.app.domain.member.object.MemberObject;
 import lombok.Builder;
 
 @Builder
-public record UpdateObjectStatusResDto(
+public record ObjectResDto(
         Long memberObjectId,
         String objectName,
         boolean status
 ) {
-    public static UpdateObjectStatusResDto of(MemberObject memberObject) {
-        return UpdateObjectStatusResDto.builder()
+    public static ObjectResDto of(MemberObject memberObject) {
+        return ObjectResDto.builder()
                 .memberObjectId(memberObject.getMemberObjectId())
                 .objectName(memberObject.getObject().getDisplayName())
                 .status(memberObject.isStatus())

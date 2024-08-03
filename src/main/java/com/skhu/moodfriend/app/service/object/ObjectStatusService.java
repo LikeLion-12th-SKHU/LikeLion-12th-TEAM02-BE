@@ -3,7 +3,7 @@ package com.skhu.moodfriend.app.service.object;
 import com.skhu.moodfriend.app.domain.member.Member;
 import com.skhu.moodfriend.app.domain.member.object.MemberObject;
 import com.skhu.moodfriend.app.dto.object.reqDto.UpdateObjectStatusReqDto;
-import com.skhu.moodfriend.app.dto.object.resDto.UpdateObjectStatusResDto;
+import com.skhu.moodfriend.app.dto.object.resDto.ObjectResDto;
 import com.skhu.moodfriend.app.repository.MemberObjectRepository;
 import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.global.exception.CustomException;
@@ -25,7 +25,7 @@ public class ObjectStatusService {
     private final MemberObjectRepository memberObjectRepository;
 
     @Transactional
-    public ApiResponseTemplate<UpdateObjectStatusResDto> updateObjectStatus(
+    public ApiResponseTemplate<ObjectResDto> updateObjectStatus(
             UpdateObjectStatusReqDto reqDto,
             Principal principal) {
 
@@ -43,6 +43,6 @@ public class ObjectStatusService {
         memberObject.updateStatus(reqDto.status());
         memberObjectRepository.save(memberObject);
 
-        return ApiResponseTemplate.success(SuccessCode.UPDATE_OBJECT_STATUS_SUCCESS, UpdateObjectStatusResDto.of(memberObject));
+        return ApiResponseTemplate.success(SuccessCode.UPDATE_OBJECT_STATUS_SUCCESS, ObjectResDto.of(memberObject));
     }
 }
