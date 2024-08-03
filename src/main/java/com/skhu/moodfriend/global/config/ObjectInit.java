@@ -1,6 +1,6 @@
 package com.skhu.moodfriend.global.config;
 
-import com.skhu.moodfriend.app.domain.store.ObjectEnum;
+import com.skhu.moodfriend.app.domain.store.Objects;
 import com.skhu.moodfriend.app.domain.store.ObjectStore;
 import com.skhu.moodfriend.app.repository.ObjectStoreRepository;
 import lombok.AccessLevel;
@@ -18,10 +18,10 @@ public class ObjectInit {
     @Bean
     public CommandLineRunner initDatabase() {
         return args -> {
-            for (ObjectEnum objectEnum : ObjectEnum.values()) {
-                objectStoreRepository.findByObject(objectEnum)
+            for (Objects objects : Objects.values()) {
+                objectStoreRepository.findByObject(objects)
                         .orElseGet(() -> objectStoreRepository.save(ObjectStore.builder()
-                                .object(objectEnum)
+                                .object(objects)
                                 .build()));
             }
         };

@@ -1,6 +1,6 @@
 package com.skhu.moodfriend.app.domain.member.object;
 
-import com.skhu.moodfriend.app.domain.store.ObjectEnum;
+import com.skhu.moodfriend.app.domain.store.Objects;
 import com.skhu.moodfriend.app.domain.member.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -22,7 +22,7 @@ public class MemberObject {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "MEMBER_OBJECT", nullable = false)
-    private ObjectEnum object;
+    private Objects object;
 
     @Column(name = "OBJECT_STATUS", nullable = false)
     private boolean status;
@@ -32,7 +32,7 @@ public class MemberObject {
     private Member member;
 
     @Builder
-    private MemberObject(ObjectEnum object, boolean status, Member member) {
+    private MemberObject(Objects object, boolean status, Member member) {
         this.object = object;
         this.status = status;
         this.member = member;

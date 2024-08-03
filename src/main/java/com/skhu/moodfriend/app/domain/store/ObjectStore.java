@@ -20,13 +20,13 @@ public class ObjectStore {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "OBJECT", nullable = false)
-    private ObjectEnum object;
+    private Objects object;
 
     @Column(name = "OBJECT_PRICE", nullable = false)
     private int price;
 
     @Builder
-    private ObjectStore(ObjectEnum object) {
+    private ObjectStore(Objects object) {
         this.object = object;
         this.price = object.getPrice();
     }
