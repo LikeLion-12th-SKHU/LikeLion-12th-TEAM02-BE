@@ -1,10 +1,11 @@
 package com.skhu.moodfriend.app.domain.member;
 
 import com.skhu.moodfriend.app.domain.member.attendance.Attendance;
-import com.skhu.moodfriend.app.domain.member.feedback.FeedBack;
 import com.skhu.moodfriend.app.domain.friend.Friend;
 import com.skhu.moodfriend.app.domain.member.object.MemberObject;
+import com.skhu.moodfriend.app.domain.payment.Order;
 import com.skhu.moodfriend.app.domain.tracker.diary.Diary;
+import com.skhu.moodfriend.app.domain.tracker.diary_ai.DiaryAI;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -50,16 +51,19 @@ public class Member {
     private List<Attendance> attendances = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MemberObject> userObjects = new ArrayList<>();
+    private List<MemberObject> memberObjects = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Friend> friends = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<FeedBack> feedBacks = new ArrayList<>();
+    private List<Diary> diaries = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Diary> diaries = new ArrayList<>();
+    private List<DiaryAI> diaryAIS = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Order> orders = new ArrayList<>();
 
     @Builder
     private Member(String email, String password, String name, Integer mileage, LoginType loginType, RoleType roleType) {
