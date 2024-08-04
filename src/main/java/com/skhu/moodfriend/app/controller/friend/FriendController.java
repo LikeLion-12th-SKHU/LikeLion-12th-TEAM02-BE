@@ -2,6 +2,7 @@ package com.skhu.moodfriend.app.controller.friend;
 
 import com.skhu.moodfriend.app.dto.friend.reqDto.FriendReqDto;
 import com.skhu.moodfriend.app.dto.friend.resDto.FriendResDto;
+import com.skhu.moodfriend.app.dto.friend.resDto.ReceivedResDto;
 import com.skhu.moodfriend.app.service.friend.FriendService;
 import com.skhu.moodfriend.app.service.friend.FriendDisplayService;
 import com.skhu.moodfriend.global.template.ApiResponseTemplate;
@@ -53,8 +54,8 @@ public class FriendController {
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<List<FriendReqDto>>> getReceivedFriendRequests(Principal principal) {
-        ApiResponseTemplate<List<FriendReqDto>> data = friendDisplayService.getReceivedFriendRequests(principal);
+    public ResponseEntity<ApiResponseTemplate<List<ReceivedResDto>>> getReceivedFriendRequests(Principal principal) {
+        ApiResponseTemplate<List<ReceivedResDto>> data = friendDisplayService.getReceivedFriendRequests(principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 

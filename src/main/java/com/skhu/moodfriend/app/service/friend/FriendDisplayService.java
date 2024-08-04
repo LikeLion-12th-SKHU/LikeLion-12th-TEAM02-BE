@@ -1,7 +1,7 @@
 package com.skhu.moodfriend.app.service.friend;
 
-import com.skhu.moodfriend.app.dto.friend.reqDto.FriendReqDto;
 import com.skhu.moodfriend.app.dto.friend.resDto.FriendResDto;
+import com.skhu.moodfriend.app.dto.friend.resDto.ReceivedResDto;
 import com.skhu.moodfriend.app.domain.friend.Friend;
 import com.skhu.moodfriend.app.domain.friend.Status;
 import com.skhu.moodfriend.app.domain.member.Member;
@@ -31,15 +31,15 @@ public class FriendDisplayService {
     private final MemberRepository memberRepository;
     private final FriendRepository friendRepository;
 
-    public ApiResponseTemplate<List<FriendReqDto>> getReceivedFriendRequests(Principal principal) {
+    public ApiResponseTemplate<List<ReceivedResDto>> getReceivedFriendRequests(Principal principal) {
         Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
         List<Friend> receivedRequests = friendRepository.findByMemberAndStatus(member, Status.WAITING);
 
-        List<FriendReqDto> receivedRequestList = receivedRequests.stream()
-                .map(friend -> new FriendReqDto(friend.getRequester().getEmail()))
+        List<ReceivedResDto> receivedRequestList = receivedRequests.stream()
+                .map(ReceivedResDto::of)
                 .collect(Collectors.toList());
 
         return ApiResponseTemplate.success(SuccessCode.GET_RECEIVED_FRIENDS_REQUEST_SUCCESS, receivedRequestList);
