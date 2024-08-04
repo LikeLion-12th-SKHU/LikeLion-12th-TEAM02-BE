@@ -11,6 +11,9 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 
 public record DiaryUpdateReqDto(
+        @NotNull(message = "일기 ID는 필수 입력 항목입니다.")
+        Long diaryId,
+
         @NotNull(message = "감정은 필수 입력 항목입니다.")
         @EnumValid(enumClass = EmotionType.class)
         EmotionType emotionType,

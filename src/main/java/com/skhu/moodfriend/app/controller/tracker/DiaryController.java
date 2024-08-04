@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -40,13 +41,13 @@ public class DiaryController {
     )
     public ResponseEntity<ApiResponseTemplate<DiaryResDto>> createDiary(
             @Valid @RequestBody DiaryCreateReqDto reqDto,
-            @RequestParam Long memberId) {
+            Principal principal) {
 
-        ApiResponseTemplate<DiaryResDto> data = diaryCreateService.createDiary(reqDto, memberId);
+        ApiResponseTemplate<DiaryResDto> data = diaryCreateService.createDiary(reqDto, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
-    @PatchMapping("/update/{diaryId}")
+    @PatchMapping("/update")
     @Operation(
             summary = "사용자 일기 수정",
             description = "사용자 일기를 수정합니다.",
@@ -58,11 +59,10 @@ public class DiaryController {
             }
     )
     public ResponseEntity<ApiResponseTemplate<DiaryResDto>> updateDiary(
-            @PathVariable Long diaryId,
-            @RequestParam Long memberId,
-            @Valid @RequestBody DiaryUpdateReqDto reqDto) {
+            @Valid @RequestBody DiaryUpdateReqDto reqDto,
+            Principal principal) {
 
-        ApiResponseTemplate<DiaryResDto> data = diaryModifyService.updateDiary(diaryId, memberId, reqDto);
+        ApiResponseTemplate<DiaryResDto> data = diaryModifyService.updateDiary(reqDto, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
@@ -79,9 +79,9 @@ public class DiaryController {
     )
     public ResponseEntity<ApiResponseTemplate<Void>> deleteDiary(
             @PathVariable Long diaryId,
-            @RequestParam Long memberId) {
+            Principal principal) {
 
-        ApiResponseTemplate<Void> data = diaryModifyService.deleteDiary(diaryId, memberId);
+        ApiResponseTemplate<Void> data = diaryModifyService.deleteDiary(diaryId, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
@@ -98,9 +98,9 @@ public class DiaryController {
     )
     public ResponseEntity<ApiResponseTemplate<DiaryResDto>> getDiaryById(
             @PathVariable Long diaryId,
-            Long memberId) {
+            Principal principal) {
 
-        ApiResponseTemplate<DiaryResDto> data = diaryDisplayService.getDiaryById(diaryId, memberId);
+        ApiResponseTemplate<DiaryResDto> data = diaryDisplayService.getDiaryById(diaryId, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
@@ -114,9 +114,9 @@ public class DiaryController {
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<List<DiaryResDto>>> getAllDiariesByUser(Long memberId) {
+    public ResponseEntity<ApiResponseTemplate<List<DiaryResDto>>> getAllDiariesByUser(Principal principal) {
 
-        ApiResponseTemplate<List<DiaryResDto>> data = diaryDisplayService.getAllDiariesByMember(memberId);
+        ApiResponseTemplate<List<DiaryResDto>> data = diaryDisplayService.getAllDiariesByMember(principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 }

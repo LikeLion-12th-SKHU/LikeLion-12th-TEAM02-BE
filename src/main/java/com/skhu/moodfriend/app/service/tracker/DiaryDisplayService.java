@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,12 +27,13 @@ public class DiaryDisplayService {
     private final MemberRepository memberRepository;
 
     public ApiResponseTemplate<DiaryResDto> getDiaryById(
-            Long diaryId, Long memberId) {
+            Long diaryId, Principal principal) {
 
+        Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
-        Diary diary = diaryRepository.findById(diaryId)
+        Diary diary = diaryRepository.findByDiaryIdAndMember(diaryId, member)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DIARY_EXCEPTION, ErrorCode.NOT_FOUND_DIARY_EXCEPTION.getMessage()));
 
         if (!diary.getMember().equals(member)) {
@@ -41,8 +43,9 @@ public class DiaryDisplayService {
         return ApiResponseTemplate.success(SuccessCode.GET_DIARY_SUCCESS, DiaryResDto.of(diary));
     }
 
-    public ApiResponseTemplate<List<DiaryResDto>> getAllDiariesByMember(Long memberId) {
+    public ApiResponseTemplate<List<DiaryResDto>> getAllDiariesByMember(Principal principal) {
 
+        Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
