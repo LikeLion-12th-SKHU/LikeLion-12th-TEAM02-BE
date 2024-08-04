@@ -22,8 +22,8 @@ public class ObjectStore {
     @Column(name = "OBJECT", nullable = false)
     private Objects object;
 
-    @Column(name = "OBJECT_DISPLAY_NAME", nullable = false)
-    private String displayName;
+    @Column(name = "OBJECT_NAME", nullable = false)
+    private String name;
 
     @Column(name = "OBJECT_PRICE", nullable = false)
     private int price;
@@ -31,7 +31,7 @@ public class ObjectStore {
     @Builder
     private ObjectStore(Objects object) {
         this.object = object;
-        this.displayName = object.getDisplayName();
+        this.name = object.getName();
         this.price = object.getPrice();
     }
 }

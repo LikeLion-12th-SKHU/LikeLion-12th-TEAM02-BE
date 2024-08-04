@@ -38,7 +38,7 @@ public class PurchaseService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
         Objects objects = Arrays.stream(Objects.values())
-                .filter(obj -> obj.getDisplayName().equalsIgnoreCase(reqDto.objectName()))
+                .filter(obj -> obj.getName().equalsIgnoreCase(reqDto.objectName()))
                 .findFirst()
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_OBJECT_EXCEPTION, ErrorCode.NOT_FOUND_OBJECT_EXCEPTION.getMessage()));
 

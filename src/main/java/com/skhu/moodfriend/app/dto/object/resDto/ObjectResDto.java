@@ -12,7 +12,7 @@ public record ObjectResDto(
     public static ObjectResDto of(MemberObject memberObject) {
         return ObjectResDto.builder()
                 .memberObjectId(memberObject.getMemberObjectId())
-                .objectName(memberObject.getObject().getDisplayName())
+                .objectName(memberObject.getObject().getName())
                 .status(memberObject.isStatus())
                 .build();
     }
