@@ -16,10 +16,6 @@ MoodFriend 캐릭터인 호야가 사용자의 친구가 되어 감정을 관리
 5. 주변 전문 의료 기관 추천 기능
 - 지도 API를 사용하여 사용자의 주변에 있는 의료 전문 기관을 추천해 주는 기능
 
-
-# Our Development Environment
-<img width="950" alt="개발환경" src="https://github.com/user-attachments/assets/a5048390-629c-43f2-8ceb-65e5c29d1113">
-
 # Database ERD
 ![MoodFriendERD](https://github.com/user-attachments/assets/69a1d988-2bc9-4c83-808c-e413dfabf6a7)
 
