@@ -42,22 +42,6 @@ public class FriendController {
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
-    @GetMapping("/request/display")
-    @Operation(
-            summary = "요청 보낸 리스트",
-            description = "요청 보낸 친구 리스트를 조회합니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "친구 추가 요청 리스트 조회"),
-                    @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
-                    @ApiResponse(responseCode = "404", description = "친구 정보를 찾을 수 없음"),
-                    @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
-            }
-    )
-    public ResponseEntity<ApiResponseTemplate<List<FriendReqDto>>> getFriendRequests(Principal principal) {
-        ApiResponseTemplate<List<FriendReqDto>> data = friendDisplayService.getFriendRequests(principal);
-        return ResponseEntity.status(data.getStatus()).body(data);
-    }
-
     @GetMapping("/received/display")
     @Operation(
             summary = "요청 받은 리스트",
@@ -103,22 +87,6 @@ public class FriendController {
     )
     public ResponseEntity<ApiResponseTemplate<List<FriendResDto>>> getFriends(Principal principal) {
         ApiResponseTemplate<List<FriendResDto>> data = friendDisplayService.getFriends(principal);
-        return ResponseEntity.status(data.getStatus()).body(data);
-    }
-
-    @GetMapping("/detail")
-    @Operation(
-            summary = "친구 상세 조회",
-            description = "친구 상세 정보를 조회합니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "친구 상세 조회 완료"),
-                    @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
-                    @ApiResponse(responseCode = "404", description = "친구 정보를 찾을 수 없음"),
-                    @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
-            }
-    )
-    public ResponseEntity<ApiResponseTemplate<FriendResDto>> getFriendDetail(@RequestParam String friendEmail, Principal principal) {
-        ApiResponseTemplate<FriendResDto> data = friendDisplayService.getFriend(principal, friendEmail);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
