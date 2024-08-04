@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -36,9 +37,9 @@ public class DiaryAIController {
     )
     public ResponseEntity<ApiResponseTemplate<Void>> deleteDiaryAI(
             @PathVariable Long diaryAIId,
-            @RequestParam Long memberId) {
+            Principal principal) {
 
-        ApiResponseTemplate<Void> data = diaryAIModifyService.deleteDiaryAI(diaryAIId, memberId);
+        ApiResponseTemplate<Void> data = diaryAIModifyService.deleteDiaryAI(diaryAIId, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
@@ -55,9 +56,9 @@ public class DiaryAIController {
     )
     public ResponseEntity<ApiResponseTemplate<DiaryAIResDto>> getDiarySummaryById(
             @PathVariable Long diaryAIId,
-            @RequestParam Long memberId) {
+            Principal principal) {
 
-        ApiResponseTemplate<DiaryAIResDto> data = diaryAIDisplayService.getDiarySummaryById(diaryAIId, memberId);
+        ApiResponseTemplate<DiaryAIResDto> data = diaryAIDisplayService.getDiarySummaryById(diaryAIId, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
@@ -71,9 +72,9 @@ public class DiaryAIController {
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<List<DiaryAIResDto>>> getAllDiaryAISummariesByUser(@RequestParam Long memberId) {
+    public ResponseEntity<ApiResponseTemplate<List<DiaryAIResDto>>> getAllDiaryAISummariesByUser(Principal principal) {
 
-        ApiResponseTemplate<List<DiaryAIResDto>> data = diaryAIDisplayService.getAllDiarySummariesByMember(memberId);
+        ApiResponseTemplate<List<DiaryAIResDto>> data = diaryAIDisplayService.getAllDiarySummariesByMember(principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 }
