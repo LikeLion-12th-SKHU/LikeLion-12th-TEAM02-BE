@@ -22,12 +22,16 @@ public class ObjectStore {
     @Column(name = "OBJECT", nullable = false)
     private Objects object;
 
+    @Column(name = "OBJECT_DISPLAY_NAME", nullable = false)
+    private String displayName;
+
     @Column(name = "OBJECT_PRICE", nullable = false)
     private int price;
 
     @Builder
     private ObjectStore(Objects object) {
         this.object = object;
+        this.displayName = object.getDisplayName();
         this.price = object.getPrice();
     }
 }
