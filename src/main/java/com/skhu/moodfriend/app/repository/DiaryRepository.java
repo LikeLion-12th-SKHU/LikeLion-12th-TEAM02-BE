@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface DiaryRepository extends JpaRepository<Diary, Long> {
@@ -38,4 +39,6 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
             @Param("year") int year,
             @Param("month") int month
     );
+
+    Optional<Diary> findByDiaryIdAndMember(Long diaryId, Member member);
 }

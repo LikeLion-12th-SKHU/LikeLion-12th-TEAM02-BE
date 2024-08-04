@@ -2,7 +2,7 @@ package com.skhu.moodfriend.app.service.object;
 
 import com.skhu.moodfriend.app.domain.member.Member;
 import com.skhu.moodfriend.app.domain.member.object.MemberObject;
-import com.skhu.moodfriend.app.domain.store.ObjectEnum;
+import com.skhu.moodfriend.app.domain.store.Objects;
 import com.skhu.moodfriend.app.domain.store.ObjectStore;
 import com.skhu.moodfriend.app.dto.object.reqDto.PurchaseReqDto;
 import com.skhu.moodfriend.app.dto.object.resDto.ObjectResDto;
@@ -37,12 +37,12 @@ public class PurchaseService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
-        ObjectEnum objectEnum = Arrays.stream(ObjectEnum.values())
-                .filter(obj -> obj.getDisplayName().equalsIgnoreCase(reqDto.objectName()))
+        Objects objects = Arrays.stream(Objects.values())
+                .filter(obj -> obj.getName().equalsIgnoreCase(reqDto.objectName()))
                 .findFirst()
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_OBJECT_EXCEPTION, ErrorCode.NOT_FOUND_OBJECT_EXCEPTION.getMessage()));
 
-        ObjectStore objectStore = objectStoreRepository.findByObject(objectEnum)
+        ObjectStore objectStore = objectStoreRepository.findByObject(objects)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_OBJECT_EXCEPTION, ErrorCode.NOT_FOUND_OBJECT_EXCEPTION.getMessage()));
 
         if (memberObjectRepository.existsByMemberAndObject(member, objectStore.getObject())) {

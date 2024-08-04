@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
+
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class DiaryModifyService {
@@ -24,21 +26,17 @@ public class DiaryModifyService {
 
     @Transactional
     public ApiResponseTemplate<DiaryResDto> updateDiary(
-            Long diaryId,
-            Long memberId,
-            DiaryUpdateReqDto reqDto) {
+            DiaryUpdateReqDto reqDto,
+            Principal principal) {
 
+        Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
-        Diary diary = diaryRepository.findById(diaryId)
+        Diary diary = diaryRepository.findByDiaryIdAndMember(reqDto.diaryId(), member)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DIARY_EXCEPTION, ErrorCode.NOT_FOUND_DIARY_EXCEPTION.getMessage()));
 
-        if (!diary.getMember().equals(member)) {
-            throw new CustomException(ErrorCode.ONLY_OWN_DIARY_ACCESS_EXCEPTION, ErrorCode.ONLY_OWN_DIARY_ACCESS_EXCEPTION.getMessage());
-        }
-
-        if (diaryRepository.existsByMemberAndCreatedAtDateExcludingDiary(member, reqDto.createdAt(), diaryId)) {
+        if (diaryRepository.existsByMemberAndCreatedAtDateExcludingDiary(member, reqDto.createdAt(), reqDto.diaryId())) {
             throw new CustomException(ErrorCode.ALREADY_EXIST_DIARY_EXCEPTION, ErrorCode.ALREADY_EXIST_DIARY_EXCEPTION.getMessage());
         }
 
@@ -51,17 +49,14 @@ public class DiaryModifyService {
     @Transactional
     public ApiResponseTemplate<Void> deleteDiary(
             Long diaryId,
-            Long memberId) {
+            Principal principal) {
 
+        Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
-        Diary diary = diaryRepository.findById(diaryId)
+        Diary diary = diaryRepository.findByDiaryIdAndMember(diaryId, member)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DIARY_EXCEPTION, ErrorCode.NOT_FOUND_DIARY_EXCEPTION.getMessage()));
-
-        if (!diary.getMember().equals(member)) {
-            throw new CustomException(ErrorCode.ONLY_OWN_DIARY_ACCESS_EXCEPTION, ErrorCode.ONLY_OWN_DIARY_ACCESS_EXCEPTION.getMessage());
-        }
 
         diaryRepository.delete(diary);
 

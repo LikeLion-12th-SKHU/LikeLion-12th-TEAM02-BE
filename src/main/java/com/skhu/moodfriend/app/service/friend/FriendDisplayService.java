@@ -31,20 +31,6 @@ public class FriendDisplayService {
     private final MemberRepository memberRepository;
     private final FriendRepository friendRepository;
 
-    public ApiResponseTemplate<List<FriendReqDto>> getFriendRequests(Principal principal) {
-        Long memberId = Long.parseLong(principal.getName());
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
-
-        List<Friend> friendRequests = friendRepository.findByRequesterAndStatus(member, Status.WAITING);
-
-        List<FriendReqDto> friendRequestList = friendRequests.stream()
-                .map(friend -> new FriendReqDto(friend.getMember().getEmail()))
-                .collect(Collectors.toList());
-
-        return ApiResponseTemplate.success(SuccessCode.GET_FRIENDS_REQUEST_SUCCESS, friendRequestList);
-    }
-
     public ApiResponseTemplate<List<FriendReqDto>> getReceivedFriendRequests(Principal principal) {
         Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)
@@ -78,29 +64,5 @@ public class FriendDisplayService {
                 .collect(Collectors.toList());
 
         return ApiResponseTemplate.success(SuccessCode.GET_FRIENDS_SUCCESS, friendDtos);
-    }
-
-    public ApiResponseTemplate<FriendResDto> getFriend(
-            Principal principal,
-            String friendEmail) {
-
-        Long memberId = Long.parseLong(principal.getName());
-        Member currentMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
-
-        Member friendMember = memberRepository.findByEmail(friendEmail)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_EMAIL_EXCEPTION, ErrorCode.NOT_FOUND_EMAIL_EXCEPTION.getMessage()));
-
-        Friend friend = friendRepository.findByRequesterAndMemberAndStatus(currentMember, friendMember, Status.ACCEPTED)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_FRIEND_REQUEST_EXCEPTION, ErrorCode.NOT_FOUND_FRIEND_REQUEST_EXCEPTION.getMessage()));
-
-        EmotionType emotionType = friendMember.getDiaries().stream()
-                .max(Comparator.comparing(Diary::getCreatedAt))
-                .map(Diary::getEmotionType)
-                .orElse(EmotionType.SO_SO);
-
-        FriendResDto friendDto = FriendResDto.of(friend, emotionType);
-
-        return ApiResponseTemplate.success(SuccessCode.GET_FRIEND_SUCCESS, friendDto);
     }
 }
