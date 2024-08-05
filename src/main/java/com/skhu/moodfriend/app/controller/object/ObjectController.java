@@ -46,7 +46,7 @@ public class ObjectController {
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
-    @GetMapping("/display")
+    @GetMapping("/owned/display")
     @Operation(
             summary = "보유 오브제 조회",
             description = "사용자가 보유한 오브제를 조회합니다.",
@@ -59,6 +59,22 @@ public class ObjectController {
     )
     public ResponseEntity<ApiResponseTemplate<List<ObjectResDto>>> getMemberObjects(Principal principal) {
         ApiResponseTemplate<List<ObjectResDto>> data = objectDisplayService.getOwnedObjects(principal);
+        return ResponseEntity.status(data.getStatus()).body(data);
+    }
+
+    @GetMapping("/available/display")
+    @Operation(
+            summary = "구매 가능한 오브제 조회",
+            description = "사용자가 구매하지 않은 오브제를 조회합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "구매 가능한 오브제 조회 성공"),
+                    @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
+                    @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없음"),
+                    @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
+            }
+    )
+    public ResponseEntity<ApiResponseTemplate<List<ObjectResDto>>> getAvailableObjects(Principal principal) {
+        ApiResponseTemplate<List<ObjectResDto>> data = objectDisplayService.getAvailableObjects(principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
