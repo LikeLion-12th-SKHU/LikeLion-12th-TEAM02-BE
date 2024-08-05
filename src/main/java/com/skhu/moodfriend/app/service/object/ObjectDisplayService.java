@@ -46,20 +46,16 @@ public class ObjectDisplayService {
         return ApiResponseTemplate.success(SuccessCode.GET_OBJECTS_SUCCESS, resDtos);
     }
 
-    public ApiResponseTemplate<List<ObjectResDto>> getAvailableObjects(Principal principal) {
+    public ApiResponseTemplate<List<String>> getAvailableObjects(Principal principal) {
         Member member = getMember(principal);
         List<MemberObject> ownedObjects = memberObjectRepository.findByMember(member);
         List<Objects> allObjects = objectStoreRepository.findAll().stream()
                 .map(ObjectStore::getObject)
                 .toList();
 
-        List<ObjectResDto> availableObjects = allObjects.stream()
+        List<String> availableObjects = allObjects.stream()
                 .filter(object -> ownedObjects.stream().noneMatch(owned -> owned.getObject().equals(object)))
-                .map(object -> ObjectResDto.builder()
-                        .memberObjectId(null)
-                        .objectName(object.getName())
-                        .status(false)
-                        .build())
+                .map(Objects::getName)
                 .collect(Collectors.toList());
 
         return ApiResponseTemplate.success(SuccessCode.GET_OBJECTS_SUCCESS, availableObjects);

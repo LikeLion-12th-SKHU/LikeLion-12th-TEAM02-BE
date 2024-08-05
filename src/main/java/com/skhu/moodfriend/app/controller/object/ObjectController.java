@@ -65,7 +65,7 @@ public class ObjectController {
     @GetMapping("/available/display")
     @Operation(
             summary = "구매 가능한 오브제 조회",
-            description = "사용자가 구매하지 않은 오브제를 조회합니다.",
+            description = "사용자가 아직 구매하지 않은 오브제를 조회합니다.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "구매 가능한 오브제 조회 성공"),
                     @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
@@ -73,8 +73,8 @@ public class ObjectController {
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<List<ObjectResDto>>> getAvailableObjects(Principal principal) {
-        ApiResponseTemplate<List<ObjectResDto>> data = objectDisplayService.getAvailableObjects(principal);
+    public ResponseEntity<ApiResponseTemplate<List<String>>> getAvailableObjects(Principal principal) {
+        ApiResponseTemplate<List<String>> data = objectDisplayService.getAvailableObjects(principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
