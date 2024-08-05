@@ -2,9 +2,12 @@ package com.skhu.moodfriend.app.service.object;
 
 import com.skhu.moodfriend.app.domain.member.Member;
 import com.skhu.moodfriend.app.domain.member.object.MemberObject;
+import com.skhu.moodfriend.app.domain.store.ObjectStore;
+import com.skhu.moodfriend.app.domain.store.Objects;
 import com.skhu.moodfriend.app.dto.object.resDto.ObjectResDto;
 import com.skhu.moodfriend.app.repository.MemberObjectRepository;
 import com.skhu.moodfriend.app.repository.MemberRepository;
+import com.skhu.moodfriend.app.repository.ObjectStoreRepository;
 import com.skhu.moodfriend.global.exception.CustomException;
 import com.skhu.moodfriend.global.exception.code.ErrorCode;
 import com.skhu.moodfriend.global.exception.code.SuccessCode;
@@ -25,19 +28,40 @@ public class ObjectDisplayService {
 
     private final MemberRepository memberRepository;
     private final MemberObjectRepository memberObjectRepository;
+    private final ObjectStoreRepository objectStoreRepository;
+
+    private Member getMember(Principal principal) {
+        Long memberId = Long.parseLong(principal.getName());
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
+    }
 
     public ApiResponseTemplate<List<ObjectResDto>> getOwnedObjects(Principal principal) {
-
-        Long memberId = Long.parseLong(principal.getName());
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
-
+        Member member = getMember(principal);
         List<MemberObject> ownedObjects = memberObjectRepository.findByMember(member);
-
         List<ObjectResDto> resDtos = ownedObjects.stream()
                 .map(ObjectResDto::of)
                 .collect(Collectors.toList());
 
         return ApiResponseTemplate.success(SuccessCode.GET_OBJECTS_SUCCESS, resDtos);
+    }
+
+    public ApiResponseTemplate<List<ObjectResDto>> getAvailableObjects(Principal principal) {
+        Member member = getMember(principal);
+        List<MemberObject> ownedObjects = memberObjectRepository.findByMember(member);
+        List<Objects> allObjects = objectStoreRepository.findAll().stream()
+                .map(ObjectStore::getObject)
+                .toList();
+
+        List<ObjectResDto> availableObjects = allObjects.stream()
+                .filter(object -> ownedObjects.stream().noneMatch(owned -> owned.getObject().equals(object)))
+                .map(object -> ObjectResDto.builder()
+                        .memberObjectId(null)
+                        .objectName(object.getName())
+                        .status(false)
+                        .build())
+                .collect(Collectors.toList());
+
+        return ApiResponseTemplate.success(SuccessCode.GET_OBJECTS_SUCCESS, availableObjects);
     }
 }
