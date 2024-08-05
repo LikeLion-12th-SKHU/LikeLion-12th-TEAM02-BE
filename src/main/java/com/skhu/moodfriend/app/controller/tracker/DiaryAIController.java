@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
@@ -60,22 +59,6 @@ public class DiaryAIController {
             Principal principal) {
 
         ApiResponseTemplate<DiaryAIResDto> data = diaryAIDisplayService.getDiarySummaryByCreatedAt(createdAt, principal);
-        return ResponseEntity.status(data.getStatus()).body(data);
-    }
-
-    @GetMapping("/display")
-    @Operation(
-            summary = "사용자의 모든 AI 일기 조회",
-            description = "사용자의 모든 AI 일기를 조회합니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "모든 AI 일기 조회 성공"),
-                    @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
-                    @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
-            }
-    )
-    public ResponseEntity<ApiResponseTemplate<List<DiaryAIResDto>>> getAllDiaryAISummariesByUser(Principal principal) {
-
-        ApiResponseTemplate<List<DiaryAIResDto>> data = diaryAIDisplayService.getAllDiarySummariesByMember(principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 }

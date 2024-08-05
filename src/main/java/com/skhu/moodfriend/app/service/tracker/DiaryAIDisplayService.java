@@ -16,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -39,20 +37,5 @@ public class DiaryAIDisplayService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DIARY_EXCEPTION, ErrorCode.NOT_FOUND_DIARY_EXCEPTION.getMessage()));
 
         return ApiResponseTemplate.success(SuccessCode.GET_DIARY_SUMMARY_SUCCESS, DiaryAIResDto.of(diaryAI));
-    }
-
-    public ApiResponseTemplate<List<DiaryAIResDto>> getAllDiarySummariesByMember(Principal principal) {
-
-        Long memberId = Long.parseLong(principal.getName());
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
-
-        List<DiaryAI> diaryAIs = diaryAIRepository.findByMemberOrderByCreatedAt(member);
-
-        List<DiaryAIResDto> resDtos = diaryAIs.stream()
-                .map(DiaryAIResDto::of)
-                .collect(Collectors.toList());
-
-        return ApiResponseTemplate.success(SuccessCode.GET_ALL_DIARY_SUMMARIES_SUCCESS, resDtos);
     }
 }
