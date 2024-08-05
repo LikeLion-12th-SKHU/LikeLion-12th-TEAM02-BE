@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -24,10 +25,10 @@ public class DiaryAIController {
     private final DiaryAIModifyService diaryAIModifyService;
     private final DiaryAIDisplayService diaryAIDisplayService;
 
-    @DeleteMapping("delete/{diaryAIId}")
+    @DeleteMapping("/delete/{createdAt}")
     @Operation(
             summary = "사용자 AI 일기 삭제",
-            description = "사용자 AI 일기를 삭제합니다.",
+            description = "작성일을 기준으로 사용자 AI 일기를 삭제합니다.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "사용자 AI 일기 삭제 성공"),
                     @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
@@ -36,17 +37,17 @@ public class DiaryAIController {
             }
     )
     public ResponseEntity<ApiResponseTemplate<Void>> deleteDiaryAI(
-            @PathVariable Long diaryAIId,
+            @PathVariable LocalDate createdAt,
             Principal principal) {
 
-        ApiResponseTemplate<Void> data = diaryAIModifyService.deleteDiaryAI(diaryAIId, principal);
+        ApiResponseTemplate<Void> data = diaryAIModifyService.deleteDiaryAI(createdAt, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
-    @GetMapping("/display/{diaryAIId}")
+    @GetMapping("/display/{createdAt}")
     @Operation(
             summary = "사용자의 특정 AI 일기 조회",
-            description = "사용자의 특정 AI 일기를 조회합니다.",
+            description = "작성일을 기준으로 사용자의 특정 AI 일기를 조회합니다.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "특정 AI 일기 조회 성공"),
                     @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
@@ -54,11 +55,11 @@ public class DiaryAIController {
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<DiaryAIResDto>> getDiarySummaryById(
-            @PathVariable Long diaryAIId,
+    public ResponseEntity<ApiResponseTemplate<DiaryAIResDto>> getDiarySummaryByCreatedAt(
+            @PathVariable LocalDate createdAt,
             Principal principal) {
 
-        ApiResponseTemplate<DiaryAIResDto> data = diaryAIDisplayService.getDiarySummaryById(diaryAIId, principal);
+        ApiResponseTemplate<DiaryAIResDto> data = diaryAIDisplayService.getDiarySummaryByCreatedAt(createdAt, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 

@@ -17,4 +17,6 @@ public interface DiaryAIRepository extends JpaRepository<DiaryAI, Long> {
 
     @Query("SELECT d FROM DiaryAI d WHERE d.member = :member ORDER BY d.createdAt DESC")
     Optional<DiaryAI> findTopByMemberOrderByCreatedAtDesc(Member member);
+
+    Optional<DiaryAI> findByMemberAndCreatedAt(Member member, LocalDate createdAt);
 }

@@ -1,8 +1,8 @@
 package com.skhu.moodfriend.app.service.tracker;
 
+import com.skhu.moodfriend.app.domain.tracker.diary_ai.DiaryAI;
 import com.skhu.moodfriend.app.dto.tracker.resDto.DiaryAIResDto;
 import com.skhu.moodfriend.app.domain.member.Member;
-import com.skhu.moodfriend.app.domain.tracker.diary_ai.DiaryAI;
 import com.skhu.moodfriend.app.repository.DiaryAIRepository;
 import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.global.exception.CustomException;
@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,20 +27,16 @@ public class DiaryAIDisplayService {
     private final DiaryAIRepository diaryAIRepository;
     private final MemberRepository memberRepository;
 
-    public ApiResponseTemplate<DiaryAIResDto> getDiarySummaryById(
-            Long diaryAIId,
+    public ApiResponseTemplate<DiaryAIResDto> getDiarySummaryByCreatedAt(
+            LocalDate createdAt,
             Principal principal) {
 
         Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
-        DiaryAI diaryAI = diaryAIRepository.findById(diaryAIId)
+        DiaryAI diaryAI = diaryAIRepository.findByMemberAndCreatedAt(member, createdAt)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DIARY_EXCEPTION, ErrorCode.NOT_FOUND_DIARY_EXCEPTION.getMessage()));
-
-        if (!diaryAI.getMember().equals(member)) {
-            throw new CustomException(ErrorCode.ONLY_OWN_DIARY_ACCESS_EXCEPTION, ErrorCode.ONLY_OWN_DIARY_ACCESS_EXCEPTION.getMessage());
-        }
 
         return ApiResponseTemplate.success(SuccessCode.GET_DIARY_SUMMARY_SUCCESS, DiaryAIResDto.of(diaryAI));
     }
