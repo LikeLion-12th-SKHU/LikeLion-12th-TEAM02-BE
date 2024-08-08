@@ -61,7 +61,7 @@ MoodFriend는 현대인의 건강(wellness) 문제를 해결하기 위한 서비
 
 ### 🗃️ ERD
 
-![호야](https://github.com/user-attachments/assets/5fd90ffc-69c6-4132-b810-4353bbd359be)
+![호야](https://github.com/user-attachments/assets/2cd369e9-f716-434b-a046-485e84f17e21)
 
 <br/>
 
