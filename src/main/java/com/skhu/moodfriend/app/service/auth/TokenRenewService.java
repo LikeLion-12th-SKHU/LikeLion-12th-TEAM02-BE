@@ -1,11 +1,13 @@
 package com.skhu.moodfriend.app.service.auth;
 
-import com.skhu.moodfriend.app.dto.auth.RenewAccessTokenDto;
 import com.skhu.moodfriend.app.domain.member.Member;
+import com.skhu.moodfriend.app.dto.auth.resDto.AuthResDto;
 import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.global.exception.CustomException;
 import com.skhu.moodfriend.global.exception.code.ErrorCode;
+import com.skhu.moodfriend.global.exception.code.SuccessCode;
 import com.skhu.moodfriend.global.jwt.TokenProvider;
+import com.skhu.moodfriend.global.template.ApiResponseTemplate;
 import io.jsonwebtoken.Claims;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -20,21 +22,28 @@ import java.util.Date;
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class TokenRenewService {
 
+    private static final String REFRESH_TOKEN_PREFIX = "refreshToken:";
+
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
     private final RedisTemplate<String, String> redisTemplate;
 
     @Transactional
-    public RenewAccessTokenDto renewAccessTokenDtoFromRefreshToken(String refreshToken) {
+    public ApiResponseTemplate<AuthResDto> renewAccessToken(String refreshToken) {
+        String key = REFRESH_TOKEN_PREFIX + refreshToken;
 
         if (isBlacklisted(refreshToken)) {
             throw new CustomException(ErrorCode.INVALID_TOKEN_EXCEPTION, ErrorCode.INVALID_TOKEN_EXCEPTION.getMessage());
         }
 
-        String memberIdStr = redisTemplate.opsForValue().get(refreshToken);
-        if (memberIdStr == null || !tokenProvider.validateToken(refreshToken)) {
-            throw new CustomException(ErrorCode.INVALID_TOKEN_EXCEPTION,
-                    ErrorCode.INVALID_TOKEN_EXCEPTION.getMessage());
+        String memberIdStr = redisTemplate.opsForValue().get(key);
+
+        if (memberIdStr == null) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN_EXCEPTION, ErrorCode.INVALID_TOKEN_EXCEPTION.getMessage());
+        }
+
+        if (!tokenProvider.validateToken(refreshToken)) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN_EXCEPTION, ErrorCode.INVALID_TOKEN_EXCEPTION.getMessage());
         }
 
         Long memberId = Long.parseLong(memberIdStr);
@@ -45,17 +54,22 @@ public class TokenRenewService {
 
         String renewAccessToken = tokenProvider.createAccessToken(member);
 
-        return RenewAccessTokenDto.builder()
-                .renewAccessToken(renewAccessToken)
+        AuthResDto data = AuthResDto.builder()
+                .accessToken(renewAccessToken)
+                .refreshToken(refreshToken)
                 .build();
+
+        return ApiResponseTemplate.success(SuccessCode.GET_TOKEN_SUCCESS, data);
     }
 
     public void saveRefreshToken(String refreshToken, Long memberId) {
-        redisTemplate.opsForValue().set(refreshToken, memberId.toString());
+        String key = REFRESH_TOKEN_PREFIX + refreshToken;
+        redisTemplate.opsForValue().set(key, memberId.toString());
     }
 
     public void deleteRefreshToken(String refreshToken) {
-        redisTemplate.delete(refreshToken);
+        String redisKey = REFRESH_TOKEN_PREFIX + refreshToken;
+        redisTemplate.delete(redisKey);
     }
 
     public void addToBlacklist(String token) {
