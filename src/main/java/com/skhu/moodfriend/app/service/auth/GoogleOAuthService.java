@@ -85,11 +85,7 @@ public class GoogleOAuthService {
         String refreshToken = tokenProvider.createRefreshToken(member);
 
         tokenRenewService.saveRefreshToken(refreshToken, member.getMemberId());
-
-        AuthResDto resDto = AuthResDto.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
+        AuthResDto resDto = AuthResDto.of(accessToken, refreshToken);
 
         return ApiResponseTemplate.success(SuccessCode.LOGIN_MEMBER_SUCCESS, resDto);
     }
