@@ -2,7 +2,6 @@ package com.skhu.moodfriend.app.service.auth;
 
 import com.skhu.moodfriend.app.domain.member.LoginType;
 import com.skhu.moodfriend.app.domain.member.Member;
-import com.skhu.moodfriend.app.repository.MemberRefreshTokenRepository;
 import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.global.exception.CustomException;
 import com.skhu.moodfriend.global.exception.code.ErrorCode;
@@ -18,6 +17,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.security.Principal;
 import java.util.HashMap;
@@ -27,8 +27,9 @@ import java.util.Map;
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class LogoutService {
 
-    private final MemberRefreshTokenRepository memberRefreshTokenRepository;
     private final MemberRepository memberRepository;
+    private final TokenRenewService tokenRenewService;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Value("${oauth.google.logout-url}")
     private String googleLogoutUrl;
@@ -44,13 +45,18 @@ public class LogoutService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
         LoginType loginType = member.getLoginType();
 
-        memberRefreshTokenRepository.findByMember_MemberId(memberId)
-                .ifPresent(memberRefreshTokenRepository::delete);
+        String refreshToken = redisTemplate.opsForValue().get(memberId.toString());
+        if (refreshToken != null) {
+            tokenRenewService.deleteRefreshToken(refreshToken);
+        }
 
         if (principal instanceof Authentication) {
             String accessToken = extractAccessToken((Authentication) principal);
 
             if (accessToken != null) {
+                tokenRenewService.addToBlacklist(accessToken);
+                tokenRenewService.addToBlacklist(refreshToken);
+
                 switch (loginType) {
                     case GOOGLE_LOGIN:
                         logoutFromGoogle(accessToken);

@@ -1,12 +1,10 @@
 package com.skhu.moodfriend.app.controller.auth;
 
 import com.skhu.moodfriend.app.dto.auth.reqDto.LoginReqDto;
+import com.skhu.moodfriend.app.dto.auth.reqDto.RefreshTokenReqDto;
 import com.skhu.moodfriend.app.dto.auth.reqDto.SignUpReqDto;
 import com.skhu.moodfriend.app.dto.auth.resDto.AuthResDto;
-import com.skhu.moodfriend.app.service.auth.GoogleOAuthService;
-import com.skhu.moodfriend.app.service.auth.KakaoOAuthService;
-import com.skhu.moodfriend.app.service.auth.LoginService;
-import com.skhu.moodfriend.app.service.auth.SignUpService;
+import com.skhu.moodfriend.app.service.auth.*;
 import com.skhu.moodfriend.global.template.ApiResponseTemplate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,6 +25,7 @@ public class AuthController {
     private final LoginService loginService;
     private final GoogleOAuthService googleOauthService;
     private final KakaoOAuthService kakaoOAuthService;
+    private final TokenRenewService tokenRenewService;
 
     @PostMapping("/signUp")
     @Operation(
@@ -87,6 +86,21 @@ public class AuthController {
     )
     public ResponseEntity<ApiResponseTemplate<AuthResDto>> kakaoCallback(@RequestParam(name = "code") String code) {
         ApiResponseTemplate<AuthResDto> data = kakaoOAuthService.signUpOrLogin(kakaoOAuthService.getKakaoAccessToken(code).getData());
+        return ResponseEntity.status(data.getStatus()).body(data);
+    }
+
+    @PostMapping("/renew")
+    @Operation(
+            summary = "accessToken 재발급",
+            description = "refreshToken을 사용하여 새로운 accessToken을 발급합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "토큰 재발급 성공"),
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청"),
+                    @ApiResponse(responseCode = "500", description = "관리자 문의")
+            }
+    )
+    public ResponseEntity<ApiResponseTemplate<AuthResDto>> renewAccessToken(@RequestBody RefreshTokenReqDto refreshTokenReqDto) {
+        ApiResponseTemplate<AuthResDto> data = tokenRenewService.renewAccessToken(refreshTokenReqDto.refreshToken());
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 }

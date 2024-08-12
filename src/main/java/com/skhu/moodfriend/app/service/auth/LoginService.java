@@ -1,11 +1,8 @@
 package com.skhu.moodfriend.app.service.auth;
 
-import com.skhu.moodfriend.app.dto.auth.RenewAccessTokenDto;
 import com.skhu.moodfriend.app.dto.auth.reqDto.LoginReqDto;
-import com.skhu.moodfriend.app.domain.member.Member;
-import com.skhu.moodfriend.app.domain.member.MemberRefreshToken;
 import com.skhu.moodfriend.app.dto.auth.resDto.AuthResDto;
-import com.skhu.moodfriend.app.repository.MemberRefreshTokenRepository;
+import com.skhu.moodfriend.app.domain.member.Member;
 import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.global.exception.CustomException;
 import com.skhu.moodfriend.global.exception.code.ErrorCode;
@@ -23,15 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class LoginService {
 
     private final MemberRepository memberRepository;
-    private final MemberRefreshTokenRepository memberRefreshTokenRepository;
-
+    private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
     private final TokenRenewService tokenRenewService;
-    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public ApiResponseTemplate<AuthResDto> login(LoginReqDto loginReqDto) {
-
         Member member = memberRepository.findByEmail(loginReqDto.email())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_EMAIL_EXCEPTION,
                         ErrorCode.NOT_FOUND_EMAIL_EXCEPTION.getMessage()));
@@ -41,27 +35,15 @@ public class LoginService {
                     ErrorCode.PASSWORD_MISMATCH_EXCEPTION.getMessage());
         }
 
-        String renewRefreshToken = tokenProvider.createRefreshToken(member);
+        String accessToken = tokenProvider.createAccessToken(member);
+        String refreshToken = tokenProvider.createRefreshToken(member);
 
-        MemberRefreshToken refreshTokenEntity = memberRefreshTokenRepository.findByMember_MemberId(member.getMemberId())
-                .orElseGet(() -> {
-                    MemberRefreshToken logoutMemberRenewRefreshToken = new MemberRefreshToken();
-                    logoutMemberRenewRefreshToken.setMember(member);
-                    return memberRefreshTokenRepository.save(logoutMemberRenewRefreshToken);
-                });
+        if (tokenRenewService.isBlacklisted(accessToken) || tokenRenewService.isBlacklisted(refreshToken)) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN_EXCEPTION, ErrorCode.INVALID_TOKEN_EXCEPTION.getMessage());
+        }
 
-        refreshTokenEntity.setRefreshToken(renewRefreshToken);
-        refreshTokenEntity.setMember(member);
-
-        memberRefreshTokenRepository.save(refreshTokenEntity);
-
-        RenewAccessTokenDto renewAccessTokenDto = tokenRenewService.renewAccessTokenDtoFromRefreshToken(renewRefreshToken);
-        String renewAccessToken = renewAccessTokenDto.renewAccessToken();
-
-        AuthResDto resDto = AuthResDto.builder()
-                .accessToken(renewAccessToken)
-                .refreshToken(renewRefreshToken)
-                .build();
+        tokenRenewService.saveRefreshToken(refreshToken, member.getMemberId());
+        AuthResDto resDto = AuthResDto.of(accessToken, refreshToken);
 
         return ApiResponseTemplate.success(SuccessCode.LOGIN_MEMBER_SUCCESS, resDto);
     }

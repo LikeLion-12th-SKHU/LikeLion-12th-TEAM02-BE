@@ -1,12 +1,10 @@
 package com.skhu.moodfriend.app.service.auth;
 
 import com.google.gson.Gson;
+import com.skhu.moodfriend.app.domain.member.RoleType;
 import com.skhu.moodfriend.app.dto.auth.resDto.AuthResDto;
 import com.skhu.moodfriend.app.domain.member.LoginType;
 import com.skhu.moodfriend.app.domain.member.Member;
-import com.skhu.moodfriend.app.domain.member.MemberRefreshToken;
-import com.skhu.moodfriend.app.domain.member.RoleType;
-import com.skhu.moodfriend.app.repository.MemberRefreshTokenRepository;
 import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.global.dto.MemberInfo;
 import com.skhu.moodfriend.global.dto.Token;
@@ -39,10 +37,12 @@ public class GoogleOAuthService {
     @Value("${oauth.google.redirect-uri}")
     private String GOOGLE_REDIRECT_URI;
 
-    private final String GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
+    @Value("${oauth.google.token-url}")
+    private String GOOGLE_TOKEN_URL;
+
     private final MemberRepository memberRepository;
-    private final MemberRefreshTokenRepository memberRefreshTokenRepository;
     private final TokenProvider tokenProvider;
+    private final TokenRenewService tokenRenewService;
 
     public ApiResponseTemplate<String> getGoogleAccessToken(String code) {
         RestTemplate restTemplate = new RestTemplate();
@@ -84,17 +84,8 @@ public class GoogleOAuthService {
         String accessToken = tokenProvider.createAccessToken(member);
         String refreshToken = tokenProvider.createRefreshToken(member);
 
-        MemberRefreshToken memberRefreshToken = new MemberRefreshToken();
-        memberRefreshToken.setRefreshToken(refreshToken);
-        memberRefreshToken.setMember(member);
-
-        memberRefreshTokenRepository.deleteByMember(member);
-        memberRefreshTokenRepository.save(memberRefreshToken);
-
-        AuthResDto resDto = AuthResDto.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
+        tokenRenewService.saveRefreshToken(refreshToken, member.getMemberId());
+        AuthResDto resDto = AuthResDto.of(accessToken, refreshToken);
 
         return ApiResponseTemplate.success(SuccessCode.LOGIN_MEMBER_SUCCESS, resDto);
     }
