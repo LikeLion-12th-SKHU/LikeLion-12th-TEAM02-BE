@@ -2,12 +2,10 @@ package com.skhu.moodfriend.app.service.auth;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.skhu.moodfriend.app.domain.member.RoleType;
 import com.skhu.moodfriend.app.dto.auth.resDto.AuthResDto;
 import com.skhu.moodfriend.app.domain.member.LoginType;
 import com.skhu.moodfriend.app.domain.member.Member;
-import com.skhu.moodfriend.app.domain.member.MemberRefreshToken;
-import com.skhu.moodfriend.app.domain.member.RoleType;
-import com.skhu.moodfriend.app.repository.MemberRefreshTokenRepository;
 import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.global.dto.MemberInfo;
 import com.skhu.moodfriend.global.dto.Token;
@@ -37,11 +35,12 @@ public class KakaoOAuthService {
     @Value("${oauth.kakao.redirect-uri}")
     private String KAKAO_REDIRECT_URI;
 
-    private final String KAKAO_TOKEN_URL = "https://kauth.kakao.com/oauth/token";
+    @Value("${oauth.kakao.token-url}")
+    private String KAKAO_TOKEN_URL;
 
     private final MemberRepository memberRepository;
-    private final MemberRefreshTokenRepository memberRefreshTokenRepository;
     private final TokenProvider tokenProvider;
+    private final TokenRenewService tokenRenewService;
 
     public ApiResponseTemplate<String> getKakaoAccessToken(String code) {
         RestTemplate restTemplate = new RestTemplate();
@@ -87,12 +86,7 @@ public class KakaoOAuthService {
         String accessToken = tokenProvider.createAccessToken(member);
         String refreshToken = tokenProvider.createRefreshToken(member);
 
-        MemberRefreshToken memberRefreshToken = new MemberRefreshToken();
-        memberRefreshToken.setRefreshToken(refreshToken);
-        memberRefreshToken.setMember(member);
-
-        memberRefreshTokenRepository.deleteByMember(member);
-        memberRefreshTokenRepository.save(memberRefreshToken);
+        tokenRenewService.saveRefreshToken(refreshToken, member.getMemberId());
 
         AuthResDto resDto = AuthResDto.builder()
                 .accessToken(accessToken)

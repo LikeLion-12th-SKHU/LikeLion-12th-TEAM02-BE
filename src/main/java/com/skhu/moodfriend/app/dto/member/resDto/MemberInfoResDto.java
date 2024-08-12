@@ -14,7 +14,7 @@ public record MemberInfoResDto(
         return MemberInfoResDto.builder()
                 .email(member.getEmail())
                 .name(member.getName())
-                .mileage(member.getMileage())
+                .mileage(member.getMileage() != null ? member.getMileage() : 0)
                 .loginType(member.getLoginType().getDisplayName())
                 .build();
     }

@@ -36,10 +36,12 @@ oauth:
     redirect-uri: ${GOOGLE_REDIRECT_URI}
     logout-url: ${GOOGLE_LOGOUT_URL}
     revoke-url: ${GOOGLE_REVOKE_URL}
+    token-url: ${GOOGLE_TOKEN_URL}
   kakao:
     client-id: ${KAKAO_CLIENT_ID}
     redirect-uri: ${KAKAO_REDIRECT_URI}
     admin-key: ${KAKAO_ADMIN_KEY}
+    token-url: ${KAKAO_TOKEN_URL}
 
 kakao-map:
   client-id: ${KAKAO_CLIENT_ID}
