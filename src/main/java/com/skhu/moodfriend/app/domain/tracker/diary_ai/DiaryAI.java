@@ -26,7 +26,7 @@ public class DiaryAI {
     @Column(name = "DIARY_AI_CREATED_AT", updatable = false)
     private LocalDate createdAt;
 
-    @Column(name = "DIARY_AI_SUMMARY", length = 1024)
+    @Column(name = "DIARY_AI_SUMMARY", length = 1024, nullable = false)
     private String summary;
 
     @ManyToOne(fetch = FetchType.LAZY)

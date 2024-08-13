@@ -23,16 +23,16 @@ public class Order {
     @Column(name = "ORDER_ID")
     private Long orderId;
 
-    @Column(name = "PRODUCT_NAME")
+    @Column(name = "PRODUCT_NAME", nullable = false)
     private String productName;
 
-    @Column(name = "PRICE")
+    @Column(name = "PRICE", nullable = false)
     private int price;
 
-    @Column(name = "IMP_UID")
+    @Column(name = "IMP_UID", nullable = false)
     private String impUid;
 
-    @Column(name = "MERCHANT_UID")
+    @Column(name = "MERCHANT_UID", nullable = false)
     private String merchantUid;
 
     @CreatedDate
