@@ -61,7 +61,7 @@ MoodFriend는 현대인의 건강(wellness) 문제를 해결하기 위한 서비
 
 ### 🗃️ ERD
 
-![호야](https://github.com/user-attachments/assets/2cd369e9-f716-434b-a046-485e84f17e21)
+![호야](https://github.com/user-attachments/assets/45c251de-6c98-42a7-8d97-d3931c4ef869)
 
 <br/>
 
@@ -70,9 +70,9 @@ MoodFriend는 현대인의 건강(wellness) 문제를 해결하기 위한 서비
 #### FrontEnd
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![Styled Components](https://img.shields.io/badge/styled--components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white)
-![React Query](https://img.shields.io/badge/ReactQuery-FF4154?style=for-the-badge&logo=react-query&logoColor=white)
+![React Query](https://img.shields.io/badge/React_Query-FF4154?style=for-the-badge&logo=react-query&logoColor=white)
 ![Recoil](https://img.shields.io/badge/Recoil-3578e5?style=for-the-badge&logo=Recoil&logoColor=white)
-![React Router DOM](https://img.shields.io/badge/ReactRouter-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
+![React Router DOM](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 
 #### BackEnd
