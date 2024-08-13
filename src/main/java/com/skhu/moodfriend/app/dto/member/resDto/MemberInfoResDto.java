@@ -7,7 +7,7 @@ import lombok.Builder;
 public record MemberInfoResDto(
         String email,
         String name,
-        long mileage,
+        int mileage,
         String loginType
 ) {
     public static MemberInfoResDto of(Member member) {

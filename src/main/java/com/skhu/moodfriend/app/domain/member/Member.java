@@ -37,7 +37,7 @@ public class Member {
     private String name;
 
     @Column(name = "MILEAGE", nullable = false)
-    private Integer mileage;
+    private int mileage;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "LOGIN_TYPE", nullable = false)
@@ -66,7 +66,7 @@ public class Member {
     private List<Order> orders = new ArrayList<>();
 
     @Builder
-    private Member(String email, String password, String name, Integer mileage, LoginType loginType, RoleType roleType) {
+    private Member(String email, String password, String name, int mileage, LoginType loginType, RoleType roleType) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -79,7 +79,7 @@ public class Member {
         this.name = name;
     }
 
-    public void updateMileage(Integer mileageIncrement) {
+    public void updateMileage(int mileageIncrement) {
         this.mileage += mileageIncrement;
     }
 }
