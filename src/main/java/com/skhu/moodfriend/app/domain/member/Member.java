@@ -36,7 +36,7 @@ public class Member {
     @Column(name = "MEMBER_NAME", length = 10, nullable = false)
     private String name;
 
-    @Column(name = "MILEAGE")
+    @Column(name = "MILEAGE", nullable = false)
     private Integer mileage;
 
     @Enumerated(EnumType.STRING)
