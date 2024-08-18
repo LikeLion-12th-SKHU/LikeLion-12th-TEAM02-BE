@@ -45,10 +45,10 @@ public class PaymentService {
         }
     }
 
-    public ApiResponseTemplate<OrderResDto> saveOrder(OrderReqDto reqDto, Principal principal) {
+    public ApiResponseTemplate<OrderResDto> saveOrder(
+            OrderReqDto reqDto, Principal principal) {
 
         Long memberId = Long.parseLong(principal.getName());
-
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
@@ -64,15 +64,6 @@ public class PaymentService {
             throw new CustomException(ErrorCode.FAILED_ORDER_SAVE_EXCEPTION, ErrorCode.FAILED_ORDER_SAVE_EXCEPTION.getMessage());
         }
 
-        OrderResDto resDto = OrderResDto.builder()
-                .orderId(order.getOrderId())
-                .productName(order.getProductName())
-                .price(order.getPrice())
-                .impUid(order.getImpUid())
-                .merchantUid(order.getMerchantUid())
-                .createdAt(order.getCreatedAt())
-                .build();
-
-        return ApiResponseTemplate.success(SuccessCode.ORDER_SAVE_SUCCESS, resDto);
+        return ApiResponseTemplate.success(SuccessCode.ORDER_SAVE_SUCCESS, OrderResDto.of(order));
     }
 }

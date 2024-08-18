@@ -30,8 +30,7 @@ public class PurchaseService {
 
     @Transactional
     public ApiResponseTemplate<ObjectResDto> purchaseObject(
-            PurchaseReqDto reqDto,
-            Principal principal) {
+            PurchaseReqDto reqDto, Principal principal) {
 
         Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)

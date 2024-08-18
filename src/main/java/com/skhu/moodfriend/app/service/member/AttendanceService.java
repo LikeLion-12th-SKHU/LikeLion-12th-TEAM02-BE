@@ -24,7 +24,6 @@ import java.util.Optional;
 public class AttendanceService {
 
     private static final int MILEAGE_INCREMENT = 3;
-
     private final AttendanceRepository attendanceRepository;
     private final MemberRepository memberRepository;
 

@@ -26,8 +26,7 @@ public class DiaryModifyService {
 
     @Transactional
     public ApiResponseTemplate<DiaryResDto> updateDiary(
-            DiaryUpdateReqDto reqDto,
-            Principal principal) {
+            DiaryUpdateReqDto reqDto, Principal principal) {
 
         Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)
@@ -48,8 +47,7 @@ public class DiaryModifyService {
 
     @Transactional
     public ApiResponseTemplate<Void> deleteDiary(
-            Long diaryId,
-            Principal principal) {
+            Long diaryId, Principal principal) {
 
         Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)

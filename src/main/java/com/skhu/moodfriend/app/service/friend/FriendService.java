@@ -27,8 +27,7 @@ public class FriendService {
     private final FriendRepository friendRepository;
 
     public ApiResponseTemplate<Void> sendFriendRequest(
-            FriendReqDto friendReqDto,
-            Principal principal) {
+            FriendReqDto friendReqDto, Principal principal) {
 
         Long memberId = Long.parseLong(principal.getName());
         Member requester = memberRepository.findById(memberId)
@@ -54,8 +53,7 @@ public class FriendService {
     }
 
     public ApiResponseTemplate<Void> acceptFriendRequest(
-            String friendEmail,
-            Principal principal) {
+            String friendEmail, Principal principal) {
 
         Long memberId = Long.parseLong(principal.getName());
         Member currentMember = memberRepository.findById(memberId)
@@ -78,8 +76,7 @@ public class FriendService {
     }
 
     public ApiResponseTemplate<Void> deleteFriend(
-            String friendEmail,
-            Principal principal) {
+            String friendEmail, Principal principal) {
 
         Long memberId = Long.parseLong(principal.getName());
         Member currentMember = memberRepository.findById(memberId)

@@ -45,8 +45,7 @@ public class SignUpService {
         String refreshToken = tokenProvider.createRefreshToken(member);
 
         tokenRenewService.saveRefreshToken(refreshToken, member.getMemberId());
-        AuthResDto resDto = AuthResDto.of(accessToken, refreshToken);
 
-        return ApiResponseTemplate.success(SuccessCode.CREATE_MEMBER_SUCCESS, resDto);
+        return ApiResponseTemplate.success(SuccessCode.CREATE_MEMBER_SUCCESS, AuthResDto.of(accessToken, refreshToken));
     }
 }
