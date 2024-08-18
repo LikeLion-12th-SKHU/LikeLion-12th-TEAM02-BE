@@ -28,6 +28,8 @@ import java.util.Map;
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class WithDrawService {
 
+    private static final String REFRESH_TOKEN_PREFIX = "refreshToken:";
+
     private final MemberRepository memberRepository;
     private final TokenRenewService tokenRenewService;
     private final RedisTemplate<String, String> redisTemplate;
@@ -46,9 +48,12 @@ public class WithDrawService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
         LoginType loginType = member.getLoginType();
 
-        String refreshToken = redisTemplate.opsForValue().get(memberId.toString());
+        String refreshTokenKey = REFRESH_TOKEN_PREFIX + memberId;
+        String refreshToken = redisTemplate.opsForValue().get(refreshTokenKey);
+
         if (refreshToken != null) {
             tokenRenewService.deleteRefreshToken(refreshToken);
+            tokenRenewService.addToBlacklist(refreshToken);
         }
 
         if (principal instanceof Authentication) {
@@ -56,7 +61,6 @@ public class WithDrawService {
 
             if (accessToken != null) {
                 tokenRenewService.addToBlacklist(accessToken);
-                tokenRenewService.addToBlacklist(refreshToken);
 
                 switch (loginType) {
                     case GOOGLE_LOGIN:
