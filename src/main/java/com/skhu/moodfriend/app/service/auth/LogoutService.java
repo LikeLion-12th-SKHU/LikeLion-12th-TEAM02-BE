@@ -7,15 +7,15 @@ import com.skhu.moodfriend.global.exception.CustomException;
 import com.skhu.moodfriend.global.exception.code.ErrorCode;
 import com.skhu.moodfriend.global.exception.code.SuccessCode;
 import com.skhu.moodfriend.global.template.ApiResponseTemplate;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -27,9 +27,12 @@ import java.util.Map;
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class LogoutService {
 
+    private static final String REFRESH_TOKEN_PREFIX = "refreshToken:";
+
     private final MemberRepository memberRepository;
     private final TokenRenewService tokenRenewService;
     private final RedisTemplate<String, String> redisTemplate;
+    private final HttpServletRequest request;
 
     @Value("${oauth.google.logout-url}")
     private String googleLogoutUrl;
@@ -45,38 +48,38 @@ public class LogoutService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
         LoginType loginType = member.getLoginType();
 
-        String refreshToken = redisTemplate.opsForValue().get(memberId.toString());
+        String refreshTokenKey = REFRESH_TOKEN_PREFIX + memberId;
+        String refreshToken = redisTemplate.opsForValue().get(refreshTokenKey);
+
         if (refreshToken != null) {
             tokenRenewService.deleteRefreshToken(refreshToken);
+            tokenRenewService.addToBlacklist(refreshToken);
         }
 
-        if (principal instanceof Authentication) {
-            String accessToken = extractAccessToken((Authentication) principal);
+        String accessToken = resolveToken(request);
 
-            if (accessToken != null) {
-                tokenRenewService.addToBlacklist(accessToken);
-                tokenRenewService.addToBlacklist(refreshToken);
+        if (accessToken != null) {
+            tokenRenewService.addToBlacklist(accessToken);
 
-                switch (loginType) {
-                    case GOOGLE_LOGIN:
-                        logoutFromGoogle(accessToken);
-                        break;
-                    case KAKAO_LOGIN:
-                        logoutFromKakao(memberId);
-                        break;
-                    case NATIVE_LOGIN:
-                        break;
-                }
+            switch (loginType) {
+                case GOOGLE_LOGIN:
+                    logoutFromGoogle(accessToken);
+                    break;
+                case KAKAO_LOGIN:
+                    logoutFromKakao(memberId);
+                    break;
+                case NATIVE_LOGIN:
+                    break;
             }
         }
 
         return ApiResponseTemplate.success(SuccessCode.LOGOUT_MEMBER_SUCCESS, null);
     }
 
-    private String extractAccessToken(Authentication authentication) {
-        Object credentials = authentication.getCredentials();
-        if (credentials instanceof Jwt) {
-            return ((Jwt) credentials).getTokenValue();
+    private String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
         }
         return null;
     }

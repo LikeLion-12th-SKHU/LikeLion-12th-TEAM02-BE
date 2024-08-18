@@ -23,6 +23,7 @@ import java.util.Date;
 public class TokenRenewService {
 
     private static final String REFRESH_TOKEN_PREFIX = "refreshToken:";
+    private static final String BLACKLIST_PREFIX = "blacklist:";
 
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
@@ -71,13 +72,13 @@ public class TokenRenewService {
         if (token != null) {
             long expiration = getRemainingExpirationTime(token);
             if (expiration > 0) {
-                redisTemplate.opsForValue().set(token, "blacklisted", Duration.ofMillis(expiration));
+                redisTemplate.opsForValue().set(BLACKLIST_PREFIX + token, "blacklisted", Duration.ofMillis(expiration));
             }
         }
     }
 
     public boolean isBlacklisted(String token) {
-        return Boolean.TRUE.equals(redisTemplate.hasKey(token));
+        return Boolean.TRUE.equals(redisTemplate.hasKey(BLACKLIST_PREFIX + token));
     }
 
     private long getRemainingExpirationTime(String token) {

@@ -1,6 +1,7 @@
 package com.skhu.moodfriend.global.jwt;
 
 import com.skhu.moodfriend.app.domain.member.Member;
+import com.skhu.moodfriend.app.service.auth.TokenRenewService;
 import com.skhu.moodfriend.global.exception.code.ErrorCode;
 import com.skhu.moodfriend.global.exception.CustomException;
 import io.jsonwebtoken.Claims;
@@ -13,6 +14,7 @@ import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -32,14 +34,17 @@ public class TokenProvider {
     private final Key key;
     private final long accessTokenValidityTime;
     private final long refreshTokenValidityTime;
+    private final TokenRenewService tokenRenewService;
 
     public TokenProvider(@Value("${jwt.secret}") String secretKey,
                          @Value("${jwt.access-token-validity-in-milliseconds}") long accessTokenValidityTime,
-                         @Value("${jwt.refresh-token-validity-in-milliseconds}") long refreshTokenValidityTime) {
+                         @Value("${jwt.refresh-token-validity-in-milliseconds}") long refreshTokenValidityTime,
+                         @Lazy TokenRenewService tokenRenewService) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.accessTokenValidityTime = accessTokenValidityTime;
         this.refreshTokenValidityTime = refreshTokenValidityTime;
+        this.tokenRenewService = tokenRenewService;
     }
 
     public String createRefreshToken(Member member) {
@@ -116,6 +121,10 @@ public class TokenProvider {
 
     public boolean validateToken(String token) {
         try {
+            if (tokenRenewService.isBlacklisted(token)) {
+                throw new CustomException(ErrorCode.INVALID_TOKEN_EXCEPTION, ErrorCode.INVALID_TOKEN_EXCEPTION.getMessage());
+            }
+
             Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
