@@ -48,8 +48,4 @@ public enum SuccessCode {
 
     private final HttpStatus httpStatus;
     private final String message;
-
-    public int getHttpStatusCode() {
-        return httpStatus.value();
-    }
 }

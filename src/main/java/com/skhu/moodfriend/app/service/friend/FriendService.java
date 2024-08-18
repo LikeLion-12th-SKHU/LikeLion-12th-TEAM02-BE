@@ -96,7 +96,7 @@ public class FriendService {
             friendInFriendList.ifPresent(friendRepository::delete);
             return ApiResponseTemplate.success(SuccessCode.DELETE_FRIEND_SUCCESS, null);
         } else {
-            return ApiResponseTemplate.error(ErrorCode.NOT_FOUND_FRIEND_REQUEST_EXCEPTION, ErrorCode.NOT_FOUND_FRIEND_REQUEST_EXCEPTION.getMessage());
+            return ApiResponseTemplate.error(ErrorCode.NOT_FOUND_FRIEND_REQUEST_EXCEPTION);
         }
     }
 }
