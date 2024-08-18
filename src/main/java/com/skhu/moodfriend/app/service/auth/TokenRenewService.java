@@ -55,7 +55,7 @@ public class TokenRenewService {
         String renewAccessToken = tokenProvider.createAccessToken(member);
         AuthResDto resDto = AuthResDto.of(renewAccessToken, refreshToken);
 
-        return ApiResponseTemplate.success(SuccessCode.GET_TOKEN_SUCCESS, resDto);
+        return ApiResponseTemplate.success(SuccessCode.RENEW_TOKEN_SUCCESS, resDto);
     }
 
     public void saveRefreshToken(String refreshToken, Long memberId) {

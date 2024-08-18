@@ -11,6 +11,7 @@ public enum SuccessCode {
 
     // 200 OK
     GET_TOKEN_SUCCESS(HttpStatus.OK, "Access 토큰을 성공적으로 가져왔습니다."),
+    RENEW_TOKEN_SUCCESS(HttpStatus.OK, "Access 토큰을 성공적으로 재발급했습니다."),
     LOGIN_MEMBER_SUCCESS(HttpStatus.OK, "로그인에 성공했습니다."),
     LOGOUT_MEMBER_SUCCESS(HttpStatus.OK, "로그아웃에 성공했습니다."),
     WITHDRAW_MEMBER_SUCCESS(HttpStatus.OK, "회원탈퇴에 성공했습니다."),
