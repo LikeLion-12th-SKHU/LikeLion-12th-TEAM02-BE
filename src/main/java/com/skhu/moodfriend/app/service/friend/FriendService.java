@@ -27,8 +27,7 @@ public class FriendService {
     private final FriendRepository friendRepository;
 
     public ApiResponseTemplate<Void> sendFriendRequest(
-            FriendReqDto friendReqDto,
-            Principal principal) {
+            FriendReqDto friendReqDto, Principal principal) {
 
         Long memberId = Long.parseLong(principal.getName());
         Member requester = memberRepository.findById(memberId)
@@ -54,8 +53,7 @@ public class FriendService {
     }
 
     public ApiResponseTemplate<Void> acceptFriendRequest(
-            String friendEmail,
-            Principal principal) {
+            String friendEmail, Principal principal) {
 
         Long memberId = Long.parseLong(principal.getName());
         Member currentMember = memberRepository.findById(memberId)
@@ -78,8 +76,7 @@ public class FriendService {
     }
 
     public ApiResponseTemplate<Void> deleteFriend(
-            String friendEmail,
-            Principal principal) {
+            String friendEmail, Principal principal) {
 
         Long memberId = Long.parseLong(principal.getName());
         Member currentMember = memberRepository.findById(memberId)
@@ -96,7 +93,7 @@ public class FriendService {
             friendInFriendList.ifPresent(friendRepository::delete);
             return ApiResponseTemplate.success(SuccessCode.DELETE_FRIEND_SUCCESS, null);
         } else {
-            return ApiResponseTemplate.error(ErrorCode.NOT_FOUND_FRIEND_REQUEST_EXCEPTION, ErrorCode.NOT_FOUND_FRIEND_REQUEST_EXCEPTION.getMessage());
+            return ApiResponseTemplate.error(ErrorCode.NOT_FOUND_FRIEND_REQUEST_EXCEPTION);
         }
     }
 }

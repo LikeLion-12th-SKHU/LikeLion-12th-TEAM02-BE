@@ -43,7 +43,8 @@ public class DiaryDisplayService {
         return ApiResponseTemplate.success(SuccessCode.GET_DIARY_SUCCESS, DiaryResDto.of(diary));
     }
 
-    public ApiResponseTemplate<List<DiaryResDto>> getAllDiariesByMember(Principal principal) {
+    public ApiResponseTemplate<List<DiaryResDto>> getAllDiariesByMember(
+            Principal principal) {
 
         Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)

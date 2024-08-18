@@ -26,8 +26,7 @@ public class DiaryCreateService {
 
     @Transactional
     public ApiResponseTemplate<DiaryResDto> createDiary(
-            DiaryCreateReqDto reqDto,
-            Principal principal) {
+            DiaryCreateReqDto reqDto, Principal principal) {
 
         Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)

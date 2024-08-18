@@ -26,8 +26,7 @@ public class DiaryAIDisplayService {
     private final MemberRepository memberRepository;
 
     public ApiResponseTemplate<DiaryAIResDto> getDiarySummaryByCreatedAt(
-            LocalDate createdAt,
-            Principal principal) {
+            LocalDate createdAt, Principal principal) {
 
         Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)

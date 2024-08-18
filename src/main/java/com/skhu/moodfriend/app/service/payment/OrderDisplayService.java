@@ -26,12 +26,12 @@ public class OrderDisplayService {
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
 
-    public ApiResponseTemplate<List<OrderResDto>> getOrderHistory(Principal principal) {
-        Long memberId = Long.parseLong(principal.getName());
+    public ApiResponseTemplate<List<OrderResDto>> getOrderHistory(
+            Principal principal) {
 
+        Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
-
 
         List<Order> orders = orderRepository.findByMember(member);
 
@@ -42,9 +42,10 @@ public class OrderDisplayService {
         return ApiResponseTemplate.success(SuccessCode.GET_ALL_ORDERS_SUCCESS, resDtos);
     }
 
-    public ApiResponseTemplate<OrderResDto> getOrderDetail(Long orderId, Principal principal) {
-        Long memberId = Long.parseLong(principal.getName());
+    public ApiResponseTemplate<OrderResDto> getOrderDetail(
+            Long orderId, Principal principal) {
 
+        Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 

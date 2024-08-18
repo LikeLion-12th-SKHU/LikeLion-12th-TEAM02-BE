@@ -26,8 +26,7 @@ public class ObjectStatusService {
 
     @Transactional
     public ApiResponseTemplate<ObjectResDto> updateObjectStatus(
-            UpdateObjectStatusReqDto reqDto,
-            Principal principal) {
+            UpdateObjectStatusReqDto reqDto, Principal principal) {
 
         Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)

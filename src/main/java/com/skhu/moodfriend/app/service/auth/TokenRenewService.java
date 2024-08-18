@@ -53,9 +53,8 @@ public class TokenRenewService {
                         ErrorCode.NOT_FOUND_ID_EXCEPTION.getMessage()));
 
         String renewAccessToken = tokenProvider.createAccessToken(member);
-        AuthResDto resDto = AuthResDto.of(renewAccessToken, refreshToken);
 
-        return ApiResponseTemplate.success(SuccessCode.GET_TOKEN_SUCCESS, resDto);
+        return ApiResponseTemplate.success(SuccessCode.RENEW_TOKEN_SUCCESS, AuthResDto.of(renewAccessToken, refreshToken));
     }
 
     public void saveRefreshToken(String refreshToken, Long memberId) {

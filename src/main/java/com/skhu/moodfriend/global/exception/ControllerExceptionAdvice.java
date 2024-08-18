@@ -22,7 +22,7 @@ public class ControllerExceptionAdvice {
     @ExceptionHandler(CustomException.class)
     protected ResponseEntity<ApiResponseTemplate<String>> handleCustomException(CustomException e) {
         return ResponseEntity.status(e.getErrorCode().getHttpStatus())
-                .body(ApiResponseTemplate.error(e.getErrorCode(), e.getMessage()));
+                .body(ApiResponseTemplate.error(e.getErrorCode()));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -31,8 +31,11 @@ public class ControllerExceptionAdvice {
         Map<String, String> errorMap = e.getBindingResult().getFieldErrors().stream()
                 .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage, (existing, replacement) -> existing));
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponseTemplate.error(ErrorCode.VALIDATION_EXCEPTION, convertMapToString(errorMap)));
+        return ResponseEntity.status(ErrorCode.VALIDATION_EXCEPTION.getHttpStatus())
+                .body(ApiResponseTemplate.<String>error(ErrorCode.VALIDATION_EXCEPTION)
+                        .toBuilder()
+                        .data(convertMapToString(errorMap))
+                        .build());
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -45,12 +48,15 @@ public class ControllerExceptionAdvice {
                 String enumValues = getEnumValues(ife.getTargetType());
                 String message = String.format("허용되는 값: [%s]", enumValues);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(ApiResponseTemplate.error(ErrorCode.INVALID_ENUM_VALUE, message));
+                        .body(ApiResponseTemplate.<String>error(ErrorCode.INVALID_ENUM_VALUE)
+                                .toBuilder()
+                                .data(message)
+                                .build());
             }
         }
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponseTemplate.error(ErrorCode.JSON_SYNTAX_ERROR, ErrorCode.JSON_SYNTAX_ERROR.getMessage()));
+                .body(ApiResponseTemplate.error(ErrorCode.JSON_SYNTAX_ERROR));
     }
 
     private static String getEnumValues(Class<?> enumClass) {

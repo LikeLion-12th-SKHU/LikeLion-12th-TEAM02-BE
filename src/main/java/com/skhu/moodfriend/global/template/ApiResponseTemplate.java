@@ -7,30 +7,28 @@ import lombok.*;
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder
+@Builder(toBuilder = true)
 public class ApiResponseTemplate<T> {
 
-    private final int status;
     private final boolean success;
+    private final int status;
     private final String message;
     private T data;
-    private ErrorCode errorCode;
 
     public static <T> ApiResponseTemplate<T> success(SuccessCode successCode, T data) {
         return ApiResponseTemplate.<T>builder()
-                .status(successCode.getHttpStatus().value())
                 .success(true)
+                .status(successCode.getHttpStatus().value())
                 .message(successCode.getMessage())
                 .data(data)
                 .build();
     }
 
-    public static <T> ApiResponseTemplate<T> error(ErrorCode errorCode, String message) {
+    public static <T> ApiResponseTemplate<T> error(ErrorCode errorCode) {
         return ApiResponseTemplate.<T>builder()
-                .status(errorCode.getHttpStatus().value())
                 .success(false)
-                .message(message)
-                .errorCode(errorCode)
+                .status(errorCode.getHttpStatus().value())
+                .message(errorCode.getMessage())
                 .build();
     }
 }
