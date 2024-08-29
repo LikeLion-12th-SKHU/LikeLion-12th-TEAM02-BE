@@ -7,7 +7,6 @@ import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.global.exception.CustomException;
 import com.skhu.moodfriend.global.exception.code.ErrorCode;
 import com.skhu.moodfriend.global.exception.code.SuccessCode;
-import com.skhu.moodfriend.global.jwt.TokenProvider;
 import com.skhu.moodfriend.global.template.ApiResponseTemplate;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -21,31 +20,31 @@ public class SignUpService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final TokenProvider tokenProvider;
-    private final TokenRenewService tokenRenewService;
+    private final EmailService emailService;
 
     @Transactional
     public ApiResponseTemplate<AuthResDto> signUp(SignUpReqDto signUpReqDto) {
-        if (!signUpReqDto.password().equals(signUpReqDto.confirmPassword())) {
-            throw new CustomException(ErrorCode.PASSWORD_MISMATCH_EXCEPTION,
-                    ErrorCode.PASSWORD_MISMATCH_EXCEPTION.getMessage());
-        }
 
         if (memberRepository.existsByEmail(signUpReqDto.email())) {
             throw new CustomException(ErrorCode.ALREADY_EXIST_MEMBER_EXCEPTION,
                     ErrorCode.ALREADY_EXIST_MEMBER_EXCEPTION.getMessage());
         }
 
-        String encodedPassword = passwordEncoder.encode(signUpReqDto.password());
+        if (!emailService.isEmailVerified(signUpReqDto.email())) {
+            throw new CustomException(ErrorCode.EMAIL_NOT_VERIFIED_EXCEPTION, ErrorCode.EMAIL_NOT_VERIFIED_EXCEPTION.getMessage());
+        }
 
+        if (!signUpReqDto.password().equals(signUpReqDto.confirmPassword())) {
+            throw new CustomException(ErrorCode.PASSWORD_MISMATCH_EXCEPTION,
+                    ErrorCode.PASSWORD_MISMATCH_EXCEPTION.getMessage());
+        }
+
+        String encodedPassword = passwordEncoder.encode(signUpReqDto.password());
         Member member = signUpReqDto.toEntity(encodedPassword);
         memberRepository.save(member);
 
-        String accessToken = tokenProvider.createAccessToken(member);
-        String refreshToken = tokenProvider.createRefreshToken(member);
+        emailService.removeVerifiedEmail(signUpReqDto.email());
 
-        tokenRenewService.saveRefreshToken(refreshToken, member.getMemberId());
-
-        return ApiResponseTemplate.success(SuccessCode.CREATE_MEMBER_SUCCESS, AuthResDto.of(accessToken, refreshToken));
+        return ApiResponseTemplate.success(SuccessCode.CREATE_MEMBER_SUCCESS, null);
     }
 }

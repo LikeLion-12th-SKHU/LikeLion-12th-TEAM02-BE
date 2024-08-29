@@ -10,14 +10,12 @@ import lombok.*;
 @Builder(toBuilder = true)
 public class ApiResponseTemplate<T> {
 
-    private final boolean success;
     private final int status;
     private final String message;
     private T data;
 
     public static <T> ApiResponseTemplate<T> success(SuccessCode successCode, T data) {
         return ApiResponseTemplate.<T>builder()
-                .success(true)
                 .status(successCode.getHttpStatus().value())
                 .message(successCode.getMessage())
                 .data(data)
@@ -26,7 +24,6 @@ public class ApiResponseTemplate<T> {
 
     public static <T> ApiResponseTemplate<T> error(ErrorCode errorCode) {
         return ApiResponseTemplate.<T>builder()
-                .success(false)
                 .status(errorCode.getHttpStatus().value())
                 .message(errorCode.getMessage())
                 .build();

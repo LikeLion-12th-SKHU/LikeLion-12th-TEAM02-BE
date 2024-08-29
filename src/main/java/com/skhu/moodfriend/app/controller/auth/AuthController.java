@@ -1,8 +1,6 @@
 package com.skhu.moodfriend.app.controller.auth;
 
-import com.skhu.moodfriend.app.dto.auth.reqDto.LoginReqDto;
-import com.skhu.moodfriend.app.dto.auth.reqDto.RefreshTokenReqDto;
-import com.skhu.moodfriend.app.dto.auth.reqDto.SignUpReqDto;
+import com.skhu.moodfriend.app.dto.auth.reqDto.*;
 import com.skhu.moodfriend.app.dto.auth.resDto.AuthResDto;
 import com.skhu.moodfriend.app.service.auth.*;
 import com.skhu.moodfriend.global.template.ApiResponseTemplate;
@@ -21,11 +19,24 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/auth")
 public class AuthController {
 
+    private final EmailService emailService;
     private final SignUpService signUpService;
     private final LoginService loginService;
     private final GoogleOAuthService googleOauthService;
     private final KakaoOAuthService kakaoOAuthService;
     private final TokenRenewService tokenRenewService;
+
+    @PostMapping("/email-send")
+    public ResponseEntity<ApiResponseTemplate<Void>> sendCode(@Valid @RequestBody EmailSendReqDto reqDto) {
+        ApiResponseTemplate<Void> data = emailService.sendVerificationCode(reqDto);
+        return ResponseEntity.status(data.getStatus()).body(data);
+    }
+
+    @PostMapping("/email-verify")
+    public ResponseEntity<ApiResponseTemplate<Void>> verifyCode(@Valid @RequestBody EmailVerifyReqDto reqDto) {
+        ApiResponseTemplate<Void> data = emailService.verifyCode(reqDto);
+        return ResponseEntity.status(data.getStatus()).body(data);
+    }
 
     @PostMapping("/signUp")
     @Operation(
