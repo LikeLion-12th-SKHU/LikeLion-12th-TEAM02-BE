@@ -6,11 +6,11 @@ import com.skhu.moodfriend.global.exception.code.SuccessCode;
 import com.skhu.moodfriend.global.template.ApiResponseTemplate;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -28,16 +28,16 @@ public class HospitalDisplayService {
 
         for (String keyword : DEFAULT_KEYWORDS) {
             HospitalReqDto reqDto = new HospitalReqDto(keyword, x, y, radius, null);
-            ApiResponseTemplate<List<HospitalResDto>> apiResponse = kakaoMapService.retrieveByKeyword(reqDto);
+            ApiResponseTemplate<List<HospitalResDto>> response = kakaoMapService.retrieveByKeyword(reqDto);
 
-            if (apiResponse.isSuccess()) {
-                results.addAll(apiResponse.getData().stream()
+            if (HttpStatusCode.valueOf(response.getStatus()).is2xxSuccessful()) {
+                results.addAll(response.getData().stream()
                         .map(resDto -> new HospitalResDto(
                                 resDto.placeName(),
                                 resDto.placeUrl(),
                                 resDto.distance(),
                                 parseCategoryName(resDto.categoryName())
-                        )).collect(Collectors.toList()));
+                        )).toList());
             }
         }
         List<HospitalResDto> resDtos = new ArrayList<>(results);
