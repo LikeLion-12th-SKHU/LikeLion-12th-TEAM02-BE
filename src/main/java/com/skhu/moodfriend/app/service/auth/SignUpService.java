@@ -7,7 +7,6 @@ import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.global.exception.CustomException;
 import com.skhu.moodfriend.global.exception.code.ErrorCode;
 import com.skhu.moodfriend.global.exception.code.SuccessCode;
-import com.skhu.moodfriend.global.jwt.TokenProvider;
 import com.skhu.moodfriend.global.template.ApiResponseTemplate;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +20,6 @@ public class SignUpService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final TokenProvider tokenProvider;
-    private final TokenRenewService tokenRenewService;
     private final EmailService emailService;
 
     @Transactional
@@ -48,10 +45,6 @@ public class SignUpService {
 
         emailService.removeVerifiedEmail(signUpReqDto.email());
 
-        String accessToken = tokenProvider.createAccessToken(member);
-        String refreshToken = tokenProvider.createRefreshToken(member);
-        tokenRenewService.saveRefreshToken(refreshToken, member.getMemberId());
-
-        return ApiResponseTemplate.success(SuccessCode.CREATE_MEMBER_SUCCESS, AuthResDto.of(accessToken, refreshToken));
+        return ApiResponseTemplate.success(SuccessCode.CREATE_MEMBER_SUCCESS, null);
     }
 }
