@@ -19,6 +19,12 @@ spring:
         format_sql: false
         use_sql_comments: true
 
+  mail:
+    port: ${MAIL_PORT}
+    host: ${MAIL_SERVER}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+
   data:
     redis:
       port: ${REDIS_PORT}
