@@ -27,12 +27,30 @@ public class AuthController {
     private final TokenRenewService tokenRenewService;
 
     @PostMapping("/email-send")
+    @Operation(
+            summary = "이메일 인증 코드 전송",
+            description = "사용자가 입력한 이메일 주소로 인증 코드를 전송합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "인증 코드 전송 성공"),
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청"),
+                    @ApiResponse(responseCode = "500", description = "관리자 문의")
+            }
+    )
     public ResponseEntity<ApiResponseTemplate<Void>> sendCode(@Valid @RequestBody EmailSendReqDto reqDto) {
         ApiResponseTemplate<Void> data = emailService.sendVerificationCode(reqDto);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
     @PostMapping("/email-verify")
+    @Operation(
+            summary = "이메일 인증 코드 검증",
+            description = "사용자가 입력한 인증 코드를 검증합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "인증 코드 검증 성공"),
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청 or 인증 코드 불일치"),
+                    @ApiResponse(responseCode = "500", description = "관리자 문의")
+            }
+    )
     public ResponseEntity<ApiResponseTemplate<Void>> verifyCode(@Valid @RequestBody EmailVerifyReqDto reqDto) {
         ApiResponseTemplate<Void> data = emailService.verifyCode(reqDto);
         return ResponseEntity.status(data.getStatus()).body(data);
