@@ -19,6 +19,8 @@ public enum ErrorCode {
     JSON_SERIALIZATION_ERROR(HttpStatus.BAD_REQUEST, "JSON 직렬화 오류 발생"),
     VALIDATION_EXCEPTION(HttpStatus.BAD_REQUEST, "유효성 검사에 맞지않습니다."),
     INSUFFICIENT_MILEAGE_EXCEPTION(HttpStatus.BAD_REQUEST, "마일리지가 부족합니다."),
+    EMAIL_VERIFICATION_CODE_MISMATCH_EXCEPTION(HttpStatus.BAD_REQUEST, "인증 코드가 일치하지 않습니다."),
+    EMAIL_NOT_VERIFIED_EXCEPTION(HttpStatus.BAD_REQUEST, "이메일 인증이 완료되지 않았습니다."),
 
     // 401 Unauthorized
     INVALID_TOKEN_EXCEPTION(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
@@ -48,6 +50,7 @@ public enum ErrorCode {
     // 500 Internal Server Exception
     INTERNAL_SERVER_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "서버에서 오류가 발생했습니다."),
     TOKEN_CREATION_FAILED_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "토큰 생성 중 오류가 발생했습니다."),
+    EMAIL_SEND_FAILURE_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "이메일 전송에 실패했습니다."),
 
     // 503 Service Unavailable
     FAILED_GET_TOKEN_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "토큰을 가져오는 중 오류가 발생했습니다."),
