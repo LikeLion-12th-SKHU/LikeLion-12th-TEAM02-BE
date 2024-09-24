@@ -1,6 +1,8 @@
 package com.skhu.moodfriend.app.service.chat;
 
 import com.skhu.moodfriend.app.domain.member.Member;
+import com.skhu.moodfriend.app.domain.tracker.conversation.ContentType;
+import com.skhu.moodfriend.app.domain.tracker.conversation.Conversation;
 import com.skhu.moodfriend.app.dto.chat.Message;
 import com.skhu.moodfriend.app.dto.chat.reqDto.HoyaReqDto;
 import com.skhu.moodfriend.app.dto.chat.resDto.HoyaResDto;
@@ -17,12 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class HoyaService {
 
@@ -37,26 +38,25 @@ public class HoyaService {
     @Value("${openai.model}")
     private String model;
 
+    @Transactional
     public ApiResponseTemplate<HoyaResDto> getResponse(String prompt, Principal principal) {
-
         Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
         String userName = member.getName();
-
         String emotionPrompt = generateFriendlyEmotionPrompt(prompt, userName);
         String translatedPromptToEn = translationService.translate(emotionPrompt, "EN");
 
-        List<Message> messages = new ArrayList<>(conversationService.getConversation(memberId));
+        List<Conversation> conversations = conversationService.getConversation(memberId);
+        List<Message> messages = conversations.stream()
+                .map(conversation -> new Message(
+                        conversation.getContentType() == ContentType.USER ? "user" : "assistant",
+                        conversation.getContent()))
+                .collect(Collectors.toList());
 
-        if (messages.isEmpty()) {
-            messages.add(new Message("system", "This is the beginning of the conversation."));
-        }
-
-        Message userMessage = new Message("user", translatedPromptToEn);
-        conversationService.addMessage(memberId, userMessage);
-        messages.add(userMessage);
+        conversationService.addConversation(memberId, prompt, ContentType.USER);
+        messages.add(new Message("user", translatedPromptToEn));
 
         HoyaReqDto reqDto = new HoyaReqDto(model, messages);
         HoyaResDto resDto = restTemplate.postForObject(apiURL, reqDto, HoyaResDto.class);
@@ -68,13 +68,10 @@ public class HoyaService {
         HoyaResDto.Choice choice = resDto.choices().get(0);
         String responseInEN = choice.message().content();
 
-        Message responseMessage = new Message("assistant", responseInEN);
-        conversationService.addMessage(memberId, responseMessage);
+        conversationService.addConversation(memberId, responseInEN, ContentType.ASSISTANT);
 
         String translatedResponseToKO = translationService.translate(responseInEN, "KO");
-
         Message translatedMessage = new Message("assistant", translatedResponseToKO);
-
         HoyaResDto responseDto = new HoyaResDto(
                 Collections.singletonList(new HoyaResDto.Choice(0, translatedMessage)),
                 resDto.usage()

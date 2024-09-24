@@ -1,39 +1,44 @@
 package com.skhu.moodfriend.app.service.chat;
 
-import com.skhu.moodfriend.app.dto.chat.Message;
+import com.skhu.moodfriend.app.domain.member.Member;
+import com.skhu.moodfriend.app.domain.tracker.conversation.ContentType;
+import com.skhu.moodfriend.app.domain.tracker.conversation.Conversation;
+import com.skhu.moodfriend.app.repository.ConversationRepository;
+import com.skhu.moodfriend.app.repository.MemberRepository;
+import com.skhu.moodfriend.global.exception.CustomException;
+import com.skhu.moodfriend.global.exception.code.ErrorCode;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class ConversationService {
 
-    private final Map<Long, List<Message>> conversations = new HashMap<>();
-    private final Map<Long, List<LocalDateTime>> messageTimestamps = new HashMap<>();
+    private final ConversationRepository conversationRepository;
+    private final MemberRepository memberRepository;
 
-    public List<Message> getConversation(Long memberId) {
-        return conversations.getOrDefault(memberId, new ArrayList<>());
+    public List<Conversation> getConversation(Long memberId) {
+        return conversationRepository.findByMember_MemberIdOrderByCreatedAtAsc(memberId);
     }
 
-    public void addMessage(Long memberId, Message message) {
-        conversations.computeIfAbsent(memberId, k -> new ArrayList<>()).add(message);
-        if ("user".equals(message.role())) {
-            messageTimestamps.computeIfAbsent(memberId, k -> new ArrayList<>()).add(LocalDateTime.now());
-        }
+    @Transactional
+    public void addConversation(Long memberId, String content, ContentType contentType) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
+
+        Conversation conversation = Conversation.builder()
+                .member(member)
+                .content(content)
+                .contentType(contentType)
+                .build();
+        conversationRepository.save(conversation);
     }
 
     @Transactional
     public void clearConversation(Long memberId) {
-        conversations.put(memberId, new ArrayList<>());
-        messageTimestamps.put(memberId, new ArrayList<>());
-    }
-
-    public List<LocalDateTime> getMessageTimestamps(Long memberId) {
-        return messageTimestamps.getOrDefault(memberId, new ArrayList<>());
+        conversationRepository.deleteByMember_MemberId(memberId);
     }
 }
