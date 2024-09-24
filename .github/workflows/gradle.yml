@@ -36,7 +36,7 @@ jobs:
         mv before-deploy/before-deploy.zip deploy/moodfriend.zip
 
     - name: Deploy to S3 (GitHub Artifacts)
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: deploy
         path: deploy
