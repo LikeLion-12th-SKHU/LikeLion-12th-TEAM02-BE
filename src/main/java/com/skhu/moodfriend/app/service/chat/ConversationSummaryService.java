@@ -1,15 +1,16 @@
 package com.skhu.moodfriend.app.service.chat;
 
+import com.skhu.moodfriend.app.domain.tracker.conversation.ContentType;
+import com.skhu.moodfriend.app.domain.tracker.conversation.Conversation;
 import com.skhu.moodfriend.app.dto.chat.Message;
-import com.skhu.moodfriend.app.dto.chat.reqDto.HoyaReqDto;
-import com.skhu.moodfriend.app.dto.chat.resDto.HoyaResDto;
 import com.skhu.moodfriend.app.domain.tracker.diary_ai.DiaryAI;
 import com.skhu.moodfriend.app.domain.member.Member;
+import com.skhu.moodfriend.app.dto.chat.reqDto.HoyaReqDto;
+import com.skhu.moodfriend.app.dto.chat.resDto.HoyaResDto;
 import com.skhu.moodfriend.app.repository.DiaryAIRepository;
 import com.skhu.moodfriend.app.repository.MemberRepository;
 import com.skhu.moodfriend.global.exception.CustomException;
 import com.skhu.moodfriend.global.exception.code.ErrorCode;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,14 +18,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+@RequiredArgsConstructor
 public class ConversationSummaryService {
 
     private final ConversationService conversationService;
@@ -46,38 +45,39 @@ public class ConversationSummaryService {
 
         for (Member member : members) {
             Long memberId = member.getMemberId();
-            if (hasUserMessagesToday(memberId)) {
-                List<Message> messages = conversationService.getConversation(memberId);
+            if (hasUserInput(memberId)) {
+                List<Conversation> conversations = conversationService.getConversation(memberId);
 
-                String prompt = "Here is the user's conversation history. Please summarize the main points of the conversation in a concise and casual manner, as if the user is writing a diary entry. The summary should not exceed 1024 characters and must include the key points and important information.";
+                StringBuilder prompt = new StringBuilder("Here is the user's conversation history. Please summarize the main points of the conversation in a concise and casual manner, as if the user is writing a diary entry. The summary should not exceed 1024 characters and must include the key points and important information: ");
+                conversations.forEach(conversation -> prompt.append(conversation.getContent()).append(" "));
 
-                messages.add(new Message("system", prompt));
-
-                HoyaReqDto reqDto = new HoyaReqDto(model, messages);
+                HoyaReqDto reqDto = new HoyaReqDto(model, List.of(new Message("system", prompt.toString())));
                 HoyaResDto resDto = restTemplate.postForObject(apiURL, reqDto, HoyaResDto.class);
 
                 if (resDto == null || resDto.choices().isEmpty()) {
                     throw new CustomException(ErrorCode.FAILED_GET_GPT_RESPONSE_EXCEPTION, ErrorCode.FAILED_GET_GPT_RESPONSE_EXCEPTION.getMessage());
                 }
 
-                HoyaResDto.Choice choice = resDto.choices().get(0);
-                String summaryInEN = choice.message().content();
-
+                String summaryInEN = resDto.choices().get(0).message().content();
                 String summaryInKO = translationService.translate(summaryInEN, "KO");
 
                 DiaryAI diaryAI = DiaryAI.builder()
                         .summary(summaryInKO)
                         .member(member)
                         .build();
-
                 diaryAIRepository.save(diaryAI);
+
+                conversationService.clearConversation(memberId);
+                conversationService.addConversation(memberId, summaryInKO, ContentType.ASSISTANT);
             }
         }
     }
 
-    private boolean hasUserMessagesToday(Long memberId) {
-        LocalDate today = LocalDate.now(ZoneId.systemDefault());
-        List<LocalDateTime> timestamps = conversationService.getMessageTimestamps(memberId);
-        return timestamps.stream().anyMatch(timestamp -> timestamp.toLocalDate().isEqual(today));
+    private boolean hasUserInput(Long memberId) {
+        LocalDateTime since = LocalDateTime.now().minusHours(24);
+
+        return conversationService.getConversation(memberId).stream()
+                .anyMatch(conv -> conv.getCreatedAt().isAfter(since)
+                        && conv.getContentType() == ContentType.USER);
     }
 }
