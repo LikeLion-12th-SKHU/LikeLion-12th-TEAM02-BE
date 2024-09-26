@@ -75,6 +75,23 @@ public class FriendController {
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
+    @PutMapping("/reject")
+    @Operation(
+            summary = "친구 요청 거절",
+            description = "요청된 친구 요청을 거절합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "친구 추가 요청 거절"),
+                    @ApiResponse(responseCode = "403", description = "권한 문제 or 관리자 문의"),
+                    @ApiResponse(responseCode = "404", description = "친구 정보를 찾을 수 없음"),
+                    @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
+            }
+    )
+    public ResponseEntity<ApiResponseTemplate<Void>> rejectFriendRequest(@RequestParam String friendEmail, Principal principal) {
+        ApiResponseTemplate<Void> data = friendService.rejectFriendRequest(friendEmail, principal);
+        return ResponseEntity.status(data.getStatus()).body(data);
+    }
+
+
     @GetMapping("/list")
     @Operation(
             summary = "친구 리스트 조회",

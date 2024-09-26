@@ -75,6 +75,25 @@ public class FriendService {
         return ApiResponseTemplate.success(SuccessCode.ACCEPT_FRIEND_REQUEST, null);
     }
 
+    public ApiResponseTemplate<Void> rejectFriendRequest(
+            String friendEmail, Principal principal) {
+
+        Long memberId = Long.parseLong(principal.getName());
+        Member currentMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
+
+        Member friendMember = memberRepository.findByEmail(friendEmail)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_EMAIL_EXCEPTION, ErrorCode.NOT_FOUND_EMAIL_EXCEPTION.getMessage()));
+
+        Friend friendRequest = friendRepository.findByRequesterAndMemberAndStatus(friendMember, currentMember, Status.WAITING)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_FRIEND_REQUEST_EXCEPTION, ErrorCode.NOT_FOUND_FRIEND_REQUEST_EXCEPTION.getMessage()));
+
+        friendRequest.rejectedRequest();
+        friendRepository.save(friendRequest);
+
+        return ApiResponseTemplate.success(SuccessCode.REJECT_FRIEND_REQUEST, null);
+    }
+
     public ApiResponseTemplate<Void> deleteFriend(
             String friendEmail, Principal principal) {
 
