@@ -47,6 +47,7 @@ public enum SuccessCode {
     // 204 No Content
     DELETE_DIARY_SUCCESS(HttpStatus.NO_CONTENT, "일기 삭제에 성공했습니다."),
     ACCEPT_FRIEND_REQUEST(HttpStatus.NO_CONTENT, "친구 요청을 수락했습니다."),
+    REJECT_FRIEND_REQUEST(HttpStatus.NO_CONTENT, "친구 요청을 거절했습니다."),
     DELETE_FRIEND_SUCCESS(HttpStatus.NO_CONTENT, "친구 삭제에 성공했습니다.");
 
     private final HttpStatus httpStatus;

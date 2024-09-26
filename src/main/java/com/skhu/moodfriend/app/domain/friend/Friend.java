@@ -43,4 +43,8 @@ public class Friend {
     public void acceptRequest() {
         this.status = Status.ACCEPTED;
     }
+
+    public void rejectedRequest() {
+        this.status = Status.REJECTED;
+    }
 }
