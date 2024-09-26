@@ -34,8 +34,8 @@ public class AccountController {
             }
     )
     public ResponseEntity<ApiResponseTemplate<Void>> logout(Principal principal) {
-        ApiResponseTemplate<Void> response = logoutService.logout(principal);
-        return ResponseEntity.status(response.getStatus()).body(response);
+        ApiResponseTemplate<Void> data = logoutService.logout(principal);
+        return ResponseEntity.status(data.getStatus()).body(data);
     }
 
     @PostMapping("/withdraw")
@@ -48,7 +48,7 @@ public class AccountController {
             }
     )
     public ResponseEntity<ApiResponseTemplate<Void>> withdraw(Principal principal) {
-        ApiResponseTemplate<Void> response = withDrawService.withdraw(principal);
-        return ResponseEntity.status(response.getStatus()).body(response);
+        ApiResponseTemplate<Void> data = withDrawService.withdraw(principal);
+        return ResponseEntity.status(data.getStatus()).body(data);
     }
 }
