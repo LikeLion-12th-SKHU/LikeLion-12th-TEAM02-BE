@@ -2,6 +2,7 @@ package com.skhu.moodfriend.app.controller.auth;
 
 import com.skhu.moodfriend.app.dto.auth.reqDto.*;
 import com.skhu.moodfriend.app.dto.auth.resDto.AuthResDto;
+import com.skhu.moodfriend.app.dto.auth.resDto.EmailCheckResDto;
 import com.skhu.moodfriend.app.service.auth.*;
 import com.skhu.moodfriend.global.template.ApiResponseTemplate;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,6 +26,21 @@ public class AuthController {
     private final GoogleOAuthService googleOauthService;
     private final KakaoOAuthService kakaoOAuthService;
     private final TokenRenewService tokenRenewService;
+
+    @PostMapping("/email-check")
+    @Operation(
+            summary = "이메일 중복 검사",
+            description = "사용자가 입력한 이메일이 이미 존재하는지 여부를 체크합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "이메일 중복 검사 성공"),
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청"),
+                    @ApiResponse(responseCode = "500", description = "관리자 문의")
+            }
+    )
+    public ResponseEntity<ApiResponseTemplate<EmailCheckResDto>> checkEmailDuplication(@Valid @RequestBody EmailCheckReqDto reqDto) {
+        ApiResponseTemplate<EmailCheckResDto> data = signUpService.checkEmailDuplication(reqDto);
+        return ResponseEntity.status(data.getStatus()).body(data);
+    }
 
     @PostMapping("/email-send")
     @Operation(
