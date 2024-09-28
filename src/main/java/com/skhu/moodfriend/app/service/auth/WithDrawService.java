@@ -43,11 +43,11 @@ public class WithDrawService {
     @Transactional
     public ApiResponseTemplate<Void> withdraw(Principal principal) {
         Long memberId = Long.parseLong(principal.getName());
-
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
-        LoginType loginType = member.getLoginType();
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION,
+                        ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
+        LoginType loginType = member.getLoginType();
         String refreshTokenKey = REFRESH_TOKEN_PREFIX + memberId;
         String refreshToken = redisTemplate.opsForValue().get(refreshTokenKey);
 
@@ -94,7 +94,8 @@ public class WithDrawService {
             String url = googleRevokeUrl + "?token=" + accessToken;
             restTemplate.exchange(url, HttpMethod.POST, null, String.class);
         } catch (Exception e) {
-            throw new CustomException(ErrorCode.FAILED_WITHDRAW_EXCEPTION, ErrorCode.FAILED_WITHDRAW_EXCEPTION.getMessage());
+            throw new CustomException(ErrorCode.FAILED_WITHDRAW_EXCEPTION,
+                    ErrorCode.FAILED_WITHDRAW_EXCEPTION.getMessage());
         }
     }
 
@@ -113,7 +114,8 @@ public class WithDrawService {
             HttpEntity<Map<String, Object>> request = new HttpEntity<>(params, headers);
             restTemplate.postForEntity(kakaoUnlinkUrl, request, String.class);
         } catch (Exception e) {
-            throw new CustomException(ErrorCode.FAILED_WITHDRAW_EXCEPTION, ErrorCode.FAILED_WITHDRAW_EXCEPTION.getMessage());
+            throw new CustomException(ErrorCode.FAILED_WITHDRAW_EXCEPTION,
+                    ErrorCode.FAILED_WITHDRAW_EXCEPTION.getMessage());
         }
     }
 }

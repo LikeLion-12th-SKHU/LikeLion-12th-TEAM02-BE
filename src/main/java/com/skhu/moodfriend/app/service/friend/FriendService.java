@@ -27,26 +27,30 @@ public class FriendService {
     private final FriendRepository friendRepository;
 
     public ApiResponseTemplate<Void> sendFriendRequest(
-            FriendReqDto friendReqDto, Principal principal) {
+            FriendReqDto reqDto, Principal principal) {
 
         Long memberId = Long.parseLong(principal.getName());
         Member requester = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION,
+                        ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
-        Member receiver = memberRepository.findByEmail(friendReqDto.receiverEmail())
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_EMAIL_EXCEPTION, ErrorCode.NOT_FOUND_EMAIL_EXCEPTION.getMessage()));
+        Member receiver = memberRepository.findByEmail(reqDto.receiverEmail())
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_EMAIL_EXCEPTION,
+                        ErrorCode.NOT_FOUND_EMAIL_EXCEPTION.getMessage()));
 
-        if (requester.getEmail().equals(friendReqDto.receiverEmail())) {
-            throw new CustomException(ErrorCode.INVALID_FRIEND_REQUEST_EXCEPTION, ErrorCode.INVALID_FRIEND_REQUEST_EXCEPTION.getMessage());
+        if (requester.getEmail().equals(reqDto.receiverEmail())) {
+            throw new CustomException(ErrorCode.INVALID_FRIEND_REQUEST_EXCEPTION,
+                    ErrorCode.INVALID_FRIEND_REQUEST_EXCEPTION.getMessage());
         }
 
         if (friendRepository.existsByRequesterAndMemberAndStatus(requester, receiver, Status.WAITING) ||
                 friendRepository.existsByRequesterAndMemberAndStatus(receiver, requester, Status.WAITING) ||
                 friendRepository.existsByRequesterAndMemberAndStatus(requester, receiver, Status.ACCEPTED)) {
-            throw new CustomException(ErrorCode.ALREADY_FRIEND_REQUEST_EXCEPTION, ErrorCode.ALREADY_FRIEND_REQUEST_EXCEPTION.getMessage());
+            throw new CustomException(ErrorCode.ALREADY_FRIEND_REQUEST_EXCEPTION,
+                    ErrorCode.ALREADY_FRIEND_REQUEST_EXCEPTION.getMessage());
         }
 
-        Friend friendRequest = Friend.createFriendRequest(friendReqDto.receiverEmail(), receiver, requester);
+        Friend friendRequest = Friend.createFriendRequest(reqDto.receiverEmail(), receiver, requester);
         friendRepository.save(friendRequest);
 
         return ApiResponseTemplate.success(SuccessCode.REQUEST_FRIEND_SUCCESS, null);
@@ -57,13 +61,16 @@ public class FriendService {
 
         Long memberId = Long.parseLong(principal.getName());
         Member currentMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION,
+                        ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
         Member friendMember = memberRepository.findByEmail(friendEmail)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_EMAIL_EXCEPTION, ErrorCode.NOT_FOUND_EMAIL_EXCEPTION.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_EMAIL_EXCEPTION,
+                        ErrorCode.NOT_FOUND_EMAIL_EXCEPTION.getMessage()));
 
         Friend friendRequest = friendRepository.findByRequesterAndMemberAndStatus(friendMember, currentMember, Status.WAITING)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_FRIEND_REQUEST_EXCEPTION, ErrorCode.NOT_FOUND_FRIEND_REQUEST_EXCEPTION.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_FRIEND_REQUEST_EXCEPTION,
+                        ErrorCode.NOT_FOUND_FRIEND_REQUEST_EXCEPTION.getMessage()));
 
         friendRequest.acceptRequest();
         friendRepository.save(friendRequest);
@@ -80,13 +87,16 @@ public class FriendService {
 
         Long memberId = Long.parseLong(principal.getName());
         Member currentMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION,
+                        ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
         Member friendMember = memberRepository.findByEmail(friendEmail)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_EMAIL_EXCEPTION, ErrorCode.NOT_FOUND_EMAIL_EXCEPTION.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_EMAIL_EXCEPTION,
+                        ErrorCode.NOT_FOUND_EMAIL_EXCEPTION.getMessage()));
 
         Friend friendRequest = friendRepository.findByRequesterAndMemberAndStatus(friendMember, currentMember, Status.WAITING)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_FRIEND_REQUEST_EXCEPTION, ErrorCode.NOT_FOUND_FRIEND_REQUEST_EXCEPTION.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_FRIEND_REQUEST_EXCEPTION,
+                        ErrorCode.NOT_FOUND_FRIEND_REQUEST_EXCEPTION.getMessage()));
 
         friendRequest.rejectedRequest();
         friendRepository.save(friendRequest);
@@ -99,10 +109,12 @@ public class FriendService {
 
         Long memberId = Long.parseLong(principal.getName());
         Member currentMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION,
+                        ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
         Member friendMember = memberRepository.findByEmail(friendEmail)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_EMAIL_EXCEPTION, ErrorCode.NOT_FOUND_EMAIL_EXCEPTION.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_EMAIL_EXCEPTION,
+                        ErrorCode.NOT_FOUND_EMAIL_EXCEPTION.getMessage()));
 
         Optional<Friend> friendInMyList = friendRepository.findByRequesterAndMemberAndStatus(currentMember, friendMember, Status.ACCEPTED);
         Optional<Friend> friendInFriendList = friendRepository.findByRequesterAndMemberAndStatus(friendMember, currentMember, Status.ACCEPTED);

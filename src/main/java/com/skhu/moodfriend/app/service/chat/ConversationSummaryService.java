@@ -55,7 +55,8 @@ public class ConversationSummaryService {
                 HoyaResDto resDto = restTemplate.postForObject(apiURL, reqDto, HoyaResDto.class);
 
                 if (resDto == null || resDto.choices().isEmpty()) {
-                    throw new CustomException(ErrorCode.FAILED_GET_GPT_RESPONSE_EXCEPTION, ErrorCode.FAILED_GET_GPT_RESPONSE_EXCEPTION.getMessage());
+                    throw new CustomException(ErrorCode.FAILED_GET_GPT_RESPONSE_EXCEPTION,
+                            ErrorCode.FAILED_GET_GPT_RESPONSE_EXCEPTION.getMessage());
                 }
 
                 String summaryInEN = resDto.choices().get(0).message().content();

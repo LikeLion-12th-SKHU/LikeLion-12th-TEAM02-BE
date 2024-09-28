@@ -28,10 +28,7 @@ public class KakaoMapService {
     public ApiResponseTemplate<List<HospitalResDto>> retrieveByKeyword(HospitalReqDto reqDto) {
         Map<String, Object> response = kakaoMapRepository.searchByKeyword(
                 KAKAO_AUTH_PREFIX + KAKAO_CLIENT_ID,
-                reqDto.query(),
-                reqDto.x(),
-                reqDto.y(),
-                reqDto.radius()
+                reqDto.query(), reqDto.x(), reqDto.y(), reqDto.radius()
         );
 
         @SuppressWarnings("unchecked")

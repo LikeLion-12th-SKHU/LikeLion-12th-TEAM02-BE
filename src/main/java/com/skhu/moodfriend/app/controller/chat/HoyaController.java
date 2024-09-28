@@ -33,8 +33,7 @@ public class HoyaController {
             }
     )
     public ResponseEntity<ApiResponseTemplate<HoyaResDto>> chat(
-            @RequestParam(name = "prompt") String prompt,
-            Principal principal) {
+            @RequestParam(name = "prompt") String prompt, Principal principal) {
 
         ApiResponseTemplate<HoyaResDto> data = hoyaService.getResponse(prompt, principal);
         return ResponseEntity.status(data.getStatus()).body(data);

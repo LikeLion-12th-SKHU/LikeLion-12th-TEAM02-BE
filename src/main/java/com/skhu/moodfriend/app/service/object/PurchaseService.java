@@ -34,23 +34,28 @@ public class PurchaseService {
 
         Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION,
+                        ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
         Objects objects = Arrays.stream(Objects.values())
                 .filter(obj -> obj.getName().equalsIgnoreCase(reqDto.objectName()))
                 .findFirst()
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_OBJECT_EXCEPTION, ErrorCode.NOT_FOUND_OBJECT_EXCEPTION.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_OBJECT_EXCEPTION,
+                        ErrorCode.NOT_FOUND_OBJECT_EXCEPTION.getMessage()));
 
         ObjectStore objectStore = objectStoreRepository.findByObject(objects)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_OBJECT_EXCEPTION, ErrorCode.NOT_FOUND_OBJECT_EXCEPTION.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_OBJECT_EXCEPTION,
+                        ErrorCode.NOT_FOUND_OBJECT_EXCEPTION.getMessage()));
 
         if (memberObjectRepository.existsByMemberAndObject(member, objectStore.getObject())) {
-            throw new CustomException(ErrorCode.DUPLICATE_OBJECT_EXCEPTION, ErrorCode.DUPLICATE_OBJECT_EXCEPTION.getMessage());
+            throw new CustomException(ErrorCode.DUPLICATE_OBJECT_EXCEPTION,
+                    ErrorCode.DUPLICATE_OBJECT_EXCEPTION.getMessage());
         }
 
         int price = objectStore.getPrice();
         if (member.getMileage() < price) {
-            throw new CustomException(ErrorCode.INSUFFICIENT_MILEAGE_EXCEPTION, ErrorCode.INSUFFICIENT_MILEAGE_EXCEPTION.getMessage());
+            throw new CustomException(ErrorCode.INSUFFICIENT_MILEAGE_EXCEPTION,
+                    ErrorCode.INSUFFICIENT_MILEAGE_EXCEPTION.getMessage());
         }
 
         member.updateMileage(-price);
@@ -61,7 +66,6 @@ public class PurchaseService {
                 .status(false)
                 .member(member)
                 .build();
-
         memberObjectRepository.save(memberObject);
 
         return ApiResponseTemplate.success(SuccessCode.PURCHASE_OBJECT_SUCCESS, ObjectResDto.of(memberObject));

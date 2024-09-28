@@ -62,7 +62,9 @@ public class MemberController {
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<MemberInfoResDto>> updateMemberInfo(@Valid @RequestBody MemberInfoUpdateReqDto reqDto, Principal principal) {
+    public ResponseEntity<ApiResponseTemplate<MemberInfoResDto>> updateMemberInfo(
+            @Valid @RequestBody MemberInfoUpdateReqDto reqDto, Principal principal) {
+
         ApiResponseTemplate<MemberInfoResDto> data = memberInfoService.updateMemberInfo(reqDto, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
@@ -97,8 +99,8 @@ public class MemberController {
     public ResponseEntity<ApiResponseTemplate<List<HospitalResDto>>> retrieveHospitals(
             @Parameter(name = "x", description = "경도 (longitude)") @RequestParam String x,
             @Parameter(name = "y", description = "위도 (latitude)") @RequestParam String y,
-            @Parameter(name = "radius", description = "반경 (단위: 미터, 최소: 0, 최대: 20000)") @RequestParam String radius
-    ) {
+            @Parameter(name = "radius", description = "반경 (단위: 미터, 최소: 0, 최대: 20000)") @RequestParam String radius) {
+
         ApiResponseTemplate<List<HospitalResDto>> data = hospitalDisplayService.retrieve(x, y, radius);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
@@ -115,8 +117,7 @@ public class MemberController {
             }
     )
     public ResponseEntity<ApiResponseTemplate<MonthlyEmotionResDto>> getMonthlyEmotionStats(
-            @Valid @RequestBody MonthlyEmotionReqDto reqDto,
-            Principal principal) {
+            @Valid @RequestBody MonthlyEmotionReqDto reqDto, Principal principal) {
 
         ApiResponseTemplate<MonthlyEmotionResDto> data = emotionDisplayService.getMonthlyEmotions(reqDto, principal);
         return ResponseEntity.status(data.getStatus()).body(data);

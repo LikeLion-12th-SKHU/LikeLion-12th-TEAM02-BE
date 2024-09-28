@@ -63,7 +63,8 @@ public class GoogleOAuthService {
             return ApiResponseTemplate.success(SuccessCode.GET_TOKEN_SUCCESS, accessToken);
         }
 
-        throw new CustomException(ErrorCode.FAILED_GET_TOKEN_EXCEPTION, ErrorCode.FAILED_GET_TOKEN_EXCEPTION.getMessage());
+        throw new CustomException(ErrorCode.FAILED_GET_TOKEN_EXCEPTION,
+                ErrorCode.FAILED_GET_TOKEN_EXCEPTION.getMessage());
     }
 
     @Transactional
@@ -86,7 +87,8 @@ public class GoogleOAuthService {
 
         tokenRenewService.saveRefreshToken(refreshToken, member.getMemberId());
 
-        return ApiResponseTemplate.success(SuccessCode.LOGIN_MEMBER_SUCCESS, AuthResDto.of(accessToken, refreshToken));
+        return ApiResponseTemplate.success(SuccessCode.LOGIN_MEMBER_SUCCESS,
+                AuthResDto.of(accessToken, refreshToken));
     }
 
     public MemberInfo getMemberInfo(String accessToken) {
@@ -107,6 +109,7 @@ public class GoogleOAuthService {
             return gson.fromJson(json, MemberInfo.class);
         }
 
-        throw new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage());
+        throw new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION,
+                ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage());
     }
 }

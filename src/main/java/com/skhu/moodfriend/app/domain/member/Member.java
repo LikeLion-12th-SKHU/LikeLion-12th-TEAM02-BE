@@ -4,6 +4,7 @@ import com.skhu.moodfriend.app.domain.member.attendance.Attendance;
 import com.skhu.moodfriend.app.domain.friend.Friend;
 import com.skhu.moodfriend.app.domain.member.object.MemberObject;
 import com.skhu.moodfriend.app.domain.payment.Order;
+import com.skhu.moodfriend.app.domain.tracker.conversation.Conversation;
 import com.skhu.moodfriend.app.domain.tracker.diary.Diary;
 import com.skhu.moodfriend.app.domain.tracker.diary_ai.DiaryAI;
 import jakarta.persistence.*;
@@ -64,6 +65,9 @@ public class Member {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Conversation> conversations = new ArrayList<>();
 
     @Builder
     private Member(String email, String password, String name, int mileage, LoginType loginType, RoleType roleType) {

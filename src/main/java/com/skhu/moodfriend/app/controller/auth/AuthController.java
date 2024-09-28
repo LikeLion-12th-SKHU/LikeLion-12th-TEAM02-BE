@@ -2,6 +2,7 @@ package com.skhu.moodfriend.app.controller.auth;
 
 import com.skhu.moodfriend.app.dto.auth.reqDto.*;
 import com.skhu.moodfriend.app.dto.auth.resDto.AuthResDto;
+import com.skhu.moodfriend.app.dto.auth.resDto.EmailCheckResDto;
 import com.skhu.moodfriend.app.service.auth.*;
 import com.skhu.moodfriend.global.template.ApiResponseTemplate;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,6 +27,23 @@ public class AuthController {
     private final KakaoOAuthService kakaoOAuthService;
     private final TokenRenewService tokenRenewService;
 
+    @PostMapping("/email-check")
+    @Operation(
+            summary = "이메일 중복 검사",
+            description = "사용자가 입력한 이메일이 이미 존재하는지 여부를 체크합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "이메일 중복 검사 성공"),
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청"),
+                    @ApiResponse(responseCode = "500", description = "관리자 문의")
+            }
+    )
+    public ResponseEntity<ApiResponseTemplate<EmailCheckResDto>> checkEmailDuplication(
+            @Valid @RequestBody EmailCheckReqDto reqDto) {
+
+        ApiResponseTemplate<EmailCheckResDto> data = signUpService.checkEmailDuplication(reqDto);
+        return ResponseEntity.status(data.getStatus()).body(data);
+    }
+
     @PostMapping("/email-send")
     @Operation(
             summary = "이메일 인증 코드 전송",
@@ -36,7 +54,9 @@ public class AuthController {
                     @ApiResponse(responseCode = "500", description = "관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<Void>> sendCode(@Valid @RequestBody EmailSendReqDto reqDto) {
+    public ResponseEntity<ApiResponseTemplate<Void>> sendCode(
+            @Valid @RequestBody EmailSendReqDto reqDto) {
+
         ApiResponseTemplate<Void> data = emailService.sendVerificationCode(reqDto);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
@@ -51,7 +71,9 @@ public class AuthController {
                     @ApiResponse(responseCode = "500", description = "관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<Void>> verifyCode(@Valid @RequestBody EmailVerifyReqDto reqDto) {
+    public ResponseEntity<ApiResponseTemplate<Void>> verifyCode(
+            @Valid @RequestBody EmailVerifyReqDto reqDto) {
+
         ApiResponseTemplate<Void> data = emailService.verifyCode(reqDto);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
@@ -67,8 +89,10 @@ public class AuthController {
                     @ApiResponse(responseCode = "500", description = "관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<AuthResDto>> signUp(@Valid @RequestBody SignUpReqDto signUpReqDto) {
-        ApiResponseTemplate<AuthResDto> data = signUpService.signUp(signUpReqDto);
+    public ResponseEntity<ApiResponseTemplate<AuthResDto>> signUp(
+            @Valid @RequestBody SignUpReqDto reqDto) {
+
+        ApiResponseTemplate<AuthResDto> data = signUpService.signUp(reqDto);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
@@ -83,8 +107,10 @@ public class AuthController {
                     @ApiResponse(responseCode = "500", description = "관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<AuthResDto>> login(@Valid @RequestBody LoginReqDto loginReqDto) {
-        ApiResponseTemplate<AuthResDto> data = loginService.login(loginReqDto);
+    public ResponseEntity<ApiResponseTemplate<AuthResDto>> login(
+            @Valid @RequestBody LoginReqDto reqDto) {
+
+        ApiResponseTemplate<AuthResDto> data = loginService.login(reqDto);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
@@ -98,7 +124,9 @@ public class AuthController {
                     @ApiResponse(responseCode = "500", description = "관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<AuthResDto>> googleCallback(@RequestParam(name = "code") String code) {
+    public ResponseEntity<ApiResponseTemplate<AuthResDto>> googleCallback(
+            @RequestParam(name = "code") String code) {
+
         ApiResponseTemplate<AuthResDto> data = googleOauthService.signUpOrLogin(googleOauthService.getGoogleAccessToken(code).getData());
         return ResponseEntity.status(data.getStatus()).body(data);
     }
@@ -113,7 +141,9 @@ public class AuthController {
                     @ApiResponse(responseCode = "500", description = "관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<AuthResDto>> kakaoCallback(@RequestParam(name = "code") String code) {
+    public ResponseEntity<ApiResponseTemplate<AuthResDto>> kakaoCallback(
+            @RequestParam(name = "code") String code) {
+
         ApiResponseTemplate<AuthResDto> data = kakaoOAuthService.signUpOrLogin(kakaoOAuthService.getKakaoAccessToken(code).getData());
         return ResponseEntity.status(data.getStatus()).body(data);
     }
@@ -128,8 +158,10 @@ public class AuthController {
                     @ApiResponse(responseCode = "500", description = "관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<AuthResDto>> renewAccessToken(@RequestBody RefreshTokenReqDto refreshTokenReqDto) {
-        ApiResponseTemplate<AuthResDto> data = tokenRenewService.renewAccessToken(refreshTokenReqDto.refreshToken());
+    public ResponseEntity<ApiResponseTemplate<AuthResDto>> renewAccessToken(
+            @RequestBody RefreshTokenReqDto reqDto) {
+
+        ApiResponseTemplate<AuthResDto> data = tokenRenewService.renewAccessToken(reqDto.refreshToken());
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 }

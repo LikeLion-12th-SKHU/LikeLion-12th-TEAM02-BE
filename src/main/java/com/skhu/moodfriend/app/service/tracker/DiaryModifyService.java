@@ -30,13 +30,16 @@ public class DiaryModifyService {
 
         Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION,
+                        ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
         Diary diary = diaryRepository.findByDiaryIdAndMember(reqDto.diaryId(), member)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DIARY_EXCEPTION, ErrorCode.NOT_FOUND_DIARY_EXCEPTION.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DIARY_EXCEPTION,
+                        ErrorCode.NOT_FOUND_DIARY_EXCEPTION.getMessage()));
 
         if (diaryRepository.existsByMemberAndCreatedAtDateExcludingDiary(member, reqDto.createdAt(), reqDto.diaryId())) {
-            throw new CustomException(ErrorCode.ALREADY_EXIST_DIARY_EXCEPTION, ErrorCode.ALREADY_EXIST_DIARY_EXCEPTION.getMessage());
+            throw new CustomException(ErrorCode.ALREADY_EXIST_DIARY_EXCEPTION,
+                    ErrorCode.ALREADY_EXIST_DIARY_EXCEPTION.getMessage());
         }
 
         diary.update(reqDto.emotionType(), reqDto.weatherType(), reqDto.title(), reqDto.content(), reqDto.createdAt());
@@ -51,10 +54,12 @@ public class DiaryModifyService {
 
         Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION,
+                        ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
         Diary diary = diaryRepository.findByDiaryIdAndMember(diaryId, member)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DIARY_EXCEPTION, ErrorCode.NOT_FOUND_DIARY_EXCEPTION.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DIARY_EXCEPTION,
+                        ErrorCode.NOT_FOUND_DIARY_EXCEPTION.getMessage()));
 
         diaryRepository.delete(diary);
 

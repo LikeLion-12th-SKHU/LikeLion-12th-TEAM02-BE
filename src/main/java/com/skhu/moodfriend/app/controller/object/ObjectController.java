@@ -41,7 +41,9 @@ public class ObjectController {
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<ObjectResDto>> purchaseObject(@RequestBody PurchaseReqDto reqDto, Principal principal) {
+    public ResponseEntity<ApiResponseTemplate<ObjectResDto>> purchaseObject(
+            @RequestBody PurchaseReqDto reqDto, Principal principal) {
+
         ApiResponseTemplate<ObjectResDto> data = purchaseService.purchaseObject(reqDto, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
@@ -90,7 +92,9 @@ public class ObjectController {
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<ObjectResDto>> updateObjectStatus(@RequestBody UpdateObjectStatusReqDto reqDto, Principal principal) {
+    public ResponseEntity<ApiResponseTemplate<ObjectResDto>> updateObjectStatus(
+            @RequestBody UpdateObjectStatusReqDto reqDto, Principal principal) {
+
         ApiResponseTemplate<ObjectResDto> data = objectStatusService.updateObjectStatus(reqDto, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }

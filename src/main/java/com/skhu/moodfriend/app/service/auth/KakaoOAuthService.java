@@ -65,7 +65,8 @@ public class KakaoOAuthService {
             return ApiResponseTemplate.success(SuccessCode.GET_TOKEN_SUCCESS, accessToken);
         }
 
-        throw new CustomException(ErrorCode.FAILED_GET_TOKEN_EXCEPTION, ErrorCode.FAILED_GET_TOKEN_EXCEPTION.getMessage());
+        throw new CustomException(ErrorCode.FAILED_GET_TOKEN_EXCEPTION,
+                ErrorCode.FAILED_GET_TOKEN_EXCEPTION.getMessage());
     }
 
     @Transactional
@@ -88,7 +89,8 @@ public class KakaoOAuthService {
 
         tokenRenewService.saveRefreshToken(refreshToken, member.getMemberId());
 
-        return ApiResponseTemplate.success(SuccessCode.LOGIN_MEMBER_SUCCESS, AuthResDto.of(accessToken, refreshToken));
+        return ApiResponseTemplate.success(SuccessCode.LOGIN_MEMBER_SUCCESS,
+                AuthResDto.of(accessToken, refreshToken));
     }
 
     public MemberInfo getMemberInfo(String accessToken) {
@@ -114,6 +116,7 @@ public class KakaoOAuthService {
             return new MemberInfo(email, name);
         }
 
-        throw new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage());
+        throw new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION,
+                ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage());
     }
 }

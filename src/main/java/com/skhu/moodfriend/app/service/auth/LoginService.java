@@ -39,7 +39,8 @@ public class LoginService {
         String refreshToken = tokenProvider.createRefreshToken(member);
 
         if (tokenRenewService.isBlacklisted(accessToken) || tokenRenewService.isBlacklisted(refreshToken)) {
-            throw new CustomException(ErrorCode.INVALID_TOKEN_EXCEPTION, ErrorCode.INVALID_TOKEN_EXCEPTION.getMessage());
+            throw new CustomException(ErrorCode.INVALID_TOKEN_EXCEPTION,
+                    ErrorCode.INVALID_TOKEN_EXCEPTION.getMessage());
         }
 
         tokenRenewService.saveRefreshToken(refreshToken, member.getMemberId());

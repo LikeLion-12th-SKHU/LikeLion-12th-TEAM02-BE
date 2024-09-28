@@ -81,7 +81,8 @@ public class EmailService {
             MimeMessage message = createMessage(reqDto.email(), code);
             javaMailSender.send(message);
         } catch (MessagingException | UnsupportedEncodingException | MailException e) {
-            throw new CustomException(ErrorCode.EMAIL_SEND_FAILURE_EXCEPTION, ErrorCode.EMAIL_SEND_FAILURE_EXCEPTION.getMessage());
+            throw new CustomException(ErrorCode.EMAIL_SEND_FAILURE_EXCEPTION,
+                    ErrorCode.EMAIL_SEND_FAILURE_EXCEPTION.getMessage());
         }
 
         return ApiResponseTemplate.success(SuccessCode.EMAIL_SEND_CODE_SUCCESS, null);
@@ -92,7 +93,8 @@ public class EmailService {
         String storedCode = redisTemplate.opsForValue().get(reqDto.email());
 
         if (storedCode == null || !storedCode.equals(reqDto.code())) {
-            throw new CustomException(ErrorCode.EMAIL_VERIFICATION_CODE_MISMATCH_EXCEPTION, ErrorCode.EMAIL_VERIFICATION_CODE_MISMATCH_EXCEPTION.getMessage());
+            throw new CustomException(ErrorCode.EMAIL_VERIFICATION_CODE_MISMATCH_EXCEPTION,
+                    ErrorCode.EMAIL_VERIFICATION_CODE_MISMATCH_EXCEPTION.getMessage());
         }
 
         redisTemplate.delete(reqDto.email());

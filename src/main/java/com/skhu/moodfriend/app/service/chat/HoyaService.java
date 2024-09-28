@@ -42,7 +42,8 @@ public class HoyaService {
     public ApiResponseTemplate<HoyaResDto> getResponse(String prompt, Principal principal) {
         Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION,
+                        ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
         String userName = member.getName();
         String emotionPrompt = generateFriendlyEmotionPrompt(prompt, userName);
@@ -62,7 +63,8 @@ public class HoyaService {
         HoyaResDto resDto = restTemplate.postForObject(apiURL, reqDto, HoyaResDto.class);
 
         if (resDto == null || resDto.choices().isEmpty()) {
-            throw new CustomException(ErrorCode.FAILED_GET_GPT_RESPONSE_EXCEPTION, ErrorCode.FAILED_GET_GPT_RESPONSE_EXCEPTION.getMessage());
+            throw new CustomException(ErrorCode.FAILED_GET_GPT_RESPONSE_EXCEPTION,
+                    ErrorCode.FAILED_GET_GPT_RESPONSE_EXCEPTION.getMessage());
         }
 
         HoyaResDto.Choice choice = resDto.choices().get(0);

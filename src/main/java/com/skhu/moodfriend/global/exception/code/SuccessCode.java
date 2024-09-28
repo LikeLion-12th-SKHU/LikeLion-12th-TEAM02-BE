@@ -39,6 +39,7 @@ public enum SuccessCode {
     UPDATE_OBJECT_STATUS_SUCCESS(HttpStatus.OK, "보유 오브제 상태 관리에 성공했습니다."),
     EMAIL_SEND_CODE_SUCCESS(HttpStatus.OK, "인증 코드를 성공적으로 전송했습니다."),
     EMAIL_VERIFICATION_SUCCESS(HttpStatus.OK, "이메일 인증에 성공했습니다."),
+    EMAIL_CHECK_SUCCESS(HttpStatus.OK, "이메일 중복 검사에 성공했습니다."),
 
     // 201 Created
     CREATE_MEMBER_SUCCESS(HttpStatus.CREATED, "회원가입에 성공했습니다."),
