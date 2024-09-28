@@ -52,7 +52,9 @@ public class PaymentController {
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<OrderResDto>> processOrder(@RequestBody OrderReqDto reqDto, Principal principal) {
+    public ResponseEntity<ApiResponseTemplate<OrderResDto>> processOrder(
+            @RequestBody OrderReqDto reqDto, Principal principal) {
+
         ApiResponseTemplate<OrderResDto> data = paymentService.saveOrder(reqDto, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
@@ -99,7 +101,9 @@ public class PaymentController {
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<OrderResDto>> getOrderDetail(@PathVariable Long orderId, Principal principal) {
+    public ResponseEntity<ApiResponseTemplate<OrderResDto>> getOrderDetail(
+            @PathVariable Long orderId, Principal principal) {
+
         ApiResponseTemplate<OrderResDto> data = orderDisplayService.getOrderDetail(orderId, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }

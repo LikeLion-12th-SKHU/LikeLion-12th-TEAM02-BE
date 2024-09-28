@@ -30,10 +30,12 @@ public class DiaryCreateService {
 
         Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION,
+                        ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
         if (diaryRepository.existsByMemberAndCreatedAtDate(member, reqDto.createdAt())) {
-            throw new CustomException(ErrorCode.ALREADY_EXIST_DIARY_EXCEPTION, ErrorCode.ALREADY_EXIST_DIARY_EXCEPTION.getMessage());
+            throw new CustomException(ErrorCode.ALREADY_EXIST_DIARY_EXCEPTION,
+                    ErrorCode.ALREADY_EXIST_DIARY_EXCEPTION.getMessage());
         }
 
         Diary diary = reqDto.toEntity(member);

@@ -31,24 +31,27 @@ public class DiaryDisplayService {
 
         Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION,
+                        ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
         Diary diary = diaryRepository.findByDiaryIdAndMember(diaryId, member)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DIARY_EXCEPTION, ErrorCode.NOT_FOUND_DIARY_EXCEPTION.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_DIARY_EXCEPTION,
+                        ErrorCode.NOT_FOUND_DIARY_EXCEPTION.getMessage()));
 
         if (!diary.getMember().equals(member)) {
-            throw new CustomException(ErrorCode.ONLY_OWN_DIARY_ACCESS_EXCEPTION, ErrorCode.ONLY_OWN_DIARY_ACCESS_EXCEPTION.getMessage());
+            throw new CustomException(ErrorCode.ONLY_OWN_DIARY_ACCESS_EXCEPTION,
+                    ErrorCode.ONLY_OWN_DIARY_ACCESS_EXCEPTION.getMessage());
         }
 
         return ApiResponseTemplate.success(SuccessCode.GET_DIARY_SUCCESS, DiaryResDto.of(diary));
     }
 
-    public ApiResponseTemplate<List<DiaryResDto>> getAllDiariesByMember(
-            Principal principal) {
+    public ApiResponseTemplate<List<DiaryResDto>> getAllDiariesByMember(Principal principal) {
 
         Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION,
+                        ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
         List<Diary> diaries = diaryRepository.findByMemberOrderByCreatedAtAsc(member);
 

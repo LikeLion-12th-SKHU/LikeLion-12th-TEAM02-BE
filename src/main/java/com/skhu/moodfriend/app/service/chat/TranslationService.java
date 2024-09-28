@@ -44,7 +44,8 @@ public class TranslationService {
         try {
             requestBody = objectMapper.writeValueAsString(reqDto);
         } catch (Exception e) {
-            throw new CustomException(ErrorCode.JSON_SERIALIZATION_ERROR, ErrorCode.JSON_SERIALIZATION_ERROR.getMessage());
+            throw new CustomException(ErrorCode.JSON_SERIALIZATION_ERROR,
+                    ErrorCode.JSON_SERIALIZATION_ERROR.getMessage());
         }
 
         HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
@@ -53,7 +54,8 @@ public class TranslationService {
 
         TranslationResDto resDto = response.getBody();
         if (resDto == null || resDto.translations().isEmpty()) {
-            throw new CustomException(ErrorCode.FAILED_TRANSLATION_EXCEPTION, ErrorCode.FAILED_TRANSLATION_EXCEPTION.getMessage());
+            throw new CustomException(ErrorCode.FAILED_TRANSLATION_EXCEPTION,
+                    ErrorCode.FAILED_TRANSLATION_EXCEPTION.getMessage());
         }
 
         return resDto.translations().get(0).text();

@@ -50,7 +50,8 @@ public class PaymentService {
 
         Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION,
+                        ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
         Order order = reqDto.toEntity(member);
 
@@ -61,7 +62,8 @@ public class PaymentService {
             memberRepository.save(member);
         } catch (Exception e) {
             cancelPayment(reqDto.impUid());
-            throw new CustomException(ErrorCode.FAILED_ORDER_SAVE_EXCEPTION, ErrorCode.FAILED_ORDER_SAVE_EXCEPTION.getMessage());
+            throw new CustomException(ErrorCode.FAILED_ORDER_SAVE_EXCEPTION,
+                    ErrorCode.FAILED_ORDER_SAVE_EXCEPTION.getMessage());
         }
 
         return ApiResponseTemplate.success(SuccessCode.ORDER_SAVE_SUCCESS, OrderResDto.of(order));

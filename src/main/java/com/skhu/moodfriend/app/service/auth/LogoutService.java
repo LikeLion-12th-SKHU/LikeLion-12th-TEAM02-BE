@@ -43,11 +43,11 @@ public class LogoutService {
     @Transactional
     public ApiResponseTemplate<Void> logout(Principal principal) {
         Long memberId = Long.parseLong(principal.getName());
-
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
-        LoginType loginType = member.getLoginType();
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION,
+                        ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
+        LoginType loginType = member.getLoginType();
         String refreshTokenKey = REFRESH_TOKEN_PREFIX + memberId;
         String refreshToken = redisTemplate.opsForValue().get(refreshTokenKey);
 
@@ -89,7 +89,8 @@ public class LogoutService {
         try {
             restTemplate.postForEntity(googleLogoutUrl + accessToken, null, String.class);
         } catch (Exception e) {
-            throw new CustomException(ErrorCode.FAILED_LOGOUT_EXCEPTION, ErrorCode.FAILED_LOGOUT_EXCEPTION.getMessage());
+            throw new CustomException(ErrorCode.FAILED_LOGOUT_EXCEPTION,
+                    ErrorCode.FAILED_LOGOUT_EXCEPTION.getMessage());
         }
     }
 
@@ -108,7 +109,8 @@ public class LogoutService {
             HttpEntity<Map<String, Object>> request = new HttpEntity<>(params, headers);
             restTemplate.postForEntity(kakaoLogoutUrl, request, String.class);
         } catch (Exception e) {
-            throw new CustomException(ErrorCode.FAILED_LOGOUT_EXCEPTION, ErrorCode.FAILED_LOGOUT_EXCEPTION.getMessage());
+            throw new CustomException(ErrorCode.FAILED_LOGOUT_EXCEPTION,
+                    ErrorCode.FAILED_LOGOUT_EXCEPTION.getMessage());
         }
     }
 }

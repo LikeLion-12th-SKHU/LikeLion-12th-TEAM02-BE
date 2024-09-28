@@ -26,28 +26,28 @@ public class SignUpService {
     private final EmailService emailService;
 
     @Transactional
-    public ApiResponseTemplate<AuthResDto> signUp(SignUpReqDto signUpReqDto) {
+    public ApiResponseTemplate<AuthResDto> signUp(SignUpReqDto reqDto) {
 
-        if (memberRepository.existsByEmail(signUpReqDto.email())) {
+        if (memberRepository.existsByEmail(reqDto.email())) {
             throw new CustomException(ErrorCode.ALREADY_EXIST_MEMBER_EXCEPTION,
                     ErrorCode.ALREADY_EXIST_MEMBER_EXCEPTION.getMessage());
         }
 
-        if (!emailService.isEmailVerified(signUpReqDto.email())) {
+        if (!emailService.isEmailVerified(reqDto.email())) {
             throw new CustomException(ErrorCode.EMAIL_NOT_VERIFIED_EXCEPTION,
                     ErrorCode.EMAIL_NOT_VERIFIED_EXCEPTION.getMessage());
         }
 
-        if (!signUpReqDto.password().equals(signUpReqDto.confirmPassword())) {
+        if (!reqDto.password().equals(reqDto.confirmPassword())) {
             throw new CustomException(ErrorCode.PASSWORD_MISMATCH_EXCEPTION,
                     ErrorCode.PASSWORD_MISMATCH_EXCEPTION.getMessage());
         }
 
-        String encodedPassword = passwordEncoder.encode(signUpReqDto.password());
-        Member member = signUpReqDto.toEntity(encodedPassword);
+        String encodedPassword = passwordEncoder.encode(reqDto.password());
+        Member member = reqDto.toEntity(encodedPassword);
         memberRepository.save(member);
 
-        emailService.removeVerifiedEmail(signUpReqDto.email());
+        emailService.removeVerifiedEmail(reqDto.email());
 
         return ApiResponseTemplate.success(SuccessCode.CREATE_MEMBER_SUCCESS, null);
     }

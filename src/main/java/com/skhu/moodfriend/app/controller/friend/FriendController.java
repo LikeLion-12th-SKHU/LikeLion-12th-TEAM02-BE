@@ -38,8 +38,10 @@ public class FriendController {
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<Void>> sendFriendRequest(@RequestBody FriendReqDto friendReqDto, Principal principal) {
-        ApiResponseTemplate<Void> data = friendService.sendFriendRequest(friendReqDto, principal);
+    public ResponseEntity<ApiResponseTemplate<Void>> sendFriendRequest(
+            @RequestBody FriendReqDto reqDto, Principal principal) {
+
+        ApiResponseTemplate<Void> data = friendService.sendFriendRequest(reqDto, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
 
@@ -70,7 +72,9 @@ public class FriendController {
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<Void>> acceptFriendRequest(@RequestParam String friendEmail, Principal principal) {
+    public ResponseEntity<ApiResponseTemplate<Void>> acceptFriendRequest(
+            @RequestParam String friendEmail, Principal principal) {
+
         ApiResponseTemplate<Void> data = friendService.acceptFriendRequest(friendEmail, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
@@ -86,7 +90,9 @@ public class FriendController {
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<Void>> rejectFriendRequest(@RequestParam String friendEmail, Principal principal) {
+    public ResponseEntity<ApiResponseTemplate<Void>> rejectFriendRequest(
+            @RequestParam String friendEmail, Principal principal) {
+
         ApiResponseTemplate<Void> data = friendService.rejectFriendRequest(friendEmail, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }
@@ -119,7 +125,9 @@ public class FriendController {
                     @ApiResponse(responseCode = "500", description = "서버 문제 or 관리자 문의")
             }
     )
-    public ResponseEntity<ApiResponseTemplate<Void>> deleteFriend(@RequestParam String friendEmail, Principal principal) {
+    public ResponseEntity<ApiResponseTemplate<Void>> deleteFriend(
+            @RequestParam String friendEmail, Principal principal) {
+
         ApiResponseTemplate<Void> data = friendService.deleteFriend(friendEmail, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }

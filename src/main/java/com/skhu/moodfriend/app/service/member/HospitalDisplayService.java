@@ -20,10 +20,7 @@ public class HospitalDisplayService {
     private final KakaoMapService kakaoMapService;
 
     public ApiResponseTemplate<List<HospitalResDto>> retrieve(
-            String x,
-            String y,
-            String radius
-    ) {
+            String x, String y, String radius) {
         Set<HospitalResDto> results = new HashSet<>();
 
         for (String keyword : DEFAULT_KEYWORDS) {

@@ -30,13 +30,16 @@ public class ObjectStatusService {
 
         Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION,
+                        ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
         MemberObject memberObject = memberObjectRepository.findById(reqDto.memberObjectId())
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_OBJECT_EXCEPTION, ErrorCode.NOT_FOUND_OBJECT_EXCEPTION.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_OBJECT_EXCEPTION,
+                        ErrorCode.NOT_FOUND_OBJECT_EXCEPTION.getMessage()));
 
         if (!memberObject.getMember().equals(member)) {
-            throw new CustomException(ErrorCode.FORBIDDEN_ACCESS_EXCEPTION, ErrorCode.FORBIDDEN_ACCESS_EXCEPTION.getMessage());
+            throw new CustomException(ErrorCode.FORBIDDEN_ACCESS_EXCEPTION,
+                    ErrorCode.FORBIDDEN_ACCESS_EXCEPTION.getMessage());
         }
 
         memberObject.updateStatus(reqDto.status());

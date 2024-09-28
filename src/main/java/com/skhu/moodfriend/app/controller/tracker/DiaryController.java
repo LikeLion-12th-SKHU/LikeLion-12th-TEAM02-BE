@@ -40,8 +40,7 @@ public class DiaryController {
             }
     )
     public ResponseEntity<ApiResponseTemplate<DiaryResDto>> createDiary(
-            @Valid @RequestBody DiaryCreateReqDto reqDto,
-            Principal principal) {
+            @Valid @RequestBody DiaryCreateReqDto reqDto, Principal principal) {
 
         ApiResponseTemplate<DiaryResDto> data = diaryCreateService.createDiary(reqDto, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
@@ -78,8 +77,7 @@ public class DiaryController {
             }
     )
     public ResponseEntity<ApiResponseTemplate<Void>> deleteDiary(
-            @PathVariable Long diaryId,
-            Principal principal) {
+            @PathVariable Long diaryId, Principal principal) {
 
         ApiResponseTemplate<Void> data = diaryModifyService.deleteDiary(diaryId, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
@@ -97,8 +95,7 @@ public class DiaryController {
             }
     )
     public ResponseEntity<ApiResponseTemplate<DiaryResDto>> getDiaryById(
-            @PathVariable Long diaryId,
-            Principal principal) {
+            @PathVariable Long diaryId, Principal principal) {
 
         ApiResponseTemplate<DiaryResDto> data = diaryDisplayService.getDiaryById(diaryId, principal);
         return ResponseEntity.status(data.getStatus()).body(data);
@@ -115,7 +112,6 @@ public class DiaryController {
             }
     )
     public ResponseEntity<ApiResponseTemplate<List<DiaryResDto>>> getAllDiariesByUser(Principal principal) {
-
         ApiResponseTemplate<List<DiaryResDto>> data = diaryDisplayService.getAllDiariesByMember(principal);
         return ResponseEntity.status(data.getStatus()).body(data);
     }

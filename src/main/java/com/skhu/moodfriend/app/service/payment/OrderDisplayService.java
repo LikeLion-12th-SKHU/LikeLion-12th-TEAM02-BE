@@ -26,12 +26,12 @@ public class OrderDisplayService {
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
 
-    public ApiResponseTemplate<List<OrderResDto>> getOrderHistory(
-            Principal principal) {
+    public ApiResponseTemplate<List<OrderResDto>> getOrderHistory(Principal principal) {
 
         Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION,
+                        ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
         List<Order> orders = orderRepository.findByMember(member);
 
@@ -47,13 +47,16 @@ public class OrderDisplayService {
 
         Long memberId = Long.parseLong(principal.getName());
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION, ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER_EXCEPTION,
+                        ErrorCode.NOT_FOUND_MEMBER_EXCEPTION.getMessage()));
 
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ORDER_EXCEPTION, ErrorCode.NOT_FOUND_ORDER_EXCEPTION.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ORDER_EXCEPTION,
+                        ErrorCode.NOT_FOUND_ORDER_EXCEPTION.getMessage()));
 
         if (!order.getMember().equals(member)) {
-            throw new CustomException(ErrorCode.FORBIDDEN_ACCESS_EXCEPTION, ErrorCode.FORBIDDEN_ACCESS_EXCEPTION.getMessage());
+            throw new CustomException(ErrorCode.FORBIDDEN_ACCESS_EXCEPTION,
+                    ErrorCode.FORBIDDEN_ACCESS_EXCEPTION.getMessage());
         }
 
         return ApiResponseTemplate.success(SuccessCode.GET_ORDER_SUCCESS, OrderResDto.of(order));

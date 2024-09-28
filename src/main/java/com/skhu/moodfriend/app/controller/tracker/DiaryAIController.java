@@ -34,8 +34,7 @@ public class DiaryAIController {
             }
     )
     public ResponseEntity<ApiResponseTemplate<DiaryAIResDto>> getDiarySummaryByCreatedAt(
-            @PathVariable LocalDate createdAt,
-            Principal principal) {
+            @PathVariable LocalDate createdAt, Principal principal) {
 
         ApiResponseTemplate<DiaryAIResDto> data = diaryAIDisplayService.getDiarySummaryByCreatedAt(createdAt, principal);
         return ResponseEntity.status(data.getStatus()).body(data);

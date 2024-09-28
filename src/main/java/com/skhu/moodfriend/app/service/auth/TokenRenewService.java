@@ -34,21 +34,23 @@ public class TokenRenewService {
         String key = REFRESH_TOKEN_PREFIX + refreshToken;
 
         if (isBlacklisted(refreshToken)) {
-            throw new CustomException(ErrorCode.INVALID_TOKEN_EXCEPTION, ErrorCode.INVALID_TOKEN_EXCEPTION.getMessage());
+            throw new CustomException(ErrorCode.INVALID_TOKEN_EXCEPTION,
+                    ErrorCode.INVALID_TOKEN_EXCEPTION.getMessage());
         }
 
         String memberIdStr = redisTemplate.opsForValue().get(key);
 
         if (memberIdStr == null) {
-            throw new CustomException(ErrorCode.INVALID_TOKEN_EXCEPTION, ErrorCode.INVALID_TOKEN_EXCEPTION.getMessage());
+            throw new CustomException(ErrorCode.INVALID_TOKEN_EXCEPTION,
+                    ErrorCode.INVALID_TOKEN_EXCEPTION.getMessage());
         }
 
         if (!tokenProvider.validateToken(refreshToken)) {
-            throw new CustomException(ErrorCode.INVALID_TOKEN_EXCEPTION, ErrorCode.INVALID_TOKEN_EXCEPTION.getMessage());
+            throw new CustomException(ErrorCode.INVALID_TOKEN_EXCEPTION,
+                    ErrorCode.INVALID_TOKEN_EXCEPTION.getMessage());
         }
 
         Long memberId = Long.parseLong(memberIdStr);
-
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ID_EXCEPTION,
                         ErrorCode.NOT_FOUND_ID_EXCEPTION.getMessage()));
