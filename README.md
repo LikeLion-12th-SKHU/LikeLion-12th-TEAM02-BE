@@ -20,7 +20,7 @@
 | <img src="https://github.com/gracekim527.png" width="150"> | <img src="https://github.com/SuKyeong2002.png" width="150"> | 
 
 ### Back-End
-| [강두오](https://github.com/kduoh99) | [지정욱](https://github.com/dkdpawjddnr)
+| [강두오](https://github.com/kduoh99) | [지정욱](https://github.com/Jijoenguk)
 |:---:|:---:|
 |<img src="https://github.com/kduoh99.png" width="150"> | <img src="https://github.com/dkdpawjddnr.png" width="150"> |
 
