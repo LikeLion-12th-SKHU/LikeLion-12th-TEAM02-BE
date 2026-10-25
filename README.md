@@ -22,7 +22,7 @@
 ### Back-End
 | [강두오](https://github.com/kduoh99) | [지정욱](https://github.com/Jijoenguk)
 |:---:|:---:|
-|<img src="https://github.com/kduoh99.png" width="150"> | <img src="https://github.com/dkdpawjddnr.png" width="150"> |
+|<img src="https://github.com/kduoh99.png" width="150"> | <img src="https://github.com/Jijoenguk.png" width="150"> |
 
 ### Communication
 ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)
